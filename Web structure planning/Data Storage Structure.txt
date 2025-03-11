@@ -1,0 +1,26 @@
+儲存資聊架構
+
+使用者：
+key=gmail:{ encrypted password, 姓、名、匿名、電話、生日、[位置]、程度、[參與的play_id], [參與的tournament_id] 、[所屬隊伍]、[擁有的場地_id]、大頭貼.png}
+
+場館：
+key = id:{[球場]、使用者（擁有者）} 
+
+球場:
+key = [場館_id]_id:{名字、地址、[場地物理性質（室內、室外、PVC、拼裝、實木、水泥、沙排）]、[play_id]、[tournament_id]}
+
+Play: 
+key = id：{場館[球場]_id、網子、開始時間、結束時間、強度、開放人數、[已參加使用者](第0個是發起人）、[審核中使用者]、備註、[Games]}
+
+Tournament：
+key = id:{[分組]}
+
+分組： 
+key = Tournament_id_id:{[場館]、[球場]、bool公開可報名?、報名開始時間、報名結束時間、可報名隊數、[已報名隊伍]、[審核中隊伍]、報名費、比賽開始時間、比賽結束時間、比賽說明}
+
+Games: 
+key = games_id:{teamA, teamB, score, winner, next_game_id, Tournament_group, play_id}
+
+
+隊伍：
+key = id:{隊伍名稱、[使用者]、隊伍照片.png}
