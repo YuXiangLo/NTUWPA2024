@@ -1,15 +1,14 @@
 # Week3 Report - Group 1
-This week we planned what our final projects will be -- a global volleyball court resevation web. 
-First we drawed what the structure of our project would look like in WebOutline.pdf
-Then we planned what the data storage in SQL would be like in the future. See "Data Storage Structure.txt"
-Then we devided This weeks' responsibilities upon four team member as follow:
+
+This week we planned what our final projects will be: **A Global Volleyball Court Reservation Website**. 
+First, we drew what the structure of our project would look like in [**_WebOutline.pdf_**](https://github.com/YuXiangLo/NTUWPA2024/blob/main/HW_Report/Week03/WebOutline.pdf)
+Then, we planned what the data storage in SQL would be like in the future. See [**_Data Storage Structure.txt_**](https://github.com/YuXiangLo/NTUWPA2024/blob/main/HW_Report/Week03/Data%20Storage%20Structure.txt)
+The current Prototype is shown [**_here_**](https://github.com/YuXiangLo/NTUWPA2024/tree/main/HW_Report/Week03/create%20tournament)
 
 ## Practiced Class Topics
 - **HTML**
 - **CSS**
 - **JavaScript**
-
-<!-- TODO: Sync with Andrew and report this then -->
 
 ## Additional Programming Techniques Explored
 
@@ -24,7 +23,7 @@ nvm use 22.13.1
 node -v  # Output: v22.13.1
 ```
 
-## Team Member Work Item and Contribution
+## Team Member Work Items and Contributions
 
 | Name   | Work Item                         | Contribution           |
 |--------|-----------------------------------|:----------------------:|
