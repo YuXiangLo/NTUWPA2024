@@ -4,25 +4,33 @@ First we drawed what the structure of our project would look like in WebOutline.
 Then we planned what the data storage in SQL would be like in the future. See "Data Storage Structure.txt"
 Then we devided This weeks' responsibilities upon four team member as follow:
 
-黃靖家 JavaScript functionality
-楊盛評 SQL planning and design
-羅煜翔 google maps API research
-郭恩偕 Website structure planning and front end
-
 ## Practiced Class Topics
-This Week's Class Topics
-HTML CSS JAVASCRIPT
+- **HTML**
+- **CSS**
+- **JavaScript**
 
+<!-- TODO: Sync with Andrew and report this then -->
 
 ## Additional Programming Techniques Explored
-how to use react, integrating with HTML CSS JAVASCRIPT to make our project more managable and functional.
 
-## Team Member Responsibilities (Total: 100%)
+### React.js Framework Practice
+We chose React for its convenience in **Object-Oriented Programming (OOP) development** and **various plugin support**.
 
-Our group’s efforts were divided as follows:
-- **黃靖家  (%)**: 
-- **楊盛評  (%)**: 
-- **羅煜翔  (%)**: 
-- **郭恩偕  (%)**: 
-  
-**Team**: Group 1
+### Node Version Manager (NVM)
+To manage Node.js versions efficiently, we used **NVM**:
+```
+nvm install 22.13.1
+nvm use 22.13.1
+node -v  # Output: v22.13.1
+```
+
+## Team Member Work Item and Contribution
+
+| Name   | Work Item                         | Contribution           |
+|--------|-----------------------------------|:----------------------:|
+| 黃靖家 | Backend Planning                  | <center>1 / 4</center> |
+| 楊盛評 | SQL Planning and Design           | <center>1 / 4</center> |
+| 羅煜翔 | Google Maps API Research          | <center>1 / 4</center> |
+| 郭恩偕 | Frontend Design, Website Planning | <center>1 / 4</center> |
+
+
