@@ -11,6 +11,8 @@ You can find demo video in [**_here_**](https://github.com/YuXiangLo/NTUWPA2024/
 ## Screenshots
 
 ![image](demo/demo1.png)
+![image](demo/demo2.png)
+![image](demo/demo3.png)
 
 ## Practiced Class Topics
 - **HTML**
