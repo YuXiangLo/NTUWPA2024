@@ -24,6 +24,12 @@ const MapController = ({ position }) => {
 const TaipeiMap = () => {
   const { landmarks, selectedPosition } = useContext(LandmarkContext);
 
+  // Redirect to Google Maps on double-clicking the marker
+  const handleMarkerDoubleClick = (coords) => {
+    const [lat, lng] = coords;
+    window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`, "_blank");
+  };
+
   return (
     <div style={{ width: "800px", height: "600px" }}>
       <MapContainer
@@ -38,7 +44,14 @@ const TaipeiMap = () => {
 
         {/* Add Markers for each landmark */}
         {landmarks.map((landmark, index) => (
-          <Marker key={index} position={landmark.coords} icon={customIcon}>
+          <Marker
+            key={index}
+            position={landmark.coords}
+            icon={customIcon}
+            eventHandlers={{
+              dblclick: () => handleMarkerDoubleClick(landmark.coords), // Double-click redirects
+            }}
+          >
             <Popup>{landmark.name}</Popup>
           </Marker>
         ))}

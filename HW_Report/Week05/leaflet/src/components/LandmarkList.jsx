@@ -6,6 +6,11 @@ const FontColor = "#eeeeee"
 const LandmarkList = () => {
   const { landmarks, setSelectedPosition, selectedPosition } = useContext(LandmarkContext);
 
+  const handleDoubleClick = (coords) => {
+    const [lat, lng] = coords;
+    window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`, "_blank");
+  };
+
   return (
     <div style={{ width: "250px", background: "#303030", padding: "10px", borderRadius: "5px" }}>
       <h3 style={{color: FontColor}}>Landmarks</h3>
@@ -13,7 +18,8 @@ const LandmarkList = () => {
         {landmarks.map((landmark, index) => (
           <li
             key={index}
-            onClick={() => setSelectedPosition(landmark.coords)} // Update selected position
+            onClick={() => setSelectedPosition(landmark.coords)}
+            onDoubleClick={() => handleDoubleClick(landmark.coords)}
             style={{
               padding: "10px",
               cursor: "pointer",
