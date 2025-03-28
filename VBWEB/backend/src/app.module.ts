@@ -10,14 +10,24 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'),
-        signOptions: { expiresIn: '1h' },
-      }),
+      useFactory: async (configService: ConfigService) => {
+        const secret = configService.get<string>('JWT_SECRET');
+        
+        if (!secret) {
+          throw new Error('JWT_SECRET is not defined in the environment variables');
+        }
+
+        return {
+          secret: decodeURIComponent(secret),  // Decode the URL-encoded secret
+          signOptions: { expiresIn: '1h' },
+        };
+      },
     }),
+
     UserModule,
     SupabaseModule,
   ],

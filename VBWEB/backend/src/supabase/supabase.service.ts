@@ -25,11 +25,13 @@ export class SupabaseService {
   }
 
   async getUserByEmail(email: string) {
+
     const { data, error } = await this.supabase
       .from('users')
       .select('*')
       .eq('gmail', email);
     if (error) throw new Error(error.message);
+
     return data;
   }
 }
