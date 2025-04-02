@@ -29,10 +29,8 @@ async function bootstrap() {
 
   // Set up Swagger
   const config = new DocumentBuilder()
-    .setTitle('User Registration API')
-    .setDescription('API for user registration and management')
+    .setTitle('VBWEB\'s Backend API Docs')
     .setVersion('1.0')
-    .addTag('users')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
