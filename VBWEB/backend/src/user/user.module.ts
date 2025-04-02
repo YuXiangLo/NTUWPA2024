@@ -3,12 +3,12 @@ import { Module } from '@nestjs/common';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { SupabaseModule } from '../supabase/supabase.module';
-import { JwtModule } from '@nestjs/jwt';  // Import JwtModule here
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
     SupabaseModule,
-    JwtModule,  // Make sure JwtModule is imported here
+    JwtModule,
   ],
   
   controllers: [UserController],
