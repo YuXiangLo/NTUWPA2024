@@ -22,14 +22,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         }
 
         return {
-          secret: decodeURIComponent(secret),  // Decode the URL-encoded secret
-          signOptions: { expiresIn: '1h' },
+          secret: decodeURIComponent(secret),
+          signOptions: { expiresIn: '60s' },
         };
       },
     }),
 
     UserModule,
     SupabaseModule,
-  ],
+  ]
 })
 export class AppModule {}
