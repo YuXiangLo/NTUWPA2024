@@ -13,6 +13,8 @@ import { UserService } from './user.service';
 import { LoginDto } from './dto/login.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+
 
 @ApiTags('user')
 @Controller('user')

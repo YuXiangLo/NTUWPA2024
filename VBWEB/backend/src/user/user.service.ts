@@ -58,5 +58,11 @@ export class UserService {
 
     return { accessToken };
   }
+
+  async findByEmail(email: string): Promise<any> {
+    const users = await this.supabaseService.getUserByEmail(email);
+    return users && users.length > 0 ? users[0] : undefined;
+  }
+  
 }
 
