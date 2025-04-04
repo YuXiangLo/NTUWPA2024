@@ -25,13 +25,39 @@ export class SupabaseService {
   }
 
   async getUserByEmail(email: string) {
-
     const { data, error } = await this.supabase
       .from('users')
       .select('*')
       .eq('gmail', email);
     if (error) throw new Error(error.message);
+    return data;
+  }
 
+  async getUserInfoByUserID(userId: string) {
+    console.log(userId);
+    const { data, error } = await this.supabase
+      .from('users')
+      .select(
+        `
+          userid,
+          gmail,
+          lastname,
+          firstname,
+          nickname,
+          phone,
+          birthday,
+          location,
+          level,
+          photo,
+          created_at,
+          updated_at
+        `
+      )
+      .eq('userid', userId)
+      .maybeSingle(); 
+    if (error) {
+      throw new Error(error.message);
+    }
     return data;
   }
 }

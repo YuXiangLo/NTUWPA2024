@@ -63,6 +63,11 @@ export class UserService {
     const users = await this.supabaseService.getUserByEmail(email);
     return users && users.length > 0 ? users[0] : undefined;
   }
-  
+
+  async getUserProfileById(userId: string) {
+    const data = await this.supabaseService.getUserInfoByUserID(userId);
+    console.log(data);
+    return data;
+  }
 }
 

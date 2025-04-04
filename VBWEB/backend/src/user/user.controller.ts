@@ -8,6 +8,9 @@ import {
   UnauthorizedException,
   ConflictException,
   InternalServerErrorException,
+  Get,
+  UseGuards, 
+  Req,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { LoginDto } from './dto/login.dto';
@@ -70,6 +73,13 @@ export class UserController {
 
       throw new InternalServerErrorException('Unexpected error during login');
     }
+  }
+
+  @Get('profile')
+  @UseGuards(JwtAuthGuard)  // Only allow authenticated users
+  async getProfile(@Req() req: Request) {
+    const currentUser = (req as Request & { user: any }).user;
+    return this.userService.getUserProfileById(currentUser.userid);
   }
 }
 
