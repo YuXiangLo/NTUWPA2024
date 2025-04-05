@@ -1,1 +1,1 @@
-export const JWT_EXPIRES_IN = '60s';
+export const JWT_EXPIRES_IN = '1m';
