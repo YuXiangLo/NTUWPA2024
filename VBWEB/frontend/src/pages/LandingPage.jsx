@@ -1,35 +1,40 @@
-// src/pages/LandingPage.js
 import React from 'react';
-import { Link } from 'react-router-dom';
-import './LandingPage.css'; // Create and style according to your design
+import './LandingPage.css';
+import { LandmarkProvider } from '../context/LandmarkContext.jsx';
+import TaipeiMap from '../components/TaipeiMap.jsx';
+import LandmarkList from '../components/LandmarkList.jsx';
 
 function LandingPage() {
   return (
-    <div className="landing-page">
-      <section className="hero">
-        <h1>Welcome to Our Platform</h1>
-        <p>Your one-stop solution for legal information and more.</p>
-        <Link to="/signup" className="btn">Get Started</Link>
-      </section>
-      
-      <section className="features">
-        <div className="feature-item">
-          <img src="/assets/court-info.png" alt="Court Info" />
-          <h3>Court Info</h3>
-          <p>Get the latest details on court proceedings and case updates.</p>
-        </div>
-        <div className="feature-item">
-          <img src="/assets/maps.jpeg" alt="Maps" />
-          <h3>Location Maps</h3>
-          <p>Find courts and legal services near you.</p>
-        </div>
-        <div className="feature-item">
-          <img src="/assets/profile.png" alt="Profile" />
-          <h3>Your Profile</h3>
-          <p>Manage your account and stay updated with personalized info.</p>
-        </div>
-      </section>
-    </div>
+    <LandmarkProvider>
+      <div className="landing-page">
+        {/* Header Section */}
+        <header className="landing-header">
+          <div className="header-title">
+            <h1>排球人綜合報名網站</h1>
+            <p>點擊滑動地圖以選擇不同地點之球館位置</p>
+          </div>
+          <div className="header-buttons">
+            <button className="profile-btn">個人專區</button>
+            <button className="logout-btn">登出</button>
+          </div>
+        </header>
+
+        {/* Main Content */}
+        <main className="landing-main">
+          <div className="map-container">
+            <TaipeiMap />
+          </div>
+          <aside className="sidebar">
+            <button className="sidebar-btn">搜尋場地</button>
+            <button className="sidebar-btn">報名比賽</button>
+            <button className="sidebar-btn">新增比賽</button>
+            <button className="sidebar-btn">新增場館</button>
+            <LandmarkList />
+          </aside>
+        </main>
+      </div>
+    </LandmarkProvider>
   );
 }
 
