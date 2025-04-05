@@ -8,12 +8,17 @@ import {
   UnauthorizedException,
   ConflictException,
   InternalServerErrorException,
+  Get,
+  UseGuards, 
+  Req,
+  Patch,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { LoginDto } from './dto/login.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { UpdateUserDto } from 'src/user/dto/update-user.dto';
 @ApiTags('user')
 @Controller('user')
 export class UserController {
@@ -68,6 +73,21 @@ export class UserController {
 
       throw new InternalServerErrorException('Unexpected error during login');
     }
+  }
+
+  @Get('profile')
+  @UseGuards(JwtAuthGuard)  // Only allow authenticated users
+  async getProfile(@Req() req: Request) {
+    const currentUser = (req as Request & { user: any }).user;
+    return this.userService.getUserProfileById(currentUser.userid);
+  }
+
+  @Patch('profile')
+  @UseGuards(JwtAuthGuard)
+  async updateProfile(@Req() req: Request, @Body() updateUserDto: UpdateUserDto) {
+    const currentUser = (req as Request & { user: any }).user;
+    const updatedUser = await this.userService.updateUserProfile(currentUser.userid, updateUserDto);
+    return updatedUser;
   }
 }
 

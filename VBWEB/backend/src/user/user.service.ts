@@ -4,6 +4,7 @@ import * as bcrypt from 'bcryptjs';
 import { SupabaseService } from '../supabase/supabase.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { UpdateUserDto } from 'src/user/dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -57,6 +58,21 @@ export class UserService {
     const accessToken = this.jwtService.sign(payload, { secret });  // Pass secret to the sign method
 
     return { accessToken };
+  }
+
+  async findByEmail(email: string): Promise<any> {
+    const users = await this.supabaseService.getUserByEmail(email);
+    return users && users.length > 0 ? users[0] : undefined;
+  }
+
+  async getUserProfileById(userId: string): Promise<any> {
+    // Delegate fetching user info by userID to SupabaseService
+    return await this.supabaseService.getUserInfoByUserID(userId);
+  }
+
+  async updateUserProfile(userId: string, updateData: Partial<UpdateUserDto>): Promise<any> {
+    // Delegate updating user profile to SupabaseService
+    return await this.supabaseService.updateUserProfile(userId, updateData);
   }
 }
 
