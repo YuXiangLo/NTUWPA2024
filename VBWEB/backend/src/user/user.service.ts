@@ -74,5 +74,10 @@ export class UserService {
     // Delegate updating user profile to SupabaseService
     return await this.supabaseService.updateUserProfile(userId, updateData);
   }
+
+  async getAllRegisteredEmails(): Promise<string[]> {
+    return this.supabaseService.getAllEmails();
+  }
+  
 }
 

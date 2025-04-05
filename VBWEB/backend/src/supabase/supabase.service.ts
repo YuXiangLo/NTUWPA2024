@@ -76,4 +76,17 @@ export class SupabaseService {
       }
     return data;
   }
+
+  async getAllEmails(): Promise<string[]> {
+    const { data, error } = await this.supabase
+      .from('users')
+      .select('gmail');
+  
+    if (error) {
+      throw new Error(`Failed to fetch emails: ${error.message}`);
+    }
+  
+    return data.map((user) => user.gmail);
+  }
+  
 }

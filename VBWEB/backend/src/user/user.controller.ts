@@ -1,6 +1,7 @@
 // src/user/user.controller.ts
 import {
   Controller,
+  Get,
   Post,
   Body,
   HttpCode,
@@ -8,14 +9,13 @@ import {
   UnauthorizedException,
   ConflictException,
   InternalServerErrorException,
-  Get,
   UseGuards, 
   Req,
   Patch,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { LoginDto } from './dto/login.dto';
-import { CreateUserDto } from './dto/create-user.dto';
+import { LoginDTO } from './dto/LoginDTO';
+import { RegisterDTO } from './dto/RegisterDTO';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UpdateUserDto } from 'src/user/dto/update-user.dto';
@@ -25,12 +25,13 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('register')
+  @HttpCode(201)
   @ApiOperation({ summary: 'Register a new user' })
   @ApiResponse({ status: 201, description: 'User successfully registered' })
   @ApiResponse({ status: 400, description: 'Missing or invalid input' })
   @ApiResponse({ status: 409, description: 'User already exists' })
   @ApiResponse({ status: 500, description: 'Unexpected server error' })
-  async register(@Body() body: CreateUserDto) {
+  async register(@Body() body: RegisterDTO) {
     const { email, password } = body;
 
     if (!email || !password) {
@@ -56,7 +57,7 @@ export class UserController {
   @ApiResponse({ status: 400, description: 'Invalid property' })
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
   @ApiResponse({ status: 500, description: 'Unexpected server error' })
-  async login(@Body() body: LoginDto) {
+  async login(@Body() body: LoginDTO) {
     const { email, password } = body;
 
     try {
@@ -88,6 +89,15 @@ export class UserController {
     const currentUser = (req as Request & { user: any }).user;
     const updatedUser = await this.userService.updateUserProfile(currentUser.userid, updateUserDto);
     return updatedUser;
+  }
+
+  @Get('emails')
+  @HttpCode(200)
+  @ApiResponse({ status: 200, description: 'Fetch successful' })
+  @ApiResponse({ status: 500, description: 'Unexpected server error' })
+  @ApiOperation({ summary: 'Fetch all registered emails' })
+  async getAllEmails() {
+    return this.userService.getAllRegisteredEmails();
   }
 }
 
