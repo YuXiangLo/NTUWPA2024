@@ -31,6 +31,10 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('VBWEB\'s Backend API Docs')
     .setVersion('1.0')
+    .addBearerAuth(
+      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+      'access-token', // Name of security
+    )
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('/', app, document);

@@ -5,6 +5,7 @@ import { SupabaseService } from '../supabase/supabase.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { UpdateUserDto } from 'src/user/dto/update-user.dto';
+import { JWT_EXPIRES_IN } from './user.constants'
 
 @Injectable()
 export class UserService {
@@ -50,12 +51,12 @@ export class UserService {
     const payload = { userID: user.userID, email: user.gmail };
 
     // Use ConfigService to get the JWT_SECRET from .env file
-    const secret = this.configService.get<string>('JWT_SECRET');  // Access JWT_SECRET from .env file
+    const secret = this.configService.get<string>('JWT_SECRET');
     if (!secret) {
       throw new Error('JWT_SECRET is not defined in the environment variables');
     }
 
-    const accessToken = this.jwtService.sign(payload, { secret, expiresIn: '60s' });
+    const accessToken = this.jwtService.sign(payload, { secret, expiresIn: JWT_EXPIRES_IN });
 
     return { accessToken };
   }

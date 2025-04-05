@@ -16,9 +16,9 @@ import {
 import { UserService } from './user.service';
 import { LoginDto } from './dto/login.dto';
 import { CreateUserDto } from './dto/create-user.dto';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { UpdateUserDto } from 'src/user/dto/update-user.dto';
+import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 @ApiTags('user')
 @Controller('user')
 export class UserController {
@@ -63,7 +63,6 @@ export class UserController {
       const { accessToken } = await this.userService.loginUser(email, password);
       return {
         status: 'success',
-		statusCode: 200,
         accessToken,
       };
     } catch (error) {
@@ -76,7 +75,12 @@ export class UserController {
   }
 
   @Get('profile')
-  @UseGuards(JwtAuthGuard)  // Only allow authenticated users
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Get current user profile' })
+  @ApiResponse({ status: 200, description: 'User profile retrieved successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized - Invalid or missing token' })
+  @ApiResponse({ status: 500, description: 'Unexpected server error' })
   async getProfile(@Req() req: Request) {
     const currentUser = (req as Request & { user: any }).user;
     return this.userService.getUserProfileById(currentUser.userid);
@@ -84,6 +88,12 @@ export class UserController {
 
   @Patch('profile')
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Update current user profile' })
+  @ApiResponse({ status: 200, description: 'User profile updated successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid input' })
+  @ApiResponse({ status: 401, description: 'Unauthorized - Invalid or missing token' })
+  @ApiResponse({ status: 500, description: 'Unexpected server error' })
   async updateProfile(@Req() req: Request, @Body() updateUserDto: UpdateUserDto) {
     const currentUser = (req as Request & { user: any }).user;
     const updatedUser = await this.userService.updateUserProfile(currentUser.userid, updateUserDto);
