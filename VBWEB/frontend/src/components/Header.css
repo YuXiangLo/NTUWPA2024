@@ -14,6 +14,12 @@
   text-decoration: none;
 }
 
+.header-title {
+  font-size: 1.2rem;
+  color: #555;
+  cursor: pointer;
+}
+
 .nav ul {
   list-style: none;
   display: flex;

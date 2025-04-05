@@ -1,15 +1,21 @@
 // src/pages/LoginPage.js
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './LoginPage.css';
 
 function LoginPage() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Implement your authentication logic here
-    console.log('Logging in:', email);
+    if (email && password) {
+      // Implement your authentication logic here
+      console.log('Logging in:', email);
+      // Navigate to landing page after successful login
+      navigate('/');
+    }
   };
 
   return (
@@ -34,7 +40,9 @@ function LoginPage() {
             required 
           />
         </label>
-        <button type="submit">Login</button>
+        <button type="submit">
+          Login
+        </button>
       </form>
     </div>
   );
