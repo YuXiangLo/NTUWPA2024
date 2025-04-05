@@ -55,7 +55,7 @@ export class UserService {
       throw new Error('JWT_SECRET is not defined in the environment variables');
     }
 
-    const accessToken = this.jwtService.sign(payload, { secret });  // Pass secret to the sign method
+    const accessToken = this.jwtService.sign(payload, { secret, expiresIn: '60s' });
 
     return { accessToken };
   }
