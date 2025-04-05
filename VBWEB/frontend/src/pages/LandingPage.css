@@ -1,0 +1,79 @@
+.landing-page {
+  font-family: Arial, sans-serif;
+  color: #333;
+  background: linear-gradient(to bottom right, #f0f0f0, #ccc);
+  min-height: 100vh;
+}
+
+.landing-page .hero {
+  text-align: center;
+  padding: 4rem 1rem;
+  background-color: #fff;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+}
+
+.landing-page .hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.landing-page .hero p {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  max-width: 600px;
+  margin: 0 auto 1.5rem;
+  color: #555;
+}
+
+.landing-page .hero .btn {
+  background-color: #3498db;
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.landing-page .hero .btn:hover {
+  background-color: #217dbb;
+}
+
+.landing-page .features {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 1rem;
+}
+
+.feature-item {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  max-width: 300px;
+  flex: 1 1 300px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.feature-item img {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 1rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.feature-item h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.feature-item p {
+  font-size: 0.95rem;
+  color: #666;
+  margin-bottom: 1rem;
+}

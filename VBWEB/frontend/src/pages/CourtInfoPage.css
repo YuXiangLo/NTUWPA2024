@@ -1,0 +1,28 @@
+.court-info-page {
+  margin: 20px auto;
+  padding: 2rem;
+  max-width: 800px;
+  text-align: center;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
+
+.court-info-page h2 {
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  color: #333;
+}
+
+.court-info-page img {
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+}
+
+.court-info-page p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #555;
+}
