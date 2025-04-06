@@ -1,0 +1,57 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #ccc;
+  background: #fff;
+}
+
+.header .logo a {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
+}
+
+.header-title {
+  font-size: 1.2rem;
+  color: #555;
+  cursor: pointer;
+}
+
+.header-title h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.header-title p {
+  margin: 0.25rem 0 0 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.header-buttons button {
+  margin-left: 1rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+}
+
+.nav li a {
+  color: #333;
+  text-decoration: none;
+  padding: 0.5rem;
+}
+
+.nav li a:hover {
+  color: #3498db;
+  transition: color 0.3s;
+}

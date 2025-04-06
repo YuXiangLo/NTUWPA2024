@@ -1,0 +1,96 @@
+.landing-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: sans-serif;
+  }
+  
+  /* Header */
+  .landing-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .header-title h1 {
+    margin: 0;
+    font-size: 2rem;
+  }
+  
+  .header-title p {
+    margin: 0.25rem 0 0 0;
+    font-size: 0.9rem;
+    color: #666;
+  }
+  
+  .header-buttons button {
+    margin-left: 1rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+  }
+  
+  /* Main Content */
+  .landing-main {
+    display: flex;
+    flex: 1;
+    gap: 20px;
+  }
+  
+  /* Map container */
+  .map-container {
+    flex: 1;
+    position: relative;
+    padding: 1rem;
+  }
+  
+  .map-image {
+    width: 100%;
+    height: auto;
+    border: 1px solid #ccc;
+    /* If you prefer a fixed height: 
+       height: 600px; 
+       object-fit: cover; 
+    */
+  }
+  
+  /* The hint overlay above the map */
+  .add-court-hint {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+    border-left: 1px solid #ccc;
+  }
+  
+  .sidebar-btn {
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+  }
+  
+  /* Dim the sidebar when in addCourtMode */
+  .sidebar.dimmed {
+    opacity: 0.5;
+    pointer-events: none;
+  }

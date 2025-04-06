@@ -10,8 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "@supabase/supabase-js": "^2.49.4",
+    "docker": "^1.0.0",
+    "leaflet": "^1.9.4",
+    "react": "^19.1.0",
+    "react-dom": "^19.0.0",
+    "react-leaflet": "^5.0.0",
+    "react-router-dom": "^7.5.0",
+    "router-dom": "^3.0.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
