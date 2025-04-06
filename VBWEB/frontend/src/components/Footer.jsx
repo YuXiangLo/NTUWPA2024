@@ -5,7 +5,7 @@ import './Footer.css'; // Create your own CSS as needed
 function Footer() {
   return (
     <footer className="footer">
-      <p>&copy; {new Date().getFullYear()} NTUWPA2024.</p>
+      <p>&copy; NTUWPA2024.</p>
     </footer>
   );
 }

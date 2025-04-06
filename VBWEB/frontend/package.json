@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.49.4",
+    "docker": "^1.0.0",
     "leaflet": "^1.9.4",
     "react": "^19.1.0",
     "react-dom": "^19.0.0",

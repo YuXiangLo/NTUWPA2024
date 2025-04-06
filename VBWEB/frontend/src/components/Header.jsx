@@ -1,41 +1,31 @@
 // src/components/Header.js
-import React, { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './Header.css';
 
 function Header() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    navigate('/');
-  };
-
-  // Don't show login/logout buttons on login page
-  const showAuthButtons = location.pathname !== '/login';
+  // Use a shared auth state (or context) if needed.
+  const isLoggedIn = false;
 
   return (
     <header className="header">
       <div className="header-title" onClick={() => navigate('/')}>
         <h1>排球人綜合報名網站</h1>
+        <p>點擊滑動地圖以選擇不同地點之球館位置</p>
       </div>
-      {showAuthButtons && (
+      {location.pathname !== '/login' && (
         <div className="header-buttons">
           {isLoggedIn ? (
             <>
-              <button className="profile-btn" onClick={() => navigate('/profile')}>
-                個人專區
-              </button>
-              <button className="logout-btn" onClick={handleLogout}>
+              <button onClick={() => navigate('/profile')}>個人專區</button>
+              <button onClick={() => { /* Add logout logic */ navigate('/'); }}>
                 登出
               </button>
             </>
           ) : (
-            <button className="login-btn" onClick={() => navigate('/login')}>
-              登入
-            </button>
+            <button onClick={() => navigate('/login')}>登入</button>
           )}
         </div>
       )}

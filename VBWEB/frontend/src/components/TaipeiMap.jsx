@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { LandmarkContext } from "../context/LandmarkContext";
@@ -20,6 +20,28 @@ const MapController = ({ position }) => {
   map.setView(position, 14, { animate: true });
   return null;
 };
+
+function AddCourtHandler() {
+  const { addCourtMode, setAddCourtMode, landmarks, setLandmarks } = useContext(LandmarkContext);
+
+  useMapEvents({
+    click: (e) => {
+      if (addCourtMode) {
+        const courtName = prompt("請輸入新球館名稱:");
+        if (courtName) {
+          const newCourt = {
+            name: courtName,
+            coords: [e.latlng.lat, e.latlng.lng],
+          };
+          setLandmarks([...landmarks, newCourt]);
+        }
+        // Turn off add mode once a click is handled.
+        setAddCourtMode(false);
+      }
+    },
+  });
+  return null;
+}
 
 const TaipeiMap = () => {
   const { landmarks, selectedPosition } = useContext(LandmarkContext);
@@ -55,6 +77,7 @@ const TaipeiMap = () => {
             <Popup>{landmark.name}</Popup>
           </Marker>
         ))}
+        <AddCourtHandler />
       </MapContainer>
     </div>
   );

@@ -1,0 +1,23 @@
+.user-info-form {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.user-info-form h2 {
+  margin-bottom: 1.5rem;
+}
+
+.user-info-form form label {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.user-info-form form input {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.25rem;
+}

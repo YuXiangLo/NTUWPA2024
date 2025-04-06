@@ -8,7 +8,7 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import ProfilePage from './pages/ProfilePage';
 import CourtInfoPage from './pages/CourtInfoPage';
-import MapPage from './pages/MapPage';
+import UserInfoForm from './pages/UserInfoForm';
 import './App.css';
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/court-info" element={<CourtInfoPage />} />
-          <Route path="/maps" element={<MapPage />} />
+          <Route path="/user-info" element={<UserInfoForm />} />
         </Routes>
       </main>
       <Footer />
