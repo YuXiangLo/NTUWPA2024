@@ -1,7 +1,7 @@
-// src/pages/LoginPage.js
+// src/pages/LoginPage.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../supabaseClient';
+import { API_DOMAIN } from '../config.js';
 import './LoginPage.css';
 
 function LoginPage() {
@@ -13,45 +13,60 @@ function LoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setErrorMsg('');
+
     if (email && password) {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (error) {
-        setErrorMsg(error.message);
-      } else {
-        console.log('Logged in:', data);
-        navigate('/');
+      try {
+        const response = await fetch(`${API_DOMAIN}user/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Logged in:', data);
+          navigate('/');
+        } else {
+          const errorData = await response.json();
+          setErrorMsg(errorData.message || 'Login failed');
+        }
+      } catch (error) {
+        console.error('Error during login:', error);
+        setErrorMsg('Login failed');
       }
     }
   };
 
   return (
     <div className="login-page">
-      <h2>Login</h2>
+      <h2>Welcome Back!</h2>
       {errorMsg && <p className="error-msg">{errorMsg}</p>}
       <form onSubmit={handleLogin}>
-        <label>
-          Email:
+        <div className="input-group">
+          <label htmlFor="email">Email</label>
           <input 
+            id="email"
             type="email" 
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required 
           />
-        </label>
-        <label>
-          Password:
+        </div>
+        <div className="input-group">
+          <label htmlFor="password">Password</label>
           <input 
+            id="password"
             type="password" 
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required 
           />
-        </label>
-        <button type="submit">Login</button>
+        </div>
+        <button type="submit" className="login-btn">Login</button>
       </form>
+      <div>Don't have an account? </div>
       <button 
         type="button" 
         onClick={() => navigate('/signup')}
