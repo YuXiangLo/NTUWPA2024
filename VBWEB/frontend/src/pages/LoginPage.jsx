@@ -29,7 +29,6 @@ function LoginPage() {
         if (response.ok) {
           const data = await response.json();
           console.log('Logged in:', data);
-          // Assume data includes { token, user: { ... } }
           login(data);
           navigate('/');
         } else {

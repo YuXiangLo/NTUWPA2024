@@ -2,10 +2,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { API_DOMAIN } from '../config.js';
+import { useAuth } from '../context/AuthContext';
 import './SignupPage.css';
 
 function SignupPage() {
-  const navigate = useNavigate();
+  const navigate = useNavigate();  
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -32,8 +34,8 @@ function SignupPage() {
 
       if (response.ok) {
         const data = await response.json();
+        login(data);
         console.log('User registered:', data);
-        // Navigate to the user info page after successful registration
         navigate('/user-info');
       } else {
         const errorData = await response.json();
