@@ -1,45 +1,47 @@
 // src/pages/SignupPage.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../supabaseClient';
+import { API_DOMAIN } from '../config.js';
 import './SignupPage.css';
 
 function SignupPage() {
   const navigate = useNavigate();
-  const [name, setName] = useState(''); // If needed later, you can split this into lastname/firstname.
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
   const handleSignup = async (e) => {
     e.preventDefault();
     setErrorMsg('');
-    // Use Supabase Auth to sign up the user
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-    if (error) {
-      setErrorMsg(error.message);
+
+    // Validate that passwords match
+    if (password !== confirmPassword) {
+      setErrorMsg("Passwords do not match");
       return;
     }
-    // Once signed up, insert minimal info into the "users" table
-    if (data.user) {
-      const { error: insertError } = await supabase.from('users').insert([
-        {
-          userid: data.user.id,
-          gmail: email, // storing email in the 'gmail' field
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
+
+    try {
+      const response = await fetch(`${API_DOMAIN}user/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      ]);
-      if (insertError) {
-        setErrorMsg(insertError.message);
-        return;
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('User registered:', data);
+        // Navigate to the user info page after successful registration
+        navigate('/user-info');
+      } else {
+        const errorData = await response.json();
+        setErrorMsg(errorData.message || 'Sign up failed');
       }
-      console.log('User signed up:', data.user);
-      // Navigate to the personal info form page for additional details
-      navigate('/user-info');
+    } catch (error) {
+      console.error('Error during signup:', error);
+      setErrorMsg('Sign up failed');
     }
   };
 
@@ -48,15 +50,6 @@ function SignupPage() {
       <h2>Sign Up</h2>
       {errorMsg && <p className="error-msg">{errorMsg}</p>}
       <form onSubmit={handleSignup}>
-        <label>
-          Name:
-          <input 
-            type="text" 
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required 
-          />
-        </label>
         <label>
           Email:
           <input 
@@ -72,6 +65,15 @@ function SignupPage() {
             type="password" 
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required 
+          />
+        </label>
+        <label>
+          Confirm Password:
+          <input 
+            type="password" 
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             required 
           />
         </label>

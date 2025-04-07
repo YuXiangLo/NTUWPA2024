@@ -89,3 +89,8 @@ body {
   background: #3498db;
   color: #e7e7e7;
 }
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
