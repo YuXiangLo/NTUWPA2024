@@ -13,7 +13,7 @@ function Header() {
     <header className="header">
       <div className="header-title" onClick={() => navigate('/')}>
         <h1>排球人綜合報名網站</h1>
-        <p>點擊滑動地圖以選擇不同地點之球館位置</p>
+        {/* <p>點擊滑動地圖以選擇不同地點之球館位置</p> */}
       </div>
       {location.pathname !== '/login' && (
         <div className="header-buttons">
