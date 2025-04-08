@@ -34,6 +34,10 @@
 #### 🛠️ Build and Run
 
 ```bash
+# To get the image, you can build one yourself or use our built
+docker pull yuxiang0503/frontend-app
+docker pull yuxiang0503/backend-app
+
 # Frontend: Build and run 
 cd VBWEB/frontend/
 docker build -t frontend-app .
