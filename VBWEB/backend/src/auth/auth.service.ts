@@ -1,6 +1,6 @@
 // src/auth/auth.service.ts
 
-import { Injectable, ConflictException } from '@nestjs/common';
+import { Injectable, ConflictException, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 import { SupabaseService } from '../supabase/supabase.service';
 import { JwtService } from '@nestjs/jwt';
@@ -50,17 +50,34 @@ export class AuthService {
     }
 
     // 3) Sign a JWT with user info
-    const payload = { userID: user.userID, email: user.gmail };
-    const accessToken = this.jwtService.sign(payload);
+    const accessPayload = { userID: user.userID, email: user.gmail, tokenType: 'access' };
+    const refreshPayload = { userID: user.userID, email: user.gmail, tokenType: 'refresh' };
+    const accessToken = this.jwtService.sign(accessPayload, { expiresIn: '1h' });
+    const refreshToken = this.jwtService.sign(refreshPayload, { expiresIn: '7d' });
 
-    return { accessToken };
+    return { accessToken, refreshToken };
   }
 
   /**
-   * Used by JwtStrategy to validate a user by email (or any ID).
-   */
-  async findByEmail(email: string): Promise<any> {
-    const users = await this.supabaseService.getUserByEmail(email);
-    return users && users.length > 0 ? users[0] : undefined;
-  }
+  * refresh the access token and refresh token
+  */
+  async refreshAccessToken(refreshToken: string) {
+    try {
+      const payload = await this.jwtService.verifyAsync(refreshToken);
+  
+      const user = await this.supabaseService.getUserByEmail(payload.email);
+      if (!user || user.length === 0) {
+        throw new UnauthorizedException('User no longer exists');
+      }
+  
+      const newAccessPayload = { userID: user[0].userID, email: user[0].gmail, tokenType: 'access' };
+      const newRefreshPayload = { userID: user[0].userID, email: user[0].gmail, tokenType: 'refresh' };
+      const newAccessToken = this.jwtService.sign(newAccessPayload, { expiresIn: '1h' });
+      const newRefreshToken = this.jwtService.sign(newRefreshPayload, { expiresIn: '7d' });
+  
+      return { accessToken: newAccessToken, refreshToken: newRefreshToken };
+    } catch (error) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+  }  
 }
