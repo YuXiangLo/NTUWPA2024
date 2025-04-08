@@ -2,14 +2,11 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import jwtDecode from '../utils/jwtHelper';
 
-// Create the context
 const AuthContext = createContext();
 
-// Helper function to check if the token is expired
 const isTokenExpired = (token) => {
   try {
     const decoded = jwtDecode(token);
-    // JWT 'exp' is in seconds; convert to milliseconds.
     return decoded.exp * 1000 < Date.now();
   } catch (error) {
     return true;
@@ -33,6 +30,44 @@ export const AuthProvider = ({ children }) => {
       }
     }
   }, [user]);
+
+  const refreshAccessToken = async () => {
+    const storedUser = localStorage.getItem('user');
+    if (!storedUser) return;
+  
+    const { refreshToken } = JSON.parse(storedUser);
+  
+    try {
+      const response = await fetch('/api/refresh', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ refreshToken }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to refresh token');
+      }
+  
+      const data = await response.json();
+      // Assume the API returns new access and refresh tokens
+      const newUserData = {
+        ...JSON.parse(storedUser), // Preserve any additional user info
+        token: data.accessToken,
+        refreshToken: data.refreshToken,
+      };
+  
+      setUser(newUserData);
+      localStorage.setItem('user', JSON.stringify(newUserData));
+      
+      return data.accessToken; // Optionally return the new token
+    } catch (error) {
+      console.error('Error refreshing token:', error);
+      logout(); // Optionally log the user out if refresh fails
+    }
+  };
+  
 
   // Call this on successful login. Expects userData to include a JWT token.
   const login = (userData) => {
