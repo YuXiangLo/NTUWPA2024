@@ -33,10 +33,17 @@ function SignupPage() {
       });
 
       if (response.ok) {
+        const response = await fetch(`${API_DOMAIN}auth/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+        });
         const data = await response.json();
         login(data);
         console.log('User registered:', data);
-        navigate('/user-info');
+        navigate('/profile');
       } else {
         const errorData = await response.json();
         setErrorMsg(errorData.message || 'Sign up failed');
