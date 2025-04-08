@@ -13,12 +13,10 @@ const isTokenExpired = (token) => {
   }
 };
 
-// Provider component to wrap your app and share auth state
 export const AuthProvider = ({ children }) => {
-  // 'user' will hold user data and the JWT token when logged in, or null if not.
   const [user, setUser] = useState(null);
 
-  // On mount, restore auth state from local storage if valid.
+  // Restore auth state from localStorage on component mount.
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
@@ -29,65 +27,89 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('user');
       }
     }
-  }, [user]);
+  }, []);
 
+  // Refresh the access token using the refresh token.
   const refreshAccessToken = async () => {
     const storedUser = localStorage.getItem('user');
     if (!storedUser) return;
-  
+    
     const { refreshToken } = JSON.parse(storedUser);
-  
     try {
-      const response = await fetch('/api/refresh', {
+      const response = await fetch('/auth/refresh-token', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ refreshToken }),
       });
-      
+
       if (!response.ok) {
         throw new Error('Failed to refresh token');
       }
-  
+
       const data = await response.json();
-      // Assume the API returns new access and refresh tokens
+      // Assume the API returns new access and refresh tokens.
       const newUserData = {
-        ...JSON.parse(storedUser), // Preserve any additional user info
+        ...JSON.parse(storedUser), // Retain additional user info if any.
         token: data.accessToken,
         refreshToken: data.refreshToken,
       };
-  
+
+      // Update the auth state and localStorage with new tokens.
       setUser(newUserData);
       localStorage.setItem('user', JSON.stringify(newUserData));
-      
-      return data.accessToken; // Optionally return the new token
+
+      return data.accessToken;
     } catch (error) {
       console.error('Error refreshing token:', error);
-      logout(); // Optionally log the user out if refresh fails
+      logout(); // Optionally log the user out if refreshing fails.
     }
   };
-  
 
-  // Call this on successful login. Expects userData to include a JWT token.
+  // Scheduled token refresh: automatically triggers a refresh shortly before the token expires.
+  useEffect(() => {
+    if (!user || !user.token) return;
+
+    const decoded = jwtDecode(user.token);
+    const expiryTime = decoded.exp * 1000; // Convert expiration to milliseconds.
+    const now = Date.now();
+    // Set a safety margin of 60 seconds before expiry.
+    const refreshMargin = 60 * 1000;
+    const timeout = expiryTime - now - refreshMargin;
+
+    let timerId;
+    if (timeout > 0) {
+      timerId = setTimeout(() => {
+        refreshAccessToken();
+      }, timeout);
+    } else {
+      // If the token is already near expiry, refresh immediately.
+      refreshAccessToken();
+    }
+
+    // Clean up the scheduled refresh timer on unmount or when 'user' changes.
+    return () => clearTimeout(timerId);
+  }, [user]);
+
+  // Call this function after a successful login. The userData object must include both tokens.
   const login = (userData) => {
     setUser(userData);
     localStorage.setItem('user', JSON.stringify(userData));
   };
 
-  // Clear user state on logout.
+  // Clear auth data on logout.
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, refreshAccessToken }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-
-// Custom hook to use the auth context
+// Custom hook for easy access to the auth context.
 export const useAuth = () => useContext(AuthContext);
