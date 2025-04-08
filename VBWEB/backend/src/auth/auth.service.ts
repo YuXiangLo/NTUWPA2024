@@ -50,9 +50,10 @@ export class AuthService {
     }
 
     // 3) Sign a JWT with user info
-    const payload = { userID: user.userID, email: user.gmail };
-    const accessToken = this.jwtService.sign(payload, { expiresIn: '1h' });
-    const refreshToken = this.jwtService.sign(payload, { expiresIn: '7d' });
+    const accessPayload = { userID: user.userID, email: user.gmail, tokenType: 'access' };
+    const refreshPayload = { userID: user.userID, email: user.gmail, tokenType: 'refresh' };
+    const accessToken = this.jwtService.sign(accessPayload, { expiresIn: '1h' });
+    const refreshToken = this.jwtService.sign(refreshPayload, { expiresIn: '7d' });
 
     return { accessToken, refreshToken };
   }
@@ -69,9 +70,10 @@ export class AuthService {
         throw new UnauthorizedException('User no longer exists');
       }
   
-      const newPayload = { userID: user[0].userID, email: user[0].gmail };
-      const newAccessToken = this.jwtService.sign(newPayload, { expiresIn: '1h' });
-      const newRefreshToken = this.jwtService.sign(newPayload, { expiresIn: '7d' });
+      const newAccessPayload = { userID: user[0].userID, email: user[0].gmail, tokenType: 'access' };
+      const newRefreshPayload = { userID: user[0].userID, email: user[0].gmail, tokenType: 'refresh' };
+      const newAccessToken = this.jwtService.sign(newAccessPayload, { expiresIn: '1h' });
+      const newRefreshToken = this.jwtService.sign(newRefreshPayload, { expiresIn: '7d' });
   
       return { accessToken: newAccessToken, refreshToken: newRefreshToken };
     } catch (error) {
