@@ -13,19 +13,19 @@
 
 ### 🖥️ Frontend
 - Built separate pages: Login, Register, Search Venue, Home, and more.
-- **Status:** Still in progress — frontend API integration ongoing.
+- Stored refresh token in cookies and access token in memory.
 
 ### 🔧 Backend
 - Developed a backend service using **Nest.js** with **Supabase** support.
 - Completed APIs:
-  - `POST /user/register` — Register a new user
-  - `POST /user/login` — User login
+  - `POST /auth/register` — Register a new user
+  - `POST /auth/login` — User login
   - `GET /user/profile` — Fetch user profile
   - `PATCH /user/profile` — Update user profile
 
 **Key Features:**
 - **Register:** Passwords are hashed using `bcryptjs`.
-- **Login:** JWT tokens manage user sessions.
+- **Login:** Handle access and refresh JWT tokens for security and session control.
 - **Profile:** Data interactions via Supabase (`/VBWEB/backend/src/user/supabase.service.ts`).
 
 ### 🐳 Docker
@@ -34,6 +34,10 @@
 #### 🛠️ Build and Run
 
 ```bash
+# To get the image, you can build one yourself or use our built
+docker pull yuxiang0503/frontend-app
+docker pull yuxiang0503/backend-app
+
 # Frontend: Build and run 
 cd VBWEB/frontend/
 docker build -t frontend-app .
@@ -51,9 +55,9 @@ docker run -d -p 3000:3000 --name backend-container backend-app
 ## 🖼️ Demo Screenshots
 
 ### Frontend
-|        Home Page         |
-|:------------------------:|
-| ![demo4](demo/demo4.png) |
+|        Home Page         |       Profile Page      |
+|:------------------------:|:------------------------:|
+| ![demo4](demo/demo4.png) | ![demo6](demo/demo7.png) |
 
 |        Login Page        |       Register Page      |
 |:------------------------:|:------------------------:|
