@@ -1,0 +1,52 @@
+.booking-calendar-container {
+    margin: 20px;
+    font-family: sans-serif;
+  }
+  
+  .booking-calendar-table {
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 800px;
+  }
+  
+  .booking-calendar-table th,
+  .booking-calendar-table td {
+    border: 1px solid #ccc;
+    text-align: center;
+    padding: 8px;
+    cursor: pointer;
+  }
+  
+  .time-label {
+    background-color: #f7f7f7;
+    font-weight: bold;
+    cursor: default !important;
+  }
+  
+  .slot-cell.available {
+    background-color: #fff;
+  }
+  
+  .slot-cell.selected {
+    background-color: #a8d0ff;
+  }
+  
+  .slot-cell.booked {
+    background-color: #fbb;
+    cursor: not-allowed;
+  }
+  
+  .confirm-button {
+    margin-top: 16px;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #0055ff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+  }
+  
+  .confirm-button:hover {
+    background-color: #003ecc;
+  }
+  
