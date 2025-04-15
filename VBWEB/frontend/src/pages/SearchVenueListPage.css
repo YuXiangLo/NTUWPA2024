@@ -43,7 +43,8 @@
 .svl-header-row .svl-col {
   flex: 1;
   text-align: left;
-  padding-right: 10px;
+  padding: 0 10px;  /* Adds padding on both sides */
+  padding-left: 15px; /* Increase left padding for extra gap from separator */
   border-right: 1px solid #ddd;
 }
 
@@ -77,7 +78,7 @@
 .svl-venue-row .svl-col {
   flex: 1;
   text-align: left;
-  padding-right: 10px;
+  padding: 0 15px;  /* Increased padding adds extra gap */
   border-right: 1px solid #eee;
 }
 
