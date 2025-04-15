@@ -21,7 +21,7 @@ function LandingPageInner() {
           )}
         </div>
         <aside className={`sidebar ${addCourtMode ? 'dimmed' : ''}`}>
-          <button className="sidebar-btn" onClick={() => navigate("/court-info")}>
+          <button className="sidebar-btn" onClick={() => navigate("/search-venue")}>
             搜尋場地
           </button>
           <button className="sidebar-btn">報名比賽</button>
