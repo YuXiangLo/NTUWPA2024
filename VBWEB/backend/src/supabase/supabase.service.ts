@@ -6,7 +6,7 @@ import { UpdateUserDto } from 'src/user/dto/update-user.dto';
 
 @Injectable()
 export class SupabaseService {
-  private supabase;
+  protected supabase;
 
   constructor(private readonly configService: ConfigService) {
     const supabaseUrl = this.configService.get<string>('SUPABASE_URL');
@@ -15,6 +15,10 @@ export class SupabaseService {
       throw new Error('Supabase URL or Public Key is not defined in the environment variables');
     }
     this.supabase = createClient(supabaseUrl, supabasePublicKey);
+  }
+
+  public get client() {
+    return this.supabase;
   }
 
   async createUser(email: string, password: string) {
