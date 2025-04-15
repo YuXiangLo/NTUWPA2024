@@ -1,0 +1,169 @@
+/* Container and title */
+.svl-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.svl-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Search section styles */
+.svl-search-section {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.svl-search-input {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.svl-search-select {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Header row styles */
+.svl-header-row {
+  display: flex;
+  background-color: #f9f9f9;
+  padding: 10px 15px;
+  font-weight: bold;
+  border-bottom: 2px solid #ddd;
+}
+
+.svl-header-row .svl-col {
+  flex: 1;
+  text-align: left;
+  padding-right: 10px;
+  border-right: 1px solid #ddd;
+}
+
+/* Remove the border on the last column */
+.svl-header-row .svl-col:last-child {
+  border-right: none;
+}
+
+/* Venue card styles */
+.svl-venue-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.svl-venue-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px 15px;
+}
+
+/* Venue row styles in horizontal layout */
+.svl-venue-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.svl-venue-row .svl-col {
+  flex: 1;
+  text-align: left;
+  padding-right: 10px;
+  border-right: 1px solid #eee;
+}
+
+.svl-venue-row .svl-col:last-child {
+  border-right: none;
+}
+
+/* Styling for specific columns (optional tweaks) */
+.svl-col-name {
+  font-weight: bold;
+  color: #333;
+}
+
+/* Actions column buttons */
+.svl-col-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.svl-detail-button,
+.svl-toggle-button {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.svl-detail-button {
+  background-color: #4CAF50;
+}
+
+.svl-toggle-button {
+  background-color: #008CBA;
+}
+
+/* Court list within a venue */
+.svl-court-list {
+  margin-top: 15px;
+  padding-left: 15px;
+  border-left: 3px solid #eee;
+}
+
+.svl-court-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f9f9f9;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+
+.svl-court-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.svl-court-info span {
+  font-size: 1em;
+  color: #666;
+}
+
+.svl-court-action {
+  margin-left: 10px;
+}
+
+.svl-schedule-button {
+  padding: 6px 10px;
+  background-color: #FF5722;
+  color: #fff;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+.svl-no-courts {
+  padding-left: 10px;
+  color: #999;
+  font-style: italic;
+}
+
+.svl-no-venues {
+  text-align: center;
+  padding: 20px;
+  color: #999;
+}

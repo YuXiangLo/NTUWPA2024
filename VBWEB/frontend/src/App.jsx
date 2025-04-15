@@ -9,6 +9,7 @@ import SignupPage from './pages/SignupPage';
 import ProfilePage from './pages/ProfilePage';
 import CourtInfoPage from './pages/CourtInfoPage';
 import BookingCalendar from './pages/BookingCalendar';
+import SearchVenueListPage from './pages/SearchVenueListPage';
 import './App.css';
 
 function App() {
@@ -22,6 +23,8 @@ function App() {
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/bookingCalendar" element={<BookingCalendar />} />
+          <Route path="/court-info" element={<CourtInfoPage />} />
+          <Route path="/search-venue" element={<SearchVenueListPage />} />
         </Routes>
       </main>
       <Footer />
