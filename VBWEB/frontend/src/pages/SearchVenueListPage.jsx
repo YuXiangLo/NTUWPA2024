@@ -104,7 +104,7 @@ const SearchVenueListPage = () => {
         <span className="svl-col svl-col-address">地址</span>
         <span className="svl-col svl-col-count">場地數</span>
         <span className="svl-col svl-col-status">狀態</span>
-        <span className="svl-col svl-col-actions">操作</span>
+        <span className="svl-col svl-col-actions">詳細內容</span>
       </div>
 
       <div className="svl-venue-list">
