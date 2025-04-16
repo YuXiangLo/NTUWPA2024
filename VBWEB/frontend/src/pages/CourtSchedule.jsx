@@ -28,7 +28,7 @@ const daysOfWeek = [
 const SchedulePage = () => {
   const { court_id } = useParams(); // Extract court_id from URL
   console.log(court_id);
-  
+
   // State to hold court details (which includes venue info) from API.
   const [courtDetail, setCourtDetail] = useState(null);
   const [loadingCourt, setLoadingCourt] = useState(true);
@@ -43,11 +43,12 @@ const SchedulePage = () => {
   useEffect(() => {
     const fetchCourtDetail = async () => {
       try {
-        const res = await fetch(`${API_DOMAIN}courts/${court_id}`);
+        const res = await fetch(`${API_DOMAIN}courts/court-venue-name/${court_id}`);
         if (!res.ok) {
           throw new Error('Failed to fetch court detail');
         }
         const data = await res.json();
+        console.log(data);
         setCourtDetail(data);
         setLoadingCourt(false);
       } catch (error) {
