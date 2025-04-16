@@ -1,16 +1,20 @@
 // src/pages/LoginPage.jsx
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { API_DOMAIN } from '../config.js';
 import { useAuth } from '../context/AuthContext';
 import './LoginPage.css';
 
 function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+
+  // Get the redirect path from query parameters (if any)
+  const redirect = new URLSearchParams(location.search).get('redirect') || '/';
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -30,7 +34,8 @@ function LoginPage() {
           const data = await response.json();
           console.log('Logged in:', data);
           login(data);
-          navigate('/');
+          // Navigate back to the redirect URL after successful login
+          navigate(redirect, { replace: true });
         } else {
           const errorData = await response.json();
           setErrorMsg(errorData.message || 'Login failed');
@@ -44,11 +49,11 @@ function LoginPage() {
 
   return (
     <div className="login-page">
-      <h2>Login</h2>
+      <h2>登錄</h2>
       {errorMsg && <p className="error-msg">{errorMsg}</p>}
       <form onSubmit={handleLogin}>
         <div className="form-group">
-          <label>Email:</label>
+          <label>信箱:</label>
           <input 
             type="email" 
             value={email}
@@ -57,7 +62,7 @@ function LoginPage() {
           />
         </div>
         <div className="form-group">
-          <label>Password:</label>
+          <label>密碼:</label>
           <input 
             type="password" 
             value={password}
@@ -72,7 +77,7 @@ function LoginPage() {
         onClick={() => navigate('/signup')}
         className="signup-link-btn"
       >
-        Sign Up
+        註冊
       </button>
     </div>
   );

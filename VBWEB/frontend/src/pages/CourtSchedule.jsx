@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import './BookingCalendar.css'; // (optional) for styling
+import { useParams, useNavigate } from 'react-router-dom';
+import { API_DOMAIN } from '../config.js';
+import './CourtSchedule.css'; // (optional) for styling
 
 // Helper function to generate time slots from 9:00 AM to 10:00 PM.
 function generateTimeSlots(startHour = 9, endHour = 22) {
@@ -12,8 +14,7 @@ function generateTimeSlots(startHour = 9, endHour = 22) {
   return slots;
 }
 
-// Sample day headers for the chosen week
-// In a real application, you might generate these based on the current date.
+// Sample day headers for the chosen week (you can customize the dates)
 const daysOfWeek = [
   { dayName: 'Sun', date: 'Apr 13' },
   { dayName: 'Mon', date: 'Apr 14' },
@@ -24,21 +25,53 @@ const daysOfWeek = [
   { dayName: 'Sat', date: 'Apr 19' },
 ];
 
-const BookingCalendar = () => {
-  // State to hold all time slots in a day
+const SchedulePage = () => {
+  const { court_id } = useParams(); // Extract court_id from URL
+  const navigate = useNavigate();    // For navigation (login and redirect back)
+
+  // Function to get current URL for redirect after login
+  const getCurrentURL = () => {
+    return window.location.pathname + window.location.search;
+  };
+
+  // State to hold court details (which includes venue info) from API.
+  const [courtDetail, setCourtDetail] = useState(null);
+  const [loadingCourt, setLoadingCourt] = useState(true);
+  const [courtError, setCourtError] = useState(null);
+
+  // State to hold time slots and booking status
   const [timeSlots, setTimeSlots] = useState([]);
-  // State to track which slots are booked vs. available
   // Format: { [dayIndex_timeIndex]: 'booked' | 'available' | 'selected' }
   const [slotStatus, setSlotStatus] = useState({});
 
+  // Fetch court details on mount.
   useEffect(() => {
-    // Generate times from 9:00 AM to 10:00 PM
+    const fetchCourtDetail = async () => {
+      try {
+        const res = await fetch(`${API_DOMAIN}courts/court-venue-name/${court_id}`);
+        if (!res.ok) {
+          throw new Error('Failed to fetch court detail');
+        }
+        const data = await res.json();
+        console.log(data);
+        setCourtDetail(data);
+        setLoadingCourt(false);
+      } catch (error) {
+        setCourtError(error.message);
+        setLoadingCourt(false);
+      }
+    };
+
+    fetchCourtDetail();
+  }, [court_id]);
+
+  // Initialize calendar slots once on mount (or when court_id changes)
+  useEffect(() => {
     const slots = generateTimeSlots(9, 22);
     setTimeSlots(slots);
 
-    // In a real scenario, call your backend (NestJS + Supabase) to fetch existing bookings.
-    // Then update `slotStatus` accordingly for each day/time combination.
-    // For now, everything is 'available' by default.
+    // In a real scenario, fetch schedule data from backend for the given court.
+    // For demonstration, all slots are initialized as available.
     const initialStatus = {};
     daysOfWeek.forEach((_, dayIndex) => {
       slots.forEach((_, timeIndex) => {
@@ -46,19 +79,29 @@ const BookingCalendar = () => {
       });
     });
     setSlotStatus(initialStatus);
-  }, []);
+  }, [court_id]);
 
-  // Handler for clicking on a cell
+  // Check if the user is logged in by confirming the presence of a token
+  const isUserLoggedIn = () => {
+    return Boolean(localStorage.getItem('user_token'));
+  };
+
+  // Handler for clicking on a time slot cell
   const handleSlotClick = (dayIndex, timeIndex) => {
+    if (!isUserLoggedIn()) {
+      console.log(encodeURIComponent(getCurrentURL()));
+      alert('請先登錄會員');
+      // Redirect to login page with redirect URL
+      navigate(`/login?redirect=${encodeURIComponent(getCurrentURL())}`);
+      return;
+    }
     const slotKey = `${dayIndex}_${timeIndex}`;
-    // If the slot is booked, do nothing. If available, toggle 'selected'.
     setSlotStatus((prevStatus) => {
       const current = prevStatus[slotKey];
       if (current === 'booked') {
-        alert('This time slot is already booked!');
+        alert('此時間段已預約！');
         return prevStatus;
       }
-      // Toggle between 'available' and 'selected'
       return {
         ...prevStatus,
         [slotKey]: current === 'selected' ? 'available' : 'selected',
@@ -66,9 +109,14 @@ const BookingCalendar = () => {
     });
   };
 
-  // Handler for confirming bookings
+  // Handler for confirming a booking
   const handleConfirmBooking = () => {
-    // Gather all selected slots
+    if (!isUserLoggedIn()) {
+      alert('You must be logged in to book a schedule.');
+      navigate(`/login?redirect=${encodeURIComponent(getCurrentURL())}`);
+      return;
+    }
+
     const selectedSlots = [];
     Object.keys(slotStatus).forEach((key) => {
       if (slotStatus[key] === 'selected') {
@@ -85,53 +133,63 @@ const BookingCalendar = () => {
       return;
     }
 
-    console.log('Selected Slots:', selectedSlots);
-
-    // In a real scenario, you’d send a request to your backend to book these time slots.
-    // On success, update the slotStatus to 'booked' for each selected slot.
+    console.log('Selected Slots for court ', court_id, ':', selectedSlots);
+    
+    // For demonstration, update the status as booked.
     const updatedStatus = { ...slotStatus };
     selectedSlots.forEach(({ dayIndex, timeIndex }) => {
       const slotKey = `${dayIndex}_${timeIndex}`;
       updatedStatus[slotKey] = 'booked';
     });
     setSlotStatus(updatedStatus);
-
+    
     alert('Your booking has been confirmed!');
   };
 
+  // Display loading/error state while fetching court details
+  if (loadingCourt)
+    return <div className="booking-calendar-container">Loading court details...</div>;
+  if (courtError)
+    return <div className="booking-calendar-container">Error: {courtError}</div>;
+
   return (
     <div className="booking-calendar-container">
-      <h2>Booking Calendar</h2>
+      {/* Title shows Venue Name and Court Name */}
+      <h2>
+        {courtDetail && courtDetail.venue && courtDetail.venue.name} - {courtDetail && courtDetail.name}
+      </h2>
       <table className="booking-calendar-table">
         <thead>
           <tr>
             <th>Time</th>
             {daysOfWeek.map((day, index) => (
-              <th key={index}>{day.dayName}<br/>{day.date}</th>
+              <th key={index}>
+                {day.dayName}
+                <br />
+                {day.date}
+              </th>
             ))}
           </tr>
         </thead>
         <tbody>
           {timeSlots.map((time, timeIndex) => (
             <tr key={timeIndex}>
-              {/* First column: time label */}
               <td className="time-label">{time}</td>
-              {/* Next columns: days */}
               {daysOfWeek.map((_, dayIndex) => {
                 const slotKey = `${dayIndex}_${timeIndex}`;
                 const status = slotStatus[slotKey] || 'available';
-
-                // You can adjust the styling based on status
                 const cellClass = `slot-cell ${status}`;
-
                 return (
                   <td
                     key={slotKey}
                     className={cellClass}
                     onClick={() => handleSlotClick(dayIndex, timeIndex)}
                   >
-                    {status === 'booked' ? 'Booked' : ''}
-                    {status === 'selected' ? 'Selected' : ''}
+                    {status === 'booked'
+                      ? '已預約'
+                      : status === 'selected'
+                      ? '已選擇'
+                      : ''}
                   </td>
                 );
               })}
@@ -139,12 +197,11 @@ const BookingCalendar = () => {
           ))}
         </tbody>
       </table>
-
       <button onClick={handleConfirmBooking} className="confirm-button">
-        Book Now
+        確定預約
       </button>
     </div>
   );
 };
 
-export default BookingCalendar;
+export default SchedulePage;

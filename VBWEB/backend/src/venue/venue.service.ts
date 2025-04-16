@@ -49,4 +49,21 @@ export class VenueService {
     }
     return data;
   }
+
+  async getCourtVenueNameById(courtId: string): Promise<any> {
+    const { data, error } = await this.supabaseService.client
+      .from('court')
+      .select(`court_id, name, material, status, venue (name)`)
+      .eq('court_id', courtId)
+      .maybeSingle();
+  
+    if (error) {
+      throw new BadRequestException(`Failed to fetch court: ${error.message}`);
+    }
+    if (!data) {
+      throw new NotFoundException('Court not found.');
+    }
+    return data;
+  }
+  
 }
