@@ -83,7 +83,9 @@ const SchedulePage = () => {
 
   // Check if the user is logged in by confirming the presence of a token
   const isUserLoggedIn = () => {
-    return Boolean(localStorage.getItem('user_token'));
+    const user = localStorage.getItem('user');
+    console.log(user);
+    return Boolean(user);
   };
 
   // Handler for clicking on a time slot cell
