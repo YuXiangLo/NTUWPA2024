@@ -9,8 +9,6 @@ function Header() {
   const location = useLocation();
   const { user, logout } = useAuth();
 
-  console.log(user);
-
   return (
     <header className="header">
       <div className="header-title" onClick={() => navigate('/')}>
