@@ -41,9 +41,12 @@
   /* Map container */
   .map-container {
     flex: 1;
-    position: relative;
+    display: flex;
+    flex-direction: column;
     padding: 1rem;
+    gap: 1rem;
   }
+
   
   .map-image {
     width: 100%;
@@ -57,11 +60,6 @@
   
   /* The hint overlay above the map */
   .add-court-hint {
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
     background: rgba(255, 255, 255, 0.9);
     padding: 8px 12px;
     border-radius: 4px;
