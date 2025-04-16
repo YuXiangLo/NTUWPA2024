@@ -11,4 +11,9 @@ export class CourtController {
     // This method calls the getCourtById defined in VenueService which queries Supabase.
     return await this.venueService.getCourtById(court_id);
   }
+
+  @Get('court-venue-name/:court_id')
+  async getCourtVenueNameById(@Param('court_id') court_id: string) {
+    return await this.venueService.getCourtVenueNameById(court_id);
+  }
 }
