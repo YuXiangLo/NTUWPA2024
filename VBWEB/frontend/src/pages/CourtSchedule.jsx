@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { API_DOMAIN } from '../config.js';
 import './CourtSchedule.css'; // (optional) for styling
 
@@ -27,7 +27,12 @@ const daysOfWeek = [
 
 const SchedulePage = () => {
   const { court_id } = useParams(); // Extract court_id from URL
-  console.log(court_id);
+  const navigate = useNavigate();    // For navigation (login and redirect back)
+
+  // Function to get current URL for redirect after login
+  const getCurrentURL = () => {
+    return window.location.pathname + window.location.search;
+  };
 
   // State to hold court details (which includes venue info) from API.
   const [courtDetail, setCourtDetail] = useState(null);
@@ -76,13 +81,25 @@ const SchedulePage = () => {
     setSlotStatus(initialStatus);
   }, [court_id]);
 
+  // Check if the user is logged in by confirming the presence of a token
+  const isUserLoggedIn = () => {
+    return Boolean(localStorage.getItem('user_token'));
+  };
+
   // Handler for clicking on a time slot cell
   const handleSlotClick = (dayIndex, timeIndex) => {
+    if (!isUserLoggedIn()) {
+      console.log(encodeURIComponent(getCurrentURL()));
+      alert('請先登錄會員');
+      // Redirect to login page with redirect URL
+      navigate(`/login?redirect=${encodeURIComponent(getCurrentURL())}`);
+      return;
+    }
     const slotKey = `${dayIndex}_${timeIndex}`;
     setSlotStatus((prevStatus) => {
       const current = prevStatus[slotKey];
       if (current === 'booked') {
-        alert('This time slot is already booked!');
+        alert('此時間段已預約！');
         return prevStatus;
       }
       return {
@@ -94,6 +111,12 @@ const SchedulePage = () => {
 
   // Handler for confirming a booking
   const handleConfirmBooking = () => {
+    if (!isUserLoggedIn()) {
+      alert('You must be logged in to book a schedule.');
+      navigate(`/login?redirect=${encodeURIComponent(getCurrentURL())}`);
+      return;
+    }
+
     const selectedSlots = [];
     Object.keys(slotStatus).forEach((key) => {
       if (slotStatus[key] === 'selected') {
@@ -112,20 +135,22 @@ const SchedulePage = () => {
 
     console.log('Selected Slots for court ', court_id, ':', selectedSlots);
     
-    // Update the status as booked; in a real app, send booking request to the backend.
+    // For demonstration, update the status as booked.
     const updatedStatus = { ...slotStatus };
     selectedSlots.forEach(({ dayIndex, timeIndex }) => {
       const slotKey = `${dayIndex}_${timeIndex}`;
       updatedStatus[slotKey] = 'booked';
     });
     setSlotStatus(updatedStatus);
-
+    
     alert('Your booking has been confirmed!');
   };
 
   // Display loading/error state while fetching court details
-  if (loadingCourt) return <div className="booking-calendar-container">Loading court details...</div>;
-  if (courtError) return <div className="booking-calendar-container">Error: {courtError}</div>;
+  if (loadingCourt)
+    return <div className="booking-calendar-container">Loading court details...</div>;
+  if (courtError)
+    return <div className="booking-calendar-container">Error: {courtError}</div>;
 
   return (
     <div className="booking-calendar-container">
@@ -155,8 +180,16 @@ const SchedulePage = () => {
                 const status = slotStatus[slotKey] || 'available';
                 const cellClass = `slot-cell ${status}`;
                 return (
-                  <td key={slotKey} className={cellClass} onClick={() => handleSlotClick(dayIndex, timeIndex)}>
-                    {status === 'booked' ? '已預約' : status === 'selected' ? '已選擇' : ''}
+                  <td
+                    key={slotKey}
+                    className={cellClass}
+                    onClick={() => handleSlotClick(dayIndex, timeIndex)}
+                  >
+                    {status === 'booked'
+                      ? '已預約'
+                      : status === 'selected'
+                      ? '已選擇'
+                      : ''}
                   </td>
                 );
               })}
