@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { API_DOMAIN } from '../config.js';
 import './CourtSchedule.css';
 
+// Generate hourly slots from startHour to endHour
 function generateTimeSlots(startHour = 9, endHour = 22) {
   const slots = [];
   for (let hour = startHour; hour <= endHour; hour++) {
@@ -14,6 +15,7 @@ function generateTimeSlots(startHour = 9, endHour = 22) {
   return slots;
 }
 
+// Generate days from offsetStart to offsetEnd relative to today
 function generateDays(offsetStart = -1, offsetEnd = 5) {
   const days = [];
   const today = new Date();
@@ -96,29 +98,34 @@ const SchedulePage = () => {
       });
   }, [court_id, daysOfWeek]);
 
+  // Toggle slot selection
   const handleSlotClick = (dayIndex, { label, hour }) => {
+    const key = `${dayIndex}_${hour}`;
+    const status = slotStatus[key];
+    if (status === 'booked') {
+      alert('此時間段已預約！');
+      return;
+    }
     if (!loggedIn()) {
       alert('請先登錄會員');
       return navigate(`/login?redirect=${encodeURIComponent(currentURL())}`);
     }
-    const key = `${dayIndex}_${hour}`;
-    setSlotStatus(prev => {
-      if (prev[key] === 'booked') {
-        alert('此時間段已預約！');
-        return prev;
-      }
-      const next = prev[key] === 'selected' ? 'available' : 'selected';
-      return { ...prev, [key]: next };
-    });
-    setSelectedSlots(slots => {
-      const exists = slots.find(s => s.day === dayIndex && s.hour === hour);
-      if (exists) {
-        return slots.filter(s => !(s.day === dayIndex && s.hour === hour));
-      }
-      return [...slots, { day: dayIndex, hour, label }];
+
+    // Toggle status
+    setSlotStatus(prev => ({
+      ...prev,
+      [key]: prev[key] === 'selected' ? 'available' : 'selected'
+    }));
+
+    // Toggle selection in list
+    setSelectedSlots(prev => {
+      return prev.some(s => s.day === dayIndex && s.hour === hour)
+        ? prev.filter(s => !(s.day === dayIndex && s.hour === hour))
+        : [...prev, { day: dayIndex, hour, label }];
     });
   };
 
+  // Submit reservation
   const handleSubmit = async e => {
     e.preventDefault();
     setErrorMsg('');
@@ -134,7 +141,7 @@ const SchedulePage = () => {
     }
 
     const body = {
-      user_id: JSON.parse(localStorage.getItem('user')).userID,
+      user_id: JSON.parse(localStorage.getItem('user')).userid,
       venue_id: courtDetail.venue.venue_id,
       court_id,
       slots: selectedSlots.map(s => ({
@@ -151,9 +158,6 @@ const SchedulePage = () => {
       remark
     };
 
-    console.log(courtDetail);
-    console.log(body);
-
     try {
       const res = await fetch(`${API_DOMAIN}reserve`, {
         method: 'POST',
@@ -162,7 +166,6 @@ const SchedulePage = () => {
       });
       if (!res.ok) throw new Error('提交失敗');
       alert('預約成功！');
-      navigate('/venues');
     } catch (err) {
       setErrorMsg(err.message);
     }
@@ -198,9 +201,13 @@ const SchedulePage = () => {
                     <td
                       key={key}
                       className={`slot-cell ${status}`}
-                      onClick={() => handleSlotClick(dayIndex, slot)}
+                      onClick={e => {
+                        e.stopPropagation();
+                        handleSlotClick(dayIndex, slot);
+                      }}
                     >
-                      {status === 'booked' ? '✕' : status === 'selected' ? '✓' : ''}
+                      {status === 'booked' ? '✕' :
+                       status === 'selected' ? '✓' : ''}
                     </td>
                   );
                 })}
