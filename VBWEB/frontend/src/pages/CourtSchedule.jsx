@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+// src/pages/SchedulePage.jsx
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { API_DOMAIN } from '../config.js';
 import './CourtSchedule.css';
@@ -6,44 +7,55 @@ import './CourtSchedule.css';
 function generateTimeSlots(startHour = 9, endHour = 22) {
   const slots = [];
   for (let hour = startHour; hour <= endHour; hour++) {
-    const formatted = hour > 12 ? hour - 12 : hour;
+    const labelHour = hour > 12 ? hour - 12 : hour;
     const suffix = hour >= 12 ? 'PM' : 'AM';
-    slots.push({ label: `${formatted}:00 ${suffix}`, hour });
+    slots.push({ label: `${labelHour}:00 ${suffix}`, hour });
   }
   return slots;
 }
 
-const daysOfWeek = [
-  { dayName: 'Sun', date: '2025-04-13' },
-  { dayName: 'Mon', date: '2025-04-14' },
-  { dayName: 'Tue', date: '2025-04-15' },
-  { dayName: 'Wed', date: '2025-04-16' },
-  { dayName: 'Thu', date: '2025-04-17' },
-  { dayName: 'Fri', date: '2025-04-18' },
-  { dayName: 'Sat', date: '2025-04-19' },
-];
+function generateDays(offsetStart = -1, offsetEnd = 5) {
+  const days = [];
+  const today = new Date();
+  for (let offset = offsetStart; offset <= offsetEnd; offset++) {
+    const d = new Date(today);
+    d.setDate(d.getDate() + offset);
+    const dayName = d.toLocaleDateString('en-US', { weekday: 'short' });
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    days.push({ dayName, date: `${mm}-${dd}`, iso: d.toISOString().slice(0, 10) });
+  }
+  return days;
+}
 
 const SchedulePage = () => {
   const { court_id } = useParams();
   const navigate = useNavigate();
+
+  const daysOfWeek = useMemo(() => generateDays(-1, 5), []);
+
+  // Court & venue info
   const [courtDetail, setCourtDetail] = useState(null);
   const [loadingCourt, setLoadingCourt] = useState(true);
   const [courtError, setCourtError] = useState(null);
 
+  // Calendar state
   const [timeSlots, setTimeSlots] = useState([]);
   const [slotStatus, setSlotStatus] = useState({});
   const [selectedSlots, setSelectedSlots] = useState([]);
 
+  // Reservation form state
   const [curMale, setCurMale] = useState(0);
   const [maxMale, setMaxMale] = useState(0);
   const [curFemale, setCurFemale] = useState(0);
   const [maxFemale, setMaxFemale] = useState(0);
   const [privacy, setPrivacy] = useState('public');
-  const [level, setLevel] = useState('');
+  const [level, setLevel] = useState('0');
+  const [fee, setFee] = useState(0.0);
+  const [remark, setRemark] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
-  const currentURL = () =>
-    window.location.pathname + window.location.search;
+  const currentURL = () => window.location.pathname + window.location.search;
   const loggedIn = () => Boolean(localStorage.getItem('user'));
 
   // Fetch court & venue info
@@ -51,41 +63,59 @@ const SchedulePage = () => {
     fetch(`${API_DOMAIN}courts/court-venue-name/${court_id}`)
       .then(res => res.ok ? res.json() : Promise.reject('Fetch failed'))
       .then(setCourtDetail)
-      .catch(err => setCourtError(err))
+      .catch(setCourtError)
       .finally(() => setLoadingCourt(false));
   }, [court_id]);
 
-  // Init calendar
+  // Initialize slots & fetch existing bookings
   useEffect(() => {
     const slots = generateTimeSlots();
     setTimeSlots(slots);
-    const status = {};
-    daysOfWeek.forEach((_, d) =>
-      slots.forEach(({ hour }) => (status[`${d}_${hour}`] = 'available'))
-    );
-    setSlotStatus(status);
-  }, [court_id]);
 
-  const handleSlotClick = (day, { label, hour }) => {
+    const statusMap = {};
+    daysOfWeek.forEach((day, dayIndex) =>
+      slots.forEach(({ hour }) => statusMap[`${dayIndex}_${hour}`] = 'available')
+    );
+
+    const startIso = daysOfWeek[0].iso;
+    const endIso = daysOfWeek[daysOfWeek.length - 1].iso;
+    fetch(`${API_DOMAIN}reserve/court/${court_id}?start=${startIso}&end=${endIso}`)
+      .then(res => res.ok ? res.json() : Promise.reject())
+      .then(bookings => {
+        bookings.forEach(({ start_time }) => {
+          const dt = new Date(start_time);
+          const dayIdx = daysOfWeek.findIndex(d => d.iso === dt.toISOString().slice(0,10));
+          const hour = dt.getHours();
+          const key = `${dayIdx}_${hour}`;
+          if (statusMap[key] !== undefined) statusMap[key] = 'booked';
+        });
+        setSlotStatus(statusMap);
+      })
+      .catch(() => {
+        setSlotStatus(statusMap);
+      });
+  }, [court_id, daysOfWeek]);
+
+  const handleSlotClick = (dayIndex, { label, hour }) => {
     if (!loggedIn()) {
       alert('請先登錄會員');
       return navigate(`/login?redirect=${encodeURIComponent(currentURL())}`);
     }
-    const key = `${day}_${hour}`;
-    setSlotStatus(s => {
-      if (s[key] === 'booked') {
+    const key = `${dayIndex}_${hour}`;
+    setSlotStatus(prev => {
+      if (prev[key] === 'booked') {
         alert('此時間段已預約！');
-        return s;
+        return prev;
       }
-      const next = s[key] === 'selected' ? 'available' : 'selected';
-      return { ...s, [key]: next };
+      const next = prev[key] === 'selected' ? 'available' : 'selected';
+      return { ...prev, [key]: next };
     });
     setSelectedSlots(slots => {
-      const exists = slots.find(s => s.day === day && s.hour === hour);
+      const exists = slots.find(s => s.day === dayIndex && s.hour === hour);
       if (exists) {
-        return slots.filter(s => !(s.day === day && s.hour === hour));
+        return slots.filter(s => !(s.day === dayIndex && s.hour === hour));
       }
-      return [...slots, { day, hour, label }];
+      return [...slots, { day: dayIndex, hour, label }];
     });
   };
 
@@ -104,12 +134,12 @@ const SchedulePage = () => {
     }
 
     const body = {
-      user_id: JSON.parse(localStorage.getItem('user')).userid,
+      user_id: JSON.parse(localStorage.getItem('user')).userID,
       venue_id: courtDetail.venue.venue_id,
       court_id,
       slots: selectedSlots.map(s => ({
-        date: daysOfWeek[s.day].date,
-        time: `${s.hour}:00`,
+        date: daysOfWeek[s.day].iso,
+        time: `${s.hour}:00`
       })),
       cur_male_count: curMale,
       max_male_count: maxMale,
@@ -117,13 +147,18 @@ const SchedulePage = () => {
       max_female_count: maxFemale,
       privacy_type: privacy,
       level,
+      fee: parseFloat(fee),
+      remark
     };
+
+    console.log(courtDetail);
+    console.log(body);
 
     try {
       const res = await fetch(`${API_DOMAIN}reserve`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
+        body: JSON.stringify(body)
       });
       if (!res.ok) throw new Error('提交失敗');
       alert('預約成功！');
@@ -148,7 +183,7 @@ const SchedulePage = () => {
             <tr>
               <th>Time</th>
               {daysOfWeek.map((d, i) => (
-                <th key={i}>{d.dayName}<br />{d.date}</th>
+                <th key={i}>{d.dayName}<br/>{d.date}</th>
               ))}
             </tr>
           </thead>
@@ -165,8 +200,7 @@ const SchedulePage = () => {
                       className={`slot-cell ${status}`}
                       onClick={() => handleSlotClick(dayIndex, slot)}
                     >
-                      {status === 'booked' ? '✕' :
-                       status === 'selected' ? '✓' : ''}
+                      {status === 'booked' ? '✕' : status === 'selected' ? '✓' : ''}
                     </td>
                   );
                 })}
@@ -179,9 +213,7 @@ const SchedulePage = () => {
       {selectedSlots.length > 0 && (
         <div className="selected-summary">
           <strong>已選時間：</strong>
-          {selectedSlots
-            .map(s => `${daysOfWeek[s.day].date} ${s.label}`)
-            .join('；')}
+          {selectedSlots.map(s => `${daysOfWeek[s.day].date} ${s.label}`).join('；')}
         </div>
       )}
 
@@ -193,19 +225,15 @@ const SchedulePage = () => {
           <div className="form-field">
             <label>當前男生人數</label>
             <input
-              type="number"
-              min="0"
-              value={curMale}
-              onChange={e => setCurMale(+e.target.value)}
+              type="number" min="0"
+              value={curMale} onChange={e => setCurMale(+e.target.value)}
             />
           </div>
           <div className="form-field">
             <label>最大男生人數</label>
             <input
-              type="number"
-              min="0"
-              value={maxMale}
-              onChange={e => setMaxMale(+e.target.value)}
+              type="number" min="0"
+              value={maxMale} onChange={e => setMaxMale(+e.target.value)}
             />
           </div>
         </div>
@@ -214,38 +242,45 @@ const SchedulePage = () => {
           <div className="form-field">
             <label>當前女生人數</label>
             <input
-              type="number"
-              min="0"
-              value={curFemale}
-              onChange={e => setCurFemale(+e.target.value)}
+              type="number" min="0"
+              value={curFemale} onChange={e => setCurFemale(+e.target.value)}
             />
           </div>
           <div className="form-field">
             <label>最大女生人數</label>
             <input
-              type="number"
-              min="0"
-              value={maxFemale}
-              onChange={e => setMaxFemale(+e.target.value)}
+              type="number" min="0"
+              value={maxFemale} onChange={e => setMaxFemale(+e.target.value)}
             />
           </div>
         </div>
 
         <div className="form-row">
-          <div className="form-field full">
-            <label>公開／私人</label>
-            <select
-              value={privacy}
-              onChange={e => setPrivacy(e.target.value)}
-            >
-              <option value="public">Public</option>
-              <option value="private">Private</option>
-            </select>
+          <div className="form-field">
+            <label>費用 (Fee)</label>
+            <input
+              type="number" min="0" step="0.01"
+              value={fee} onChange={e => setFee(e.target.value)}
+            />
+          </div>
+          <div className="form-field">
+            <label>備註 (Remark)</label>
+            <textarea
+              value={remark}
+              onChange={e => setRemark(e.target.value)}
+            />
           </div>
         </div>
 
         <div className="form-row">
-          <div className="form-field full">
+          <div className="form-field">
+            <label>公開／私人</label>
+            <select value={privacy} onChange={e => setPrivacy(e.target.value)}>
+              <option value="public">Public</option>
+              <option value="private">Private</option>
+            </select>
+          </div>
+          <div className="form-field">
             <label>Level</label>
             <input
               type="text"

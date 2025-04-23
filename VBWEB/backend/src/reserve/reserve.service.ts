@@ -34,4 +34,26 @@ export class ReserveService {
     }
     return data;
   }
+
+  // New: get all reservations for a court within a date range
+  async getReservationsForCourt(
+    court_id: string,
+    start: string,   // ISO date: 'YYYY-MM-DD'
+    end: string      // ISO date: 'YYYY-MM-DD'
+  ): Promise<any[]> {
+    const startTs = `${start}T00:00:00Z`;
+    const endTs   = `${end}T23:59:59Z`;
+
+    const { data, error } = await this.supabase.client
+      .from('reserve')
+      .select('start_time')
+      .eq('court_id', court_id)
+      .gte('start_time', startTs)
+      .lte('start_time', endTs);
+
+    if (error) {
+      throw new BadRequestException(`Failed to fetch reservations: ${error.message}`);
+    }
+    return data;
+  }
 }

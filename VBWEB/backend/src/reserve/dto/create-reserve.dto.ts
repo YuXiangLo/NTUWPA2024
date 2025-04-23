@@ -14,10 +14,10 @@ export class CreateReserveDto {
   @IsUUID()
   user_id: string;
 
-  @IsString()
+  @IsUUID()
   venue_id: string;
 
-  @IsString()
+  @IsUUID()
   court_id: string;
 
   @IsArray()

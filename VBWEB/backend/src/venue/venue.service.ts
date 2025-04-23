@@ -53,7 +53,7 @@ export class VenueService {
   async getCourtVenueNameById(courtId: string): Promise<any> {
     const { data, error } = await this.supabaseService.client
       .from('court')
-      .select(`court_id, name, material, status, venue (name)`)
+      .select(`court_id, name, material, status, venue (name, venue_id)`)
       .eq('court_id', courtId)
       .maybeSingle();
   

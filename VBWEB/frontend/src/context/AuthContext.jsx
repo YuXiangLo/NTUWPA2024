@@ -23,7 +23,6 @@ export const AuthProvider = ({ children }) => {
     if (storedUser) {
       try {
         const parsedUser = JSON.parse(storedUser);
-        console.log('Restoring user from localStorage:', parsedUser);
         return parsedUser;
       } catch (error) {
         console.error('Error parsing stored user:', error);
@@ -113,16 +112,16 @@ export const AuthProvider = ({ children }) => {
 
   // Function to handle login: store user data (including tokens)
   const login = (userData) => {
+    console.log('User logged in:', userData);
     setUser(userData);
     localStorage.setItem('user', JSON.stringify(userData));
-    console.log('User logged in:', userData);
+    console.log('User logged in:', localStorage.getItem('user'));
   };
 
   // Function to handle logout: clear state and local storage.
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
-    console.log('User logged out');
   };
 
   return (
