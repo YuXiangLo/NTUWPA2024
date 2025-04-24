@@ -32,7 +32,7 @@ function LoginPage() {
 
         if (response.ok) {
           const data = await response.json();
-          console.log('Logged in:', data);
+          console.log('Login response:', data);
           login(data);
           // Navigate back to the redirect URL after successful login
           navigate(redirect, { replace: true });

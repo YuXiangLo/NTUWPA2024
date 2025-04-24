@@ -42,7 +42,6 @@ export class AuthService {
       throw new Error('User not found');
     }
     const user = users[0];
-
     // 2) Compare password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
@@ -50,12 +49,12 @@ export class AuthService {
     }
 
     // 3) Sign a JWT with user info
-    const accessPayload = { userID: user.userID, email: user.gmail, tokenType: 'access' };
-    const refreshPayload = { userID: user.userID, email: user.gmail, tokenType: 'refresh' };
+    const accessPayload = { userID: user.userid, email: user.gmail, tokenType: 'access' };
+    const refreshPayload = { userID: user.userid, email: user.gmail, tokenType: 'refresh' };
     const accessToken = this.jwtService.sign(accessPayload, { expiresIn: '1h' });
     const refreshToken = this.jwtService.sign(refreshPayload, { expiresIn: '7d' });
 
-    return { accessToken, refreshToken };
+    return { accessToken, refreshToken, userID: user.userid };
   }
 
   /**
@@ -75,7 +74,7 @@ export class AuthService {
       const newAccessToken = this.jwtService.sign(newAccessPayload, { expiresIn: '1h' });
       const newRefreshToken = this.jwtService.sign(newRefreshPayload, { expiresIn: '7d' });
   
-      return { accessToken: newAccessToken, refreshToken: newRefreshToken };
+      return { accessToken: newAccessToken, refreshToken: newRefreshToken, userID: user.userID  };
     } catch (error) {
       throw new UnauthorizedException('Invalid refresh token');
     }

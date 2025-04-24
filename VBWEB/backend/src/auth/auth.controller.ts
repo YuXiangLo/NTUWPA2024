@@ -59,11 +59,12 @@ import {
       const { email, password } = body;
   
       try {
-        const { accessToken, refreshToken } = await this.authService.loginUser(email, password);
+        const { accessToken, refreshToken, userID } = await this.authService.loginUser(email, password);
         return {
           status: 'success',
           accessToken,
-          refreshToken
+          refreshToken,
+          userID
         };
       } catch (error) {
         if (error.message === 'Invalid credentials' || error.message === 'User not found') {
@@ -87,11 +88,12 @@ import {
       }
 
       try {
-        const { accessToken, refreshToken } = await this.authService.refreshAccessToken(oldRefreshToken);
+        const { accessToken, refreshToken, userID } = await this.authService.refreshAccessToken(oldRefreshToken);
         return {
           status: 'success',
           accessToken,
           refreshToken,
+          userID
         };
       } catch (error) {
         if (error instanceof UnauthorizedException) {
