@@ -86,8 +86,10 @@ const SchedulePage = () => {
       .then(bookings => {
         bookings.forEach(({ start_time }) => {
           const dt = new Date(start_time);
+          console.log(start_time);
+          console.log(dt);
           const dayIdx = daysOfWeek.findIndex(d => d.iso === dt.toISOString().slice(0,10));
-          const hour = dt.getHours();
+          const hour = dt.getUTCHours();
           const key = `${dayIdx}_${hour}`;
           if (statusMap[key] !== undefined) statusMap[key] = 'booked';
         });
