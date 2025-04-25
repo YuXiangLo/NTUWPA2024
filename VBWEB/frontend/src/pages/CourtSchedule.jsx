@@ -141,7 +141,7 @@ const SchedulePage = () => {
     }
 
     const body = {
-      user_id: JSON.parse(localStorage.getItem('user')).userid,
+      user_id: JSON.parse(localStorage.getItem('user')).userID,
       venue_id: courtDetail.venue.venue_id,
       court_id,
       slots: selectedSlots.map(s => ({
@@ -157,7 +157,7 @@ const SchedulePage = () => {
       fee: parseFloat(fee),
       remark
     };
-
+    console.log(body);
     try {
       const res = await fetch(`${API_DOMAIN}reserve`, {
         method: 'POST',
