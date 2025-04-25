@@ -46,7 +46,7 @@ export class ReserveService {
 
     const { data, error } = await this.supabase.client
       .from('reserve')
-      .select('start_time')
+      .select('start_time, user_id')
       .eq('court_id', court_id)
       .gte('start_time', startTs)
       .lte('start_time', endTs);

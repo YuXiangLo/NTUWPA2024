@@ -51,17 +51,37 @@
   transition: background-color 0.2s;
 }
 
+/* available slots: ready to book (blank) */
+.slot-cell.available {
+  background-color: #ffffff;
+}
 .slot-cell.available:hover {
-  background-color: #eef6f7;
+  background-color: #ffffff;
 }
 
-.slot-cell.selected {
-  background-color: #c6e7ff;
-}
-
+/* other people’s bookings: not clickable (red) */
 .slot-cell.booked {
-  background-color: #fddede;
+  background-color: #f8d7da;
   cursor: not-allowed;
+}
+.slot-cell.booked:hover {
+  background-color: #f5c6cb;
+}
+
+/* your selected slots: (green) */
+.slot-cell.selected {
+  background-color: #d4edda;
+}
+.slot-cell.selected:hover {
+  background-color: #b1dfbb;
+}
+
+/* your own slots: (blue) */
+.slot-cell.own {
+  background-color: #c3e5ff;
+}
+.slot-cell.own:hover {
+  background-color: #c3e5ff;
 }
 
 /* Selected summary */

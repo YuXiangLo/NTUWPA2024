@@ -81,17 +81,25 @@ const SchedulePage = () => {
 
     const startIso = daysOfWeek[0].iso;
     const endIso = daysOfWeek[daysOfWeek.length - 1].iso;
-    fetch(`${API_DOMAIN}reserve/court/${court_id}?start=${startIso}&end=${endIso}`)
+    
+    fetch(
+      `${API_DOMAIN}reserve/court/${court_id}` +
+        `?start=${startIso}&end=${endIso}`
+    )
       .then(res => res.ok ? res.json() : Promise.reject())
       .then(bookings => {
-        bookings.forEach(({ start_time }) => {
+        console.log('Bookings:', bookings);
+        bookings.forEach(({ start_time, user_id }) => {
           const dt = new Date(start_time);
-          console.log(start_time);
-          console.log(dt);
-          const dayIdx = daysOfWeek.findIndex(d => d.iso === dt.toISOString().slice(0,10));
+          const dayIdx = daysOfWeek.findIndex(
+            d => d.iso === dt.toISOString().slice(0,10)
+          );
           const hour = dt.getUTCHours();
           const key = `${dayIdx}_${hour}`;
-          if (statusMap[key] !== undefined) statusMap[key] = 'booked';
+          if (statusMap[key] !== undefined) {
+            statusMap[key] =
+              (user_id === JSON.parse(localStorage.getItem('user')).userID) ? 'own' : 'booked';
+          }
         });
         setSlotStatus(statusMap);
       })
@@ -104,7 +112,7 @@ const SchedulePage = () => {
   const handleSlotClick = (dayIndex, { label, hour }) => {
     const key = `${dayIndex}_${hour}`;
     const status = slotStatus[key];
-    if (status === 'booked') {
+    if (status === 'booked' || status === 'own') {
       alert('此時間段已預約！');
       return;
     }
@@ -209,7 +217,8 @@ const SchedulePage = () => {
                       }}
                     >
                       {status === 'booked' ? '✕' :
-                       status === 'selected' ? '✓' : ''}
+                       status === 'selected' ? '✓' : 
+                       status === 'own' ? '✓' : ''}
                     </td>
                   );
                 })}
