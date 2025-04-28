@@ -52,6 +52,9 @@ function LandingPageInner() {
           <button className="sidebar-btn" onClick={() => setAddCourtMode(true)}>
             新增場館
           </button>
+          <button className="sidebar-btn" onClick={() => navigate("/ChatRoom")}>
+            聊天室
+          </button>
           <LandmarkList />
         </aside>
       </main>
