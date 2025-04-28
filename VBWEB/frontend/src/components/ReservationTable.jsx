@@ -1,74 +1,102 @@
 import React, { useState, useEffect } from 'react';
 import { API_DOMAIN } from '../config.js';
+import './ReservationTable.css';
 
-const ReservationTable = ({ courtId, start, end }) => {
-  const [reservations, setReservations] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+const ReservationTable = () => {
+  // read userID directly from localStorage
+  const stored = localStorage.getItem('user');
+  const userID = stored ? JSON.parse(stored).userID : null;
 
+  const [myRes, setMyRes] = useState([]);
+  const [loadingRes, setLoadingRes] = useState(false);
+  const [errRes, setErrRes] = useState(null);
+
+  // maps for id → name lookup
+  const [venueMap, setVenueMap] = useState({});
+  const [courtMap, setCourtMap]   = useState({});
+
+  // fetch all venues + courts once for name lookups
   useEffect(() => {
-    if (!courtId) return;
-    setLoading(true);
-    fetch(`${API_DOMAIN}reserve/court/${courtId}?start=${start}&end=${end}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
+    fetch(`${API_DOMAIN}venues`)
+      .then(r => {
+        if (!r.ok) throw new Error(r.statusText);
+        return r.json();
       })
-      .then((data) => {
-        setReservations(data);
-        setLoading(false);
+      .then(venues => {
+        const vMap = {};
+        const cMap = {};
+        venues.forEach(v => {
+          vMap[v.venue_id] = v.name;
+          (v.court || []).forEach(c => {
+            cMap[c.court_id] = c.name;
+          });
+        });
+        setVenueMap(vMap);
+        setCourtMap(cMap);
       })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-      });
-  }, [courtId, start, end]);
+      .catch(e => console.error('Failed to load venues for names:', e));
+  }, []);
 
-  if (loading) {
-    return <div>Loading reservations...</div>;
-  }
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  // fetch user reservations
+  useEffect(() => {
+    if (!userID) return;
+    setLoadingRes(true);
+    fetch(`${API_DOMAIN}reserve/user/${userID}`)
+      .then(r => {
+        if (!r.ok) throw new Error(r.statusText);
+        return r.json();
+      })
+      .then(data => {
+        data.sort((a, b) => new Date(a.start_time) - new Date(b.start_time));
+        setMyRes(data);
+      })
+      .catch(e => setErrRes(e.message))
+      .finally(() => setLoadingRes(false));
+  }, [userID]);
+
+  if (!userID) return null;
 
   return (
-    <table className="reservation-table">
-      <thead>
-        <tr>
-          <th>Date</th>
-          <th>Venue</th>
-          <th>Court</th>
-          <th>Time Range</th>
-        </tr>
-      </thead>
-      <tbody>
-        {reservations.map((reservation, index) => {
-          // Derive the date from start_time. Adjust formatting as needed.
-          const dateObj = new Date(reservation.start_time);
-          const dateString = dateObj.toLocaleDateString();
-          const startTimeString = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-          // If your backend returns end_time, you can format it similarly
-          const endTimeObj = new Date(reservation.end_time);
-          const endTimeString = endTimeObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-          // If your backend returns venue_id, venue_name, court_id, court_name, destructure them accordingly.
-          const venueName = reservation.venue_name || reservation.venue_id || '--';
-          const courtName = reservation.court_name || reservation.court_id || '--';
-
-          return (
-            <tr key={index}>
-              <td>{dateString}</td>
-              <td>{venueName}</td>
-              <td>{courtName}</td>
-              <td>{startTimeString} - {endTimeString}</td>
+    <section className="reservation-table-container" style={{ marginTop: 20 }}>
+      <h3>Your Upcoming Reservations</h3>
+      {loadingRes && <p>Loading…</p>}
+      {errRes && <p style={{ color: 'red' }}>{errRes}</p>}
+      {!loadingRes && !errRes && myRes.length > 0 && (
+        <table className="reservation-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Venue</th>
+              <th>Court</th>
+              <th>Time</th>
             </tr>
-          );
-        })}
-      </tbody>
-    </table>
+          </thead>
+          <tbody>
+            {myRes.map((r, i) => {
+              const s = new Date(r.start_time);
+              const e = new Date(r.end_time);
+              const venueName = venueMap[r.venue_id] || r.venue_id;
+              const courtName = courtMap[r.court_id] || r.court_id;
+              return (
+                <tr key={i}>
+                  <td>{s.toLocaleDateString()}</td>
+                  <td>{venueName}</td>
+                  <td>{courtName}</td>
+                  <td>
+                    {s.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    {' – '}
+                    {e.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      )}
+      {!loadingRes && !errRes && myRes.length === 0 && (
+        <p>No upcoming reservations.</p>
+      )}
+    </section>
   );
 };
 
