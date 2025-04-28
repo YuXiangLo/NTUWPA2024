@@ -56,4 +56,20 @@ export class ReserveService {
     }
     return data;
   }
+
+  // New: get all reservations for a user
+  async getUserReservations(user_id: string): Promise<any[]> {
+    const nowIso = new Date().toISOString();
+    const { data, error } = await this.supabase.client
+      .from('reserve')
+      .select('start_time, end_time, venue_id, court_id')
+      .eq('user_id', user_id)
+      .gte('start_time', nowIso)
+      .order('start_time', { ascending: true });
+
+    if (error) {
+      throw new BadRequestException(`Failed to fetch user reservations: ${error.message}`);
+    }
+    return data;
+  }
 }

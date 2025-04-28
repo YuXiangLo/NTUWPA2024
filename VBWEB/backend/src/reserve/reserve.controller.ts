@@ -20,4 +20,9 @@ export class ReserveController {
   ) {
     return this.reserveService.getReservationsForCourt(court_id, start, end);
   }
+
+  @Get('user/:user_id')
+  async getByUser(@Param('user_id') user_id: string) {
+    return this.reserveService.getUserReservations(user_id);
+  }
 }
