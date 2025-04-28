@@ -74,6 +74,7 @@ function ChatRoomPage() {
     return (
       <div style={{ maxWidth: 400, margin: '0 auto', paddingTop: 100 }}>
         <h2>Enter User ID to Chat</h2>
+        <h6>Your ID: {user?.userID}</h6>
         <input
           style={{ width: '100%', padding: 8, marginBottom: 8 }}
           value={otherUserId}
