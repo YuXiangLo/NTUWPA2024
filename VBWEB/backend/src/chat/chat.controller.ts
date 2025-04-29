@@ -19,7 +19,7 @@ export class ChatController {
 	@Req() req: RequestWithUser,
     @Param('otherUserId') otherUserId: string,
   ) {
-    const me = req.user.userID;
+    const me = req.user.userid;
     return this.chatService.getHistory(me, otherUserId);
   }
 }
