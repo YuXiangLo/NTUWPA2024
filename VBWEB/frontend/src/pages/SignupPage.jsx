@@ -24,7 +24,7 @@ function SignupPage() {
     }
 
     try {
-      const response = await fetch(`${API_DOMAIN}auth/register`, {
+      const response = await fetch(`${API_DOMAIN}/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -33,7 +33,7 @@ function SignupPage() {
       });
 
       if (response.ok) {
-        const response = await fetch(`${API_DOMAIN}auth/login`, {
+        const response = await fetch(`${API_DOMAIN}/auth/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

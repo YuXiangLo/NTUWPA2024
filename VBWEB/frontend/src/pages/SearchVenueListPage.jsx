@@ -19,7 +19,7 @@ const SearchVenueListPage = () => {
   // Fetch data from backend API once the component mounts
   useEffect(() => {
     setLoading(true);
-    fetch(`${API_DOMAIN}venues`)
+    fetch(`${API_DOMAIN}/venues`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');

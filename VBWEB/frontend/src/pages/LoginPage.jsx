@@ -22,7 +22,7 @@ function LoginPage() {
 
     if (email && password) {
       try {
-        const response = await fetch(`${API_DOMAIN}auth/login`, {
+        const response = await fetch(`${API_DOMAIN}/auth/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

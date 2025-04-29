@@ -35,7 +35,7 @@ function UserInfoForm() {
         return;
       }
       try {
-        const response = await fetch(`${API_DOMAIN}user/profile`, {
+        const response = await fetch(`${API_DOMAIN}/user/profile`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
