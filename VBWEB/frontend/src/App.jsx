@@ -10,6 +10,7 @@ import ProfilePage from './pages/ProfilePage';
 import CourtInfoPage from './pages/CourtInfoPage';
 import SchedulePage from './pages/CourtSchedule';
 import SearchVenueListPage from './pages/SearchVenueListPage';
+import ChatRoomPage from './pages/ChatRoomPage'
 import './App.css';
 
 function App() {
@@ -25,6 +26,8 @@ function App() {
           <Route path="/schedule/:court_id" element={<SchedulePage />} />
           <Route path="/court-info" element={<CourtInfoPage />} />
           <Route path="/search-venue" element={<SearchVenueListPage />} />
+          <Route path="/ChatRoom" element={<ChatRoomPage />} />
+          {/* Add more routes as needed */}
         </Routes>
       </main>
       <Footer />

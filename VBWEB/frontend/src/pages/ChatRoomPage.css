@@ -1,0 +1,136 @@
+.chat-container {
+  max-width: 600px;
+  margin: 50px auto;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  text-align: center;
+  color: #4a4a4a;
+}
+
+.chat-history {
+  height: 300px;
+  overflow-y: auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 12px;
+  background-color: #f9f9f9;
+  margin-bottom: 16px;
+  scroll-behavior: smooth;
+}
+
+.message {
+  margin-bottom: 12px;
+  max-width: 75%;
+  padding: 10px 14px;
+  border-radius: 20px;
+  position: relative;
+  font-size: 14px;
+  line-height: 1.4;
+  word-wrap: break-word;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.message.you {
+  align-self: flex-end;
+  background-color: #dcf8c6;
+  color: #2d2d2d;
+}
+
+.message.other {
+  align-self: flex-start;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  color: #333;
+}
+
+.message-timestamp {
+  font-size: 10px;
+  opacity: 0.6;
+  margin-top: 4px;
+  display: block;
+}
+
+.chat-input-container {
+  display: flex;
+  gap: 8px;
+}
+
+.chat-input {
+  flex-grow: 1;
+  padding: 12px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.chat-input:focus {
+  border-color: #667eea;
+}
+
+.send-button {
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+
+.send-button:hover {
+  background: #5a67d8;
+}
+
+.join-room-container {
+  max-width: 400px;
+  margin: 100px auto;
+  background: white;
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+  text-align: center;
+}
+
+.join-room-container input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.join-room-container input:focus {
+  border-color: #764ba2;
+}
+
+.join-room-container button {
+  width: 100%;
+  background-color: #764ba2;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.join-room-container button:hover {
+  background-color: #6b42a1;
+}
+
