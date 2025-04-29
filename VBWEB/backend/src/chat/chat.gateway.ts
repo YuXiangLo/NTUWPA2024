@@ -31,7 +31,6 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     } catch (err) {
       console.error('❌ handleConnection failed – invalid token', err);
       client.disconnect(true);
-      throw new UnauthorizedException('Invalid token');
     }
   }
 

@@ -69,8 +69,8 @@ export class AuthService {
         throw new UnauthorizedException('User no longer exists');
       }
   
-      const newAccessPayload = { userID: user[0].userID, email: user[0].gmail, tokenType: 'access' };
-      const newRefreshPayload = { userID: user[0].userID, email: user[0].gmail, tokenType: 'refresh' };
+      const newAccessPayload = { userID: user[0].userid, email: user[0].gmail, tokenType: 'access' };
+      const newRefreshPayload = { userID: user[0].userid, email: user[0].gmail, tokenType: 'refresh' };
       const newAccessToken = this.jwtService.sign(newAccessPayload, { expiresIn: '1h' });
       const newRefreshToken = this.jwtService.sign(newRefreshPayload, { expiresIn: '7d' });
   
