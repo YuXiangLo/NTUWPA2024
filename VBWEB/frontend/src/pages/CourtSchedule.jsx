@@ -62,7 +62,7 @@ const SchedulePage = () => {
 
   // Fetch court & venue info
   useEffect(() => {
-    fetch(`${API_DOMAIN}courts/court-venue-name/${court_id}`)
+    fetch(`${API_DOMAIN}/courts/court-venue-name/${court_id}`)
       .then(res => res.ok ? res.json() : Promise.reject('Fetch failed'))
       .then(setCourtDetail)
       .catch(setCourtError)
