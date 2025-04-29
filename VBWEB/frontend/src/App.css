@@ -1,3 +1,11 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  /*background: linear-gradient(to right, #667eea, #764ba2);*/
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
 .app-container {
   display: flex;
   flex-direction: column;
