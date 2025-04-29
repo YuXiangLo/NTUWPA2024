@@ -4,7 +4,7 @@ import { Request } from 'express';
 // Extend Express Request to include `user` from JwtAuthGuard
 export interface RequestWithUser extends Request {
   user: {
-    userID: string;
+    userid: string;
     email: string;
     tokenType: string;
   };
