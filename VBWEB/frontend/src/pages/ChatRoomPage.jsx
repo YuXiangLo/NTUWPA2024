@@ -10,56 +10,67 @@ function ChatRoomPage() {
   const [input, setInput] = useState('');
   const [otherUserId, setOtherUserId] = useState('');
   const [roomJoined, setRoomJoined] = useState(false);
+  const [sessionExpired, setSessionExpired] = useState(false);
 
   const token = user?.accessToken;
   const myId = user?.userID;
 
-  // ref to the scrolling container
+  // refs for scrolling
   const chatHistoryRef = useRef(null);
-  // ref to the bottom sentinel
   const bottomRef = useRef(null);
-
-  // are we currently scrolled to (or very near) the bottom?
   const [isAtBottom, setIsAtBottom] = useState(true);
 
-  // update isAtBottom on any manual scroll
   const handleScroll = () => {
     const el = chatHistoryRef.current;
     if (!el) return;
-    // threshold in px
     const threshold = 50;
-    const distanceFromBottom =
-      el.scrollHeight - el.scrollTop - el.clientHeight;
-    setIsAtBottom(distanceFromBottom < threshold);
+    const distance = el.scrollHeight - el.scrollTop - el.clientHeight;
+    setIsAtBottom(distance < threshold);
   };
 
+  // Initialize socket
   const socket = useMemo(() => {
     if (!token) return null;
-    return io(API_DOMAIN, { auth: { token } });
+    const sock = io(API_DOMAIN, { auth: { token } });
+
+    sock.on('connect_error', (err) => {
+      console.warn('Socket connect_error:', err.message);
+      if (err.message.includes('Invalid token') || err.message.includes('Unauthorized')) {
+        setSessionExpired(true);
+      }
+    });
+
+    return sock;
   }, [token]);
 
-  // join room, fetch history, subscribe to new messages
+  // join room & fetch history
   useEffect(() => {
     if (!isAuthLoaded || !socket || !roomJoined) return;
 
     socket.emit('joinRoom', { otherUserId });
-    fetch(`http://localhost:3000/chat/history/${otherUserId}`, {
+
+    fetch(`${API_DOMAIN}/chat/history/${otherUserId}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
-      .then(res => res.json())
+      .then(res => {
+        if (res.status === 401) {
+          setSessionExpired(true);
+          throw new Error('Session expired');
+        }
+        return res.json();
+      })
       .then(hist => setMessages(hist))
       .catch(err => console.error('❌ History fetch error:', err));
 
-    socket.on('privateMessage', msg => {
-      setMessages(prev => [...prev, msg]);
-    });
+    const handler = msg => setMessages(prev => [...prev, msg]);
+    socket.on('privateMessage', handler);
 
     return () => {
-      socket.off('privateMessage');
+      socket.off('privateMessage', handler);
     };
   }, [isAuthLoaded, socket, roomJoined, otherUserId, token]);
 
-  // whenever messages change, scroll to bottom *if* user was already at bottom
+  // scroll to bottom
   useEffect(() => {
     if (isAtBottom && bottomRef.current) {
       bottomRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -67,14 +78,27 @@ function ChatRoomPage() {
   }, [messages, isAtBottom]);
 
   const send = () => {
-    if (!input || !socket) return;
-    socket.emit('privateMessage', { to: otherUserId, content: input });
+    if (!input.trim() || !socket) return;
+    socket.emit('privateMessage', { to: otherUserId, content: input.trim() });
     setInput('');
   };
 
   const handleJoinRoom = () => {
     if (otherUserId.trim()) setRoomJoined(true);
   };
+
+  // If session expired, show popup
+  if (sessionExpired) {
+    return (
+      <div className="session-expired-modal">
+        <div className="modal-content">
+          <h2>Session Expired</h2>
+          <p>Your session has expired. Please reload to continue.</p>
+          <button onClick={() => window.location.reload()}>Reload</button>
+        </div>
+      </div>
+    );
+  }
 
   if (!isAuthLoaded) return <div>Loading...</div>;
 
@@ -112,7 +136,6 @@ function ChatRoomPage() {
             </span>
           </div>
         ))}
-        {/* sentinel element to scroll into view */}
         <div ref={bottomRef} />
       </div>
       <div className="chat-input-container">
