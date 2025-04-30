@@ -8,6 +8,7 @@ import { VenueModule } from './venue/venue.module';
 import { CourtModule } from './court/court.module';
 import { ReserveModule } from './reserve/reserve.module';
 import { ChatModule } from './chat/chat.module';
+import { FriendsModule } from './friends/friends.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ChatModule } from './chat/chat.module';
     CourtModule,
     ReserveModule,
     ChatModule,
+    FriendsModule,
   ]
 })
 export class AppModule {}

@@ -1,0 +1,43 @@
+.friend-widget-container {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 1000;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Toggle button (when closed) */
+  .friend-toggle-button {
+    padding: 10px 40px;
+    background-color: #86c0ff;
+    color: #fff;
+    border: none;
+    border-top-left-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  /* Expanded friend list box */
+  .friend-list {
+    width: 250px;
+    height: 300px; /* Fixed height */
+    background-color: #f1f1f1;
+    border-top-left-radius: 8px;
+    padding: 10px;
+    overflow-y: auto; /* Enables vertical scrolling */
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* List styling */
+  .friend-list-ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .friend-list-item {
+    padding: 8px 0;
+    border-bottom: 1px solid #ccc;
+    font-size: 14px;
+  }
+  
