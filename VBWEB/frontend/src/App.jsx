@@ -12,6 +12,7 @@ import SchedulePage from './pages/CourtSchedule';
 import SearchVenueListPage from './pages/SearchVenueListPage';
 import ChatRoomPage from './pages/ChatRoomPage'
 import './App.css';
+import FriendListWidget from './components/FriendListWidget';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           {/* Add more routes as needed */}
         </Routes>
       </main>
+      <FriendListWidget />
       <Footer />
     </Router>
   );
