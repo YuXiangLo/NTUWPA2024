@@ -24,4 +24,10 @@ export class FriendsController {
   ) {
     return this.friendsService.respondRequest(senderId, receiverId, accept);
   }
+
+  @Get(':userId/requests')
+  getPendingRequests(@Param('userId') userId: string) {
+    return this.friendsService.getPendingRequests(userId);
+  }
+
 }

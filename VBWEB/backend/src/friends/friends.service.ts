@@ -78,4 +78,31 @@ export class FriendsService {
 
     return { message: `Friend request ${accept ? 'accepted' : 'rejected'}` };
   }
+
+  async getPendingRequests(userId: string) {
+    const client = this.supabase.client;
+  
+    const { data: requests, error } = await client
+      .from('friend_requests')
+      .select('sender_id, requested_at')
+      .eq('receiver_id', userId)
+      .eq('status', 'pending');
+  
+    if (error) throw error;
+  
+    // Fetch sender info
+    const senderIds = requests.map(r => r.sender_id);
+    const { data: users, error: uErr } = await client
+      .from('users')
+      .select('userid, firstname, lastname, gmail')
+      .in('userid', senderIds);
+  
+    if (uErr) throw uErr;
+  
+    // Merge sender info with requests
+    return requests.map(r => ({
+      ...users.find(u => u.userid === r.sender_id),
+      requestedAt: r.requested_at
+    }));
+  }
 }

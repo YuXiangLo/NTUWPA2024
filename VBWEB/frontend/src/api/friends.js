@@ -23,3 +23,9 @@ export const respondFriendRequest = async (receiverId, senderId, accept) => {
   });
   return res.json();
 };
+
+export const getPendingRequests = async (userId) => {
+  const res = await fetch(`${API_BASE}/${userId}/requests`);
+  if (!res.ok) throw new Error('Failed to fetch pending requests');
+  return res.json();
+};
