@@ -11,7 +11,7 @@ import {
   HttpStatus
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { ChatService, Chat, Message } from './chat.service';
+import { ChatService, ChatListItem, Chat, Message } from './chat.service';
 import { Request } from 'express';
 
 @Controller('chats')
@@ -19,10 +19,21 @@ import { Request } from 'express';
 export class ChatController {
   constructor(private readonly chatSvc: ChatService) {}
 
-  /** List all chats for current user */
+  /** GET /chats — returns list with unreadCount & lastMessageAt */
   @Get()
-  async listChats(@Req() req: Request): Promise<Chat[]> {
-    return this.chatSvc.listChats((req.user as any).userid);
+  async listChats(@Req() req: Request): Promise<ChatListItem[]> {
+    const userId = (req.user as any).userid;
+    return this.chatSvc.listChats(userId);
+  }
+
+  /** POST /chats/:chatId/read — mark that chat read for current user */
+  @Post(':chatId/read')
+  async markRead(
+    @Req() req: Request,
+    @Param('chatId') chatId: string
+  ): Promise<void> {
+    const userId = (req.user as any).userid;
+    await this.chatSvc.markChatRead(chatId, userId);
   }
 
   /** GET existing private chat or 404 */

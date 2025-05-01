@@ -8,7 +8,8 @@ import './ChatWindow.css';
 export default function ChatWindow({ chatId, partnerName, onClose }) {
   const { user } = useAuth();
   const token = user?.accessToken;
-  const userId = user?.userID;  
+  const userId = user?.userID;
+
   const [socket, setSocket] = useState(null);
   const [msgs, setMsgs] = useState([]);
   const [input, setInput] = useState('');
@@ -23,8 +24,10 @@ export default function ChatWindow({ chatId, partnerName, onClose }) {
     });
   };
 
+  // join & load history & listen
   useEffect(() => {
     if (!chatId || !token) return;
+
     const sock = io(API_DOMAIN, { auth: { token } });
     setSocket(sock);
     sock.emit('joinChat', { chatId });
@@ -40,21 +43,30 @@ export default function ChatWindow({ chatId, partnerName, onClose }) {
       setMsgs(prev => dedupe([...prev, m]));
     });
 
+    // also mark read when opening
+    fetch(`${API_DOMAIN}/chats/${chatId}/read`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` }
+    }).catch(console.error);
+
     return () => {
       sock.disconnect();
       setSocket(null);
     };
   }, [chatId, token]);
 
+  // scroll on new messages
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [msgs]);
 
   const sendMessage = () => {
     if (!socket || !input.trim()) return;
-    const tmp = `tmp-${Date.now()}`;
+
+    // optimistic
+    const tmpId = `tmp-${Date.now()}`;
     const local = {
-      id: tmp,
+      id: tmpId,
       chat_id: chatId,
       sender_id: userId,
       content: input,
@@ -64,19 +76,27 @@ export default function ChatWindow({ chatId, partnerName, onClose }) {
 
     socket.emit('sendMessage', { chatId, content: input }, saved => {
       setMsgs(prev =>
-        dedupe(prev.map(m => (m.id === tmp ? saved : m)))
+        dedupe(prev.map(m => (m.id === tmpId ? saved : m)))
       );
     });
 
+    // clear input
     setInput('');
+
+    // mark this chat as read on the server
+    fetch(`${API_DOMAIN}/chats/${chatId}/read`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` }
+    }).catch(console.error);
   };
 
-  // 分組日期
+  // group by date...
   const grouped = [];
   let lastDate = '';
   msgs.forEach(m => {
     const d = new Date(m.created_at).toLocaleDateString('zh-TW', {
-      month: 'numeric', day: 'numeric'
+      month: 'numeric',
+      day: 'numeric'
     });
     if (d !== lastDate) {
       grouped.push({ date: d, type: 'date' });
@@ -91,15 +111,36 @@ export default function ChatWindow({ chatId, partnerName, onClose }) {
         <button className="back-btn" onClick={onClose}>←</button>
         <div className="chat-title">
           <span className="partner-name">{partnerName}</span>
-          {/* <span className="you-label">You: {userId}</span> */}
         </div>
       </header>
+
       <div className="messages">
         {grouped.map((item, i) => {
           if (item.type === 'date') {
             return (
               <div key={`date-${i}`} className="date-separator">
                 {item.date}
+              </div>
+            );
+          }
+          if (item.type === 'system') {
+            return (
+              <div key={item.id} className="system-msg">
+                {item.content}
+              </div>
+            );
+          }
+          if (item.orderId) {
+            return (
+              <div key={item.id} className="order-card">
+                <img src={item.orderImage} alt="" />
+                <div className="order-info">
+                  <div>訂單編號：{item.orderId}</div>
+                  <div>總額：${item.orderTotal}</div>
+                  <div className={`status ${item.orderStatus}`}>
+                    {item.orderStatus}
+                  </div>
+                </div>
               </div>
             );
           }
@@ -115,6 +156,7 @@ export default function ChatWindow({ chatId, partnerName, onClose }) {
         })}
         <div ref={endRef} />
       </div>
+
       <div className="input-area">
         <input
           value={input}

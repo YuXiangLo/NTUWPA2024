@@ -19,6 +19,18 @@ export interface Message {
   created_at: string;
 }
 
+
+export interface ChatListItem {
+  id: string;
+  type: 'private' | 'group';
+  name: string | null;
+  partnerId: string;
+  partnerName: string;
+  partnerPhoto: string | null;
+  lastMessageAt: string;
+  unreadCount: number;
+}
+
 @Injectable()
 export class ChatService {
   private client: SupabaseClient;
@@ -27,20 +39,23 @@ export class ChatService {
     this.client = this.supabase.client;
   }
 
-  /**  
-   * List all chats the user belongs to  
-   */
-  async listChats(userId: string): Promise<Chat[]> {
+  /** List all chats for the user, with unread counts */
+  async listChats(userId: string): Promise<ChatListItem[]> {
     const { data, error } = await this.client
-      .from('chat_members')
-      .select('chat_id, chats(id, type, name, user1, user2)')
-      .eq('user_id', userId);
+      .rpc<'get_user_chats', unknown>('get_user_chats', { p_user_id: userId });
 
     if (error) throw error;
-    // Supabase returns `chats` as an array (even though it's one-to-one), so grab the first element
-    return data.map(row => row.chats[0] as Chat);
+    return (data as ChatListItem[]) ?? [];
   }
 
+  /** Mark all messages in a chat as read */
+  async markChatRead(chatId: string, userId: string): Promise<void> {
+    const { error } = await this.client
+      .from('chat_members')
+      .update({ last_read_at: new Date().toISOString() })
+      .match({ chat_id: chatId, user_id: userId });
+    if (error) throw error;
+  }
 
   /**
    * RPC: get or create a unique private chat
@@ -145,4 +160,6 @@ export class ChatService {
       .match({ chat_id: chatId, user_id: userId });
     if (error) throw error;
   }
+
+  
 }
