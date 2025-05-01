@@ -1,5 +1,5 @@
 // src/components/FriendListWidget.jsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import {
   getFriends,
@@ -23,16 +23,29 @@ export default function FriendListWidget() {
   const [inviteEmail, setInviteEmail] = useState('');
   const [error, setError] = useState('');
   const [msg, setMsg] = useState('');
-  const [activeChatId, setActiveChatId] = useState(null);
-  const [partnerName, setPartnerName] = useState('');
+  const [activeChatPartner, setActiveChatPartner] = useState(null);
 
-  // load lists
+  const containerRef = useRef(null);
+
+  // load friends & pending when opened
   useEffect(() => {
     if (isOpen && userId) {
       getFriends(userId).then(setFriends).catch(e => setError(e.message));
       getPendingRequests(userId).then(setPending).catch(console.error);
     }
   }, [isOpen, userId]);
+
+  // click outside to close
+  useEffect(() => {
+    const handleClickOutside = e => {
+      if (isOpen && containerRef.current && !containerRef.current.contains(e.target)) {
+        setIsOpen(false);
+        setActiveChatPartner(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen]);
 
   const sendInvite = async () => {
     try {
@@ -46,20 +59,22 @@ export default function FriendListWidget() {
     }
   };
 
-  const openChat = async (friendId, partnerName) => {
+  const openChat = async friend => {
     if (!token) return;
     try {
       const res = await fetch(
-        `${API_DOMAIN}/chats/private/${friendId}`,
+        `${API_DOMAIN}/chats/private/${friend.userid}`,
         { method: 'GET', headers: { Authorization: `Bearer ${token}` } }
       );
       if (!res.ok) {
         console.error('openChat failed', await res.json());
         return;
       }
-      const chat = await res.json(); // { id, type, ... }
-      setActiveChatId(chat.id);
-      setPartnerName(partnerName);
+      const chat = await res.json();
+      setActiveChatPartner({
+        id: chat.id,
+        name: `${friend.firstname} ${friend.lastname}`
+      });
     } catch (e) {
       console.error(e);
     }
@@ -68,10 +83,13 @@ export default function FriendListWidget() {
   if (!isAuthLoaded || !userId) return null;
 
   return (
-    <div className="friend-widget-container">
+    <div ref={containerRef} className="friend-widget-container">
       <button
         className="friend-toggle-button"
-        onClick={() => { setIsOpen(o => !o); setActiveChatId(null); }}
+        onClick={() => {
+          setIsOpen(o => !o);
+          setActiveChatPartner(null);
+        }}
       >
         {isOpen ? 'Close Friends' : 'Open Friends'}
       </button>
@@ -81,7 +99,10 @@ export default function FriendListWidget() {
           <aside className="chat-sidebar">
             <div className="chat-search">
               <input placeholder="搜尋名稱" />
-              <button className="pending-btn" onClick={() => setShowPending(p => !p)}>
+              <button
+                className="pending-btn"
+                onClick={() => setShowPending(p => !p)}
+              >
                 🔔{pending.length > 0 && <span className="pending-badge">{pending.length}</span>}
               </button>
             </div>
@@ -104,7 +125,7 @@ export default function FriendListWidget() {
                 <li
                   key={f.userid}
                   className="chat-list-item"
-                  onClick={() => openChat(f.userid, f.firstname + ' ' + f.lastname)}
+                  onClick={() => openChat(f)}
                 >
                   <img
                     className="chat-avatar"
@@ -136,7 +157,6 @@ export default function FriendListWidget() {
                           <button
                             onClick={async () => {
                               await respondFriendRequest(userId, req.userid, true);
-                              await loadFriends(); // local helper or re-call getFriends
                               const p = await getPendingRequests(userId);
                               setPending(p);
                             }}
@@ -164,8 +184,12 @@ export default function FriendListWidget() {
           </aside>
 
           <section className="chat-content">
-            {activeChatId ? (
-              <ChatWindow chatId={activeChatId} onClose={() => setActiveChatId(null)} partnerName={partnerName}/>
+            {activeChatPartner ? (
+              <ChatWindow
+                chatId={activeChatPartner.id}
+                partnerName={activeChatPartner.name}
+                onClose={() => setActiveChatPartner(null)}
+              />
             ) : (
               <div className="chat-placeholder">
                 <img src="/welcome-illustration.png" alt="歡迎" />
