@@ -25,7 +25,7 @@ export class FriendsService {
     // Step 3: Fetch user data for all friend IDs
     const { data: users, error: uErr } = await client
       .from('users')
-      .select('userid, firstname, lastname, gmail')
+      .select('userid, firstname, lastname, gmail, photo')
       .in('userid', friendIds);
   
     if (uErr) throw uErr;

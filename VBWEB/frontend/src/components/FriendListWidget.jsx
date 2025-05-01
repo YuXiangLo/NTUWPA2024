@@ -104,7 +104,7 @@ const FriendListWidget = () => {
                 <li key={f.userid} className="chat-list-item">
                   <img
                     className="chat-avatar"
-                    src={f.avatarUrl || '/default-avatar.png'}
+                    src={f.photo || '/default-avatar.png'}
                     alt="avatar"
                   />
                   <div className="chat-info">
