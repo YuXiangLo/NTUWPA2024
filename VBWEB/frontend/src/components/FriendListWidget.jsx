@@ -1,4 +1,4 @@
-// FriendListWidget.jsx
+// src/components/FriendListWidget.jsx
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import {
@@ -7,53 +7,61 @@ import {
   getPendingRequests,
   respondFriendRequest
 } from '../api/friends';
+import ChatWindow from './ChatWindow.jsx';
 import './FriendListWidget.css';
+import { API_DOMAIN } from '../config.js';
 
-const FriendListWidget = () => {
+export default function FriendListWidget() {
   const { user, isAuthLoaded } = useAuth();
+  const token = user?.accessToken;
   const userId = user?.userID;
 
   const [isOpen, setIsOpen] = useState(false);
   const [showPending, setShowPending] = useState(false);
   const [friends, setFriends] = useState([]);
-  const [pendingRequests, setPendingRequests] = useState([]);
-  const [newEmail, setNewEmail] = useState('');
+  const [pending, setPending] = useState([]);
+  const [inviteEmail, setInviteEmail] = useState('');
   const [error, setError] = useState('');
-  const [message, setMessage] = useState('');
+  const [msg, setMsg] = useState('');
+  const [activeChatId, setActiveChatId] = useState(null);
+  const [partnerName, setPartnerName] = useState('');
 
-  const loadFriends = async () => {
-    try {
-      const data = await getFriends(userId);
-      setFriends(data);
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
-  const loadPending = async () => {
-    try {
-      const data = await getPendingRequests(userId);
-      setPendingRequests(data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
+  // load lists
   useEffect(() => {
     if (isOpen && userId) {
-      loadFriends();
-      loadPending();
+      getFriends(userId).then(setFriends).catch(e => setError(e.message));
+      getPendingRequests(userId).then(setPending).catch(console.error);
     }
   }, [isOpen, userId]);
 
-  const handleSendRequest = async () => {
+  const sendInvite = async () => {
     try {
-      const res = await sendFriendRequest(userId, newEmail);
-      setMessage(res.message);
-      setNewEmail('');
-      loadPending();
-    } catch (err) {
-      setError(err.message);
+      const res = await sendFriendRequest(userId, inviteEmail);
+      setMsg(res.message);
+      setInviteEmail('');
+      const p = await getPendingRequests(userId);
+      setPending(p);
+    } catch (e) {
+      setError(e.message);
+    }
+  };
+
+  const openChat = async (friendId, partnerName) => {
+    if (!token) return;
+    try {
+      const res = await fetch(
+        `${API_DOMAIN}/chats/private/${friendId}`,
+        { method: 'GET', headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (!res.ok) {
+        console.error('openChat failed', await res.json());
+        return;
+      }
+      const chat = await res.json(); // { id, type, ... }
+      setActiveChatId(chat.id);
+      setPartnerName(partnerName);
+    } catch (e) {
+      console.error(e);
     }
   };
 
@@ -63,7 +71,7 @@ const FriendListWidget = () => {
     <div className="friend-widget-container">
       <button
         className="friend-toggle-button"
-        onClick={() => setIsOpen(open => !open)}
+        onClick={() => { setIsOpen(o => !o); setActiveChatId(null); }}
       >
         {isOpen ? 'Close Friends' : 'Open Friends'}
       </button>
@@ -72,53 +80,44 @@ const FriendListWidget = () => {
         <div className="chat-widget-container">
           <aside className="chat-sidebar">
             <div className="chat-search">
-              <input type="text" placeholder="搜尋名稱" />
-              <button
-                className="pending-btn"
-                onClick={() => setShowPending(p => !p)}
-              >
-                🔔
-                {pendingRequests.length > 0 && (
-                  <span className="pending-badge">
-                    {pendingRequests.length}
-                  </span>
-                )}
+              <input placeholder="搜尋名稱" />
+              <button className="pending-btn" onClick={() => setShowPending(p => !p)}>
+                🔔{pending.length > 0 && <span className="pending-badge">{pending.length}</span>}
               </button>
             </div>
 
             <div className="invite-panel">
               <input
                 type="email"
-                value={newEmail}
-                onChange={e => setNewEmail(e.target.value)}
+                value={inviteEmail}
+                onChange={e => setInviteEmail(e.target.value)}
                 placeholder="輸入 Email 發送邀請"
               />
-              <button onClick={handleSendRequest}>Send</button>
+              <button onClick={sendInvite}>Send</button>
             </div>
 
             {error && <div className="msg error">{error}</div>}
-            {message && <div className="msg success">{message}</div>}
+            {msg   && <div className="msg success">{msg}</div>}
 
             <ul className="chat-list">
               {friends.map(f => (
-                <li key={f.userid} className="chat-list-item">
+                <li
+                  key={f.userid}
+                  className="chat-list-item"
+                  onClick={() => openChat(f.userid, f.firstname + ' ' + f.lastname)}
+                >
                   <img
                     className="chat-avatar"
                     src={f.photo || '/default-avatar.png'}
                     alt="avatar"
                   />
                   <div className="chat-info">
-                    <div className="chat-name">
-                      {f.firstname} {f.lastname}
-                    </div>
+                    <div className="chat-name">{f.firstname} {f.lastname}</div>
                     <div className="chat-snippet">{f.gmail}</div>
                   </div>
-                  <div className="chat-meta">
-                    <span className="chat-date">—</span>
-                    {f.unreadCount > 0 && (
-                      <span className="chat-badge">{f.unreadCount}</span>
-                    )}
-                  </div>
+                  {f.unreadCount > 0 && (
+                    <span className="chat-badge">{f.unreadCount}</span>
+                  )}
                 </li>
               ))}
             </ul>
@@ -126,9 +125,9 @@ const FriendListWidget = () => {
             {showPending && (
               <div className="pending-section">
                 <h4>Pending Requests</h4>
-                {pendingRequests.length > 0 ? (
+                {pending.length > 0 ? (
                   <ul className="chat-list">
-                    {pendingRequests.map(req => (
+                    {pending.map(req => (
                       <li key={req.userid} className="chat-list-item">
                         <div className="chat-info">
                           {req.firstname} {req.lastname} ({req.gmail})
@@ -136,25 +135,19 @@ const FriendListWidget = () => {
                         <div className="action-btns">
                           <button
                             onClick={async () => {
-                              await respondFriendRequest(
-                                userId,
-                                req.userid,
-                                true
-                              );
-                              await loadFriends();
-                              await loadPending();
+                              await respondFriendRequest(userId, req.userid, true);
+                              await loadFriends(); // local helper or re-call getFriends
+                              const p = await getPendingRequests(userId);
+                              setPending(p);
                             }}
                           >
                             Accept
                           </button>
                           <button
                             onClick={async () => {
-                              await respondFriendRequest(
-                                userId,
-                                req.userid,
-                                false
-                              );
-                              await loadPending();
+                              await respondFriendRequest(userId, req.userid, false);
+                              const p = await getPendingRequests(userId);
+                              setPending(p);
                             }}
                           >
                             Reject
@@ -171,16 +164,18 @@ const FriendListWidget = () => {
           </aside>
 
           <section className="chat-content">
-            <div className="chat-placeholder">
-              <img src="/welcome-illustration.png" alt="歡迎" />
-              <h3>歡迎使用聊聊</h3>
-              <p>現在就開始聊天吧！</p>
-            </div>
+            {activeChatId ? (
+              <ChatWindow chatId={activeChatId} onClose={() => setActiveChatId(null)} partnerName={partnerName}/>
+            ) : (
+              <div className="chat-placeholder">
+                <img src="/welcome-illustration.png" alt="歡迎" />
+                <h3>歡迎使用聊聊</h3>
+                <p>點擊左側好友開啟聊天</p>
+              </div>
+            )}
           </section>
         </div>
       )}
     </div>
   );
-};
-
-export default FriendListWidget;
+}
