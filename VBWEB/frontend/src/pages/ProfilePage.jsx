@@ -44,7 +44,7 @@ function UserInfoForm() {
         setBirthday(data.birthday || '');
         setLocation(data.location || '');
         setLevel(data.level != null ? String(data.level) : '');
-        setPhoto(data.photo || '');
+        setPhoto(data.photo ? `${data.photo}?t=${Date.now()}` : '');
       } catch (err) {
         console.error('Fetch profile error:', err);
       } finally {
