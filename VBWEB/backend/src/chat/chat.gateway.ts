@@ -11,7 +11,6 @@ import {
 import { Server, Socket } from 'socket.io';
 import { JwtService } from '@nestjs/jwt';
 import { ChatService } from './chat.service';
-import { UnauthorizedException } from '@nestjs/common';
 
 @WebSocketGateway({ cors: { origin: '*' } })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -22,47 +21,41 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private readonly chatService: ChatService,
   ) {}
 
-  handleConnection(client: Socket) {
+  async handleConnection(client: Socket) {
     const token = client.handshake.auth.token;
     try {
       const payload = this.jwtService.verify(token);
       client.data.userId = payload.userID;
-      console.log(`✅ Client connected: socketId=${client.id} userID=${payload.userID}`);
-    } catch (err) {
-      console.error('❌ handleConnection failed – invalid token', err);
+    } catch {
       client.disconnect(true);
     }
   }
 
-  handleDisconnect(client: Socket) {
-    console.log(`🔌 Client disconnected: socketId=${client.id}`);
+  handleDisconnect(client: Socket) {}
+
+  /** Join either private or group using chatId */
+  @SubscribeMessage('joinChat')
+  async onJoin(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() { chatId }: { chatId: string },
+  ) {
+    await this.chatService.assertMember(chatId, client.data.userId);
+    client.join(chatId);
+    return { status: 'joined', chatId };
   }
 
-  @SubscribeMessage('joinRoom')
-  handleJoin(
+  /** Send message into chatId */
+  @SubscribeMessage('sendMessage')
+  async onMessage(
     @ConnectedSocket() client: Socket,
-    @MessageBody() { otherUserId }: { otherUserId: string },
+    @MessageBody() payload: { chatId: string; content: string },
   ) {
-    const me = client.data.userId;
-    const roomId = [me, otherUserId].sort().join(':');
-    client.join(roomId);
-    console.log(`🚪 User ${me} joined room ${roomId}`);
-    return { status: 'joined', roomId };
-  }
-
-  @SubscribeMessage('privateMessage')
-  handlePrivateMessage(
-    @ConnectedSocket() client: Socket,
-    @MessageBody() { to, content }: { to: string; content: string },
-  ) {
-    const from: string = client.data.userId;
-    const roomId = [from, to].sort().join(':');
-    console.log(`✉️  Received from ${from} to ${to}: "${content}"`);
-
-    const msg = this.chatService.saveMessage(from, to, content);
-
-    console.log(`🚀 Emitting message to room ${roomId}`, msg);
-    this.server.to(roomId).emit('privateMessage', msg);
+    const msg = await this.chatService.sendMessage(
+      payload.chatId,
+      client.data.userId,
+      payload.content
+    );
+    this.server.to(payload.chatId).emit('newMessage', msg);
     return msg;
   }
 }
