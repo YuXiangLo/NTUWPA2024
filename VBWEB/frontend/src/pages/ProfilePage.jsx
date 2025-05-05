@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import './ProfilePage.css';
 import { API_DOMAIN } from '../config.js';
 import { useAuth } from '../context/AuthContext.jsx';
+import UserDashboard from '../components/userDashboard.jsx';
 
-function UserInfoForm() {
+function ProfilePage() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const token = user?.accessToken;
@@ -136,61 +137,64 @@ function UserInfoForm() {
   if (isLoading) return <div className="user-info-form"><h2>Loading...</h2></div>;
 
   return (
-    <div className="user-info-form grid-layout">
-      <h2>Complete Your Profile</h2>
-      <div className="avatar-section">
-        {uploadError && <div className="error">{uploadError}</div>}
-        <img
-          src={photoPreview || photo}
-          alt=""
-          className="avatar-preview"
-        />
-        <div className="file-input-wrapper">
-          <input
-            id="file-upload"
-            type="file"
-            accept="image/*"
-            onChange={handlePhotoUpload}
-            disabled={uploading}
+    <div className="profile-page">
+      <div className="user-info-form grid-layout">
+        <h2>Complete Your Profile</h2>
+        <div className="avatar-section">
+          {uploadError && <div className="error">{uploadError}</div>}
+          <img
+            src={photoPreview || photo}
+            alt=""
+            className="avatar-preview"
           />
-          <label htmlFor="file-upload" className="upload-btn">
-            {uploading ? '上傳中' : '選擇照片'}
-          </label>
+          <div className="file-input-wrapper">
+            <input
+              id="file-upload"
+              type="file"
+              accept="image/*"
+              onChange={handlePhotoUpload}
+              disabled={uploading}
+            />
+            <label htmlFor="file-upload" className="upload-btn">
+              {uploading ? '上傳中' : '選擇照片'}
+            </label>
+          </div>
         </div>
-        {/* {uploading && <span>上傳中...</span>} */}
+        <form onSubmit={handleProfileSubmit} className="form-section">
+          <div className="form-row">
+            <label>First Name
+              <input type="text" value={firstname} onChange={e => setFirstname(e.target.value)} required/>
+            </label>
+            <label>Last Name
+              <input type="text" value={lastname} onChange={e => setLastname(e.target.value)} required/>
+            </label>
+          </div>
+          <div className="form-row">
+            <label>Nickname
+              <input type="text" value={nickname} onChange={e => setNickname(e.target.value)} />
+            </label>
+            <label>Phone
+              <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} />
+            </label>
+          </div>
+          <div className="form-row">
+            <label>Birthday
+              <input type="date" value={birthday} onChange={e => setBirthday(e.target.value)} />
+            </label>
+            <label>Location
+              <input type="text" value={location} onChange={e => setLocation(e.target.value)} />
+            </label>
+          </div>
+          <label>Level
+            <input type="number" value={level} onChange={e => setLevel(e.target.value)} />
+          </label>
+          <button type="submit" className="save-btn">Save Profile</button>
+        </form>
       </div>
-      <form onSubmit={handleProfileSubmit} className="form-section">
-        <div className="form-row">
-          <label>First Name
-            <input type="text" value={firstname} onChange={e => setFirstname(e.target.value)} required/>
-          </label>
-          <label>Last Name
-            <input type="text" value={lastname} onChange={e => setLastname(e.target.value)} required/>
-          </label>
-        </div>
-        <div className="form-row">
-          <label>Nickname
-            <input type="text" value={nickname} onChange={e => setNickname(e.target.value)} />
-          </label>
-          <label>Phone
-            <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} />
-          </label>
-        </div>
-        <div className="form-row">
-          <label>Birthday
-            <input type="date" value={birthday} onChange={e => setBirthday(e.target.value)} />
-          </label>
-          <label>Location
-            <input type="text" value={location} onChange={e => setLocation(e.target.value)} />
-          </label>
-        </div>
-        <label>Level
-          <input type="number" value={level} onChange={e => setLevel(e.target.value)} />
-        </label>
-        <button type="submit" className="save-btn">Save Profile</button>
-      </form>
+
+      <UserDashboard />
     </div>
   );
 }
 
-export default UserInfoForm;
+export default ProfilePage;
