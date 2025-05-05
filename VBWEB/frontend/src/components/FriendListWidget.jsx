@@ -1,5 +1,6 @@
 // src/components/FriendListWidget.jsx
 import React, { useEffect, useState, useRef } from 'react';
+import io from 'socket.io-client';
 import { useAuth } from '../context/AuthContext';
 import {
   getPendingRequests,
@@ -17,45 +18,84 @@ export default function FriendListWidget() {
 
   const [isOpen, setIsOpen] = useState(false);
   const [showPending, setShowPending] = useState(false);
-  const [chats, setChats] = useState([]);       // expects fields including lastMessageAt, unreadCount
+  const [chats, setChats] = useState([]);       // fields: id, partner_name, partner_photo, last_message_at, unread_count
   const [pending, setPending] = useState([]);
   const [inviteEmail, setInviteEmail] = useState('');
   const [error, setError] = useState('');
   const [msg, setMsg] = useState('');
   const [activeChat, setActiveChat] = useState(null);
 
+  const socketRef = useRef(null);
   const containerRef = useRef(null);
 
-  // load /chats and pending when opened
+  // helper to load chats
+  const loadChats = async () => {
+    try {
+      const res = await fetch(`${API_DOMAIN}/chats`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!res.ok) throw new Error('Failed to load chats');
+      setChats(await res.json());
+    } catch (e) {
+      console.error(e);
+      setError(e.message);
+    }
+  };
+
+  // load chats & pending when widget opens
   useEffect(() => {
     if (isOpen && userId) {
-      fetch(`${API_DOMAIN}/chats`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      })
-        .then(r => {
-          if (!r.ok) throw r;
-          return r.json();
-        })
-        .then(setChats)
-        .catch(e => {
-          console.error(e);
-          setError(typeof e.json === 'function' ? e.json() : e.message);
-        });
-
-      getPendingRequests(userId)
-        .then(setPending)
-        .catch(console.error);
+      loadChats();
+      getPendingRequests(userId).then(setPending).catch(console.error);
     }
-  }, [isOpen, userId, token]);
+  }, [isOpen, userId]);
+
+  // establish socket when open
+  useEffect(() => {
+    if (!isOpen || !token) return;
+    const sock = io(API_DOMAIN, { auth: { token } });
+    socketRef.current = sock;
+    return () => {
+      sock.disconnect();
+      socketRef.current = null;
+    };
+  }, [isOpen, token]);
+
+  // join rooms & listen for incoming messages
+  useEffect(() => {
+    const sock = socketRef.current;
+    if (!sock) return;
+    // join each chat room
+    chats.forEach(chat => {
+      sock.emit('joinChat', { chatId: chat.id });
+    });
+    // handle new messages
+    const handleNew = msg => {
+      if (msg.sender_id === userId) return; // ignore own
+      setChats(prev =>
+        prev.map(c => {
+          if (c.id === msg.chat_id) {
+            const isActive = activeChat?.id === c.id;
+            return {
+              ...c,
+              last_message_at: msg.created_at,
+              unread_count: isActive ? c.unread_count : c.unread_count + 1
+            };
+          }
+          return c;
+        })
+      );
+    };
+    sock.on('newMessage', handleNew);
+    return () => {
+      sock.off('newMessage', handleNew);
+    };
+  }, [chats, activeChat, userId]);
 
   // click outside to close
   useEffect(() => {
     const onClick = e => {
-      if (
-        isOpen &&
-        containerRef.current &&
-        !containerRef.current.contains(e.target)
-      ) {
+      if (isOpen && containerRef.current && !containerRef.current.contains(e.target)) {
         setIsOpen(false);
         setActiveChat(null);
       }
@@ -77,27 +117,23 @@ export default function FriendListWidget() {
 
   const openChat = async chat => {
     setActiveChat(chat);
-    // mark as read
+    // mark as read server‐side
     await fetch(`${API_DOMAIN}/chats/${chat.id}/read`, {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${token}` }
     });
-    // reload chats to update badges
-    const r2 = await fetch(`${API_DOMAIN}/chats`, {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-    const updated = await r2.json();
-    setChats(updated);
+    // reload chats to clear badge
+    await loadChats();
   };
 
   if (!isAuthLoaded || !userId) return null;
 
-  // sort unread first, then by lastMessageAt desc
+  // sort: unread first, then by last_message_at desc
   const sorted = [...chats].sort((a, b) => {
-    if (b.unreadCount !== a.unreadCount) {
-      return b.unreadCount - a.unreadCount;
+    if (b.unread_count !== a.unread_count) {
+      return b.unread_count - a.unread_count;
     }
-    return new Date(b.lastMessageAt).getTime() - new Date(a.lastMessageAt).getTime();
+    return Date.parse(b.last_message_at || '') - Date.parse(a.last_message_at || '');
   });
 
   return (
@@ -114,14 +150,8 @@ export default function FriendListWidget() {
           <aside className="chat-sidebar">
             <div className="chat-search">
               <input placeholder="搜尋名稱" />
-              <button
-                className="pending-btn"
-                onClick={() => setShowPending(p => !p)}
-              >
-                🔔
-                {pending.length > 0 && (
-                  <span className="pending-badge">{pending.length}</span>
-                )}
+              <button className="pending-btn" onClick={() => setShowPending(p => !p)}>
+                🔔{pending.length > 0 && <span className="pending-badge">{pending.length}</span>}
               </button>
             </div>
 
@@ -140,14 +170,11 @@ export default function FriendListWidget() {
 
             <ul className="chat-list">
               {sorted.map(chat => {
-                // parse date safely
-                console.log(chat);
                 let timeLabel = '—';
                 if (chat.last_message_at) {
-                  const date = new Date(chat.last_message_at);
-
-                  if (!isNaN(date.getTime())) {
-                    timeLabel = date.toLocaleTimeString('zh-TW', {
+                  const d = new Date(chat.last_message_at);
+                  if (!isNaN(d.getTime())) {
+                    timeLabel = d.toLocaleTimeString('zh-TW', {
                       hour: '2-digit',
                       minute: '2-digit'
                     });
@@ -187,25 +214,15 @@ export default function FriendListWidget() {
                           {req.firstname} {req.lastname} ({req.gmail})
                         </div>
                         <div className="action-btns">
-                          <button
-                            onClick={async () => {
-                              await respondFriendRequest(userId, req.userid, true);
-                              setChats(await fetch(`${API_DOMAIN}/chats`, {
-                                headers: { 'Authorization': `Bearer ${token}` }
-                              }).then(r=>r.json()));
-                              setPending(await getPendingRequests(userId));
-                            }}
-                          >
-                            Accept
-                          </button>
-                          <button
-                            onClick={async () => {
-                              await respondFriendRequest(userId, req.userid, false);
-                              setPending(await getPendingRequests(userId));
-                            }}
-                          >
-                            Reject
-                          </button>
+                          <button onClick={async () => {
+                            await respondFriendRequest(userId, req.userid, true);
+                            await loadChats();
+                            setPending(await getPendingRequests(userId));
+                          }}>Accept</button>
+                          <button onClick={async () => {
+                            await respondFriendRequest(userId, req.userid, false);
+                            setPending(await getPendingRequests(userId));
+                          }}>Reject</button>
                         </div>
                       </li>
                     ))}
