@@ -16,6 +16,7 @@
     "docker": "^0.2.14",
     "jwt-decode": "^3.1.2",
     "leaflet": "^1.9.4",
+    "lucide-react": "^0.507.0",
     "react": "^19.1.0",
     "react-dom": "^19.0.0",
     "react-leaflet": "^5.0.0",

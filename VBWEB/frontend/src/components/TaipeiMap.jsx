@@ -42,46 +42,31 @@ function AddCourtHandler() {
   });
   return null;
 }
-
-const TaipeiMap = () => {
-  const { landmarks, selectedPosition } = useContext(LandmarkContext);
-
-  // Redirect to Google Maps on double-clicking the marker
-  const handleMarkerDoubleClick = (coords) => {
-    const [lat, lng] = coords;
-    window.open(`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`, "_blank");
-  };
+export default function TaipeiMap() {
+  const { landmarks, selectedPosition, userLocation } = useContext(LandmarkContext);
 
   return (
-    <div style={{ width: "800px", height: "600px" }}>
-      <MapContainer
-        center={selectedPosition}
-        zoom={12}
-        style={{ width: "100%", height: "100%" }}
-      >
+    <div style={{ width: 800, height: 600 }}>
+      <MapContainer center={selectedPosition} zoom={12} style={{ width: "100%", height: "100%" }}>
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-
-        {/* Change Map View when selecting a landmark */}
         <MapController position={selectedPosition} />
 
-        {/* Add Markers for each landmark */}
-        {landmarks.map((landmark, index) => (
-          <Marker
-            key={index}
-            position={landmark.coords}
-            icon={customIcon}
-            eventHandlers={{
-              dblclick: () => handleMarkerDoubleClick(landmark.coords), // Double-click redirects
-            }}
-          >
-            <Popup>{landmark.name}</Popup>
+        {/* render your “real” venues */}
+        {landmarks.map((lm, i) => (
+          <Marker key={i} position={lm.coords} icon={customIcon}>
+            <Popup>{lm.name}</Popup>
           </Marker>
         ))}
+
+        {/* render the user’s location too */}
+        {userLocation && (
+          <Marker position={userLocation.coords} icon={customIcon}>
+            <Popup>You are here</Popup>
+          </Marker>
+        )}
+
         <AddCourtHandler />
       </MapContainer>
     </div>
   );
-};
-
-export default TaipeiMap;
-
+}
