@@ -4,6 +4,7 @@
 
 - [📋 Work Items](#-work-items)
 - [🎬 Demo Video](#-demo-video)
+- [🖼️ Demo Screenshots](#-demo-screenshots)
 - [🎯 Topics Practiced](#-topics-practiced)
 - [🛠️ Additional Techniques Explored](#️-additional-techniques-explored)
 - [🔌 API Specification](#-api-specification)
@@ -31,6 +32,14 @@
 ## 🎬 Demo Video
 
 📹 [Click to view the demo](https://drive.google.com/file/d/1JcnWkiGzBLWm-7mYZ5KuSI1bHGbr6H4v/view)
+
+---
+
+## 🖼️ Demo Screenshots
+
+|         Calendar         |     Scheduler (Modal)    |
+|:------------------------:|:------------------------:|
+| ![demo4](demo/demo1.png) | ![demo6](demo/demo2.png) |
 
 ---
 
