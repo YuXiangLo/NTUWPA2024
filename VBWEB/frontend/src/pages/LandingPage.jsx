@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { LandmarkProvider, LandmarkContext } from '../context/LandmarkContext.jsx';
 import TaipeiMap from '../components/TaipeiMap.jsx';
 import LandmarkList from '../components/LandmarkList.jsx';
+import AdminReviewApplications from './AdminReviewApplications';
 
 function LandingPageInner() {
   const navigate = useNavigate();
@@ -57,6 +58,12 @@ function LandingPageInner() {
           </button>
           <button className="sidebar-btn" onClick={() => navigate("/venue-application")}>
             場館申請
+          </button>
+          <button className="sidebar-btn" onClick={() => navigate("/admin-review-applications")}>
+            管理場館申請
+          </button>
+          <button className="sidebar-btn" onClick={() => navigate("/admin-review-applications")}>
+            管理維護者申請
           </button>
           <LandmarkList />
         </aside>

@@ -1,0 +1,117 @@
+/* src/pages/AdminReviewDetail.css */
+.admin-review-detail {
+  max-width: 700px;
+  margin: 2rem auto;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 2rem;
+}
+.admin-review-detail h2 {
+  margin-top: 0;
+  color: #007bff;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.detail-grid > div {
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 0.5rem;
+}
+.detail-grid > div:nth-child(odd) {
+  border-right: 1px solid #e0e0e0;
+  padding-right: 1rem;
+}
+.description p {
+  margin: 0.5rem 0 1.5rem;
+  line-height: 1.5;
+}
+.images {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  justify-content: center;
+}
+.thumbnail {
+  width: 300px;
+  height: 225px;
+  object-fit: cover;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.thumbnail:hover {
+  transform: scale(1.05);
+}
+.actions {
+  display: flex;
+  gap: 1rem;
+}
+.actions .approve,
+.actions .reject {
+  flex: 1;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.actions .approve {
+  background: #28a745;
+  color: #fff;
+}
+.actions .approve:hover {
+  background: #218838;
+}
+.actions .reject {
+  background: #dc3545;
+  color: #fff;
+}
+.actions .reject:hover {
+  background: #c82333;
+}
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal-content {
+  position: relative;
+  background: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  max-width: 90%;
+  max-height: 90%;
+  overflow: auto;
+}
+.modal-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.modal-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}

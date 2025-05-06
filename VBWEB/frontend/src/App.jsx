@@ -15,6 +15,8 @@ import TestPage from './pages/TestPage';
 import './App.css';
 import FriendListWidget from './components/FriendListWidget';
 import VenueApplication from './pages/VenueApplication';
+import AdminReviewApplications from './pages/AdminReviewApplications';
+import AdminReviewDetail from './pages/AdminReviewDetail';
 
 function App() {
   return (
@@ -32,6 +34,8 @@ function App() {
           <Route path="/ChatRoom" element={<ChatRoomPage />} />
           <Route path="/test" element={<TestPage />} />
           <Route path="/venue-application" element={<VenueApplication />} />
+          <Route path="/admin-review-applications" element={<AdminReviewApplications />} />
+          <Route path="/admin-review-applications/:id" element={<AdminReviewDetail />} />
           {/* Add more routes as needed */}
         </Routes>
       </main>

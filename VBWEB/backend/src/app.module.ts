@@ -10,6 +10,7 @@ import { ReserveModule } from './reserve/reserve.module';
 import { ChatModule } from './chat/chat.module';
 import { FriendsModule } from './friends/friends.module';
 import { MaintainerApplicationsModule } from './maintainer-applications/maintainer-applications.module';
+import { AdminReviewModule } from './admin-review/admin-review.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { MaintainerApplicationsModule } from './maintainer-applications/maintain
     ChatModule,
     FriendsModule,
     MaintainerApplicationsModule,
+    AdminReviewModule,
   ]
 })
 export class AppModule {}
