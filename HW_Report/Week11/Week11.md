@@ -210,9 +210,11 @@ Authorization: Bearer <access_token>
 
 ## 👨‍💻 Team Member Contributions
 
-| Name | Work Item            | Contribution |
-| ---- | -------------------- | :----------: |
-| 黃靖家  | Docker, frontend dev |      1/4     |
-| 楊盛評  | Docker, backend dev  |      1/4     |
-| 羅煜翔  | Docker, backend dev  |      1/4     |
-| 郭恩偕  | Docker, frontend dev |      1/4     |
+| Name  | Work Item                         | Contribution |
+|-------|-----------------------------------|:------------:|
+| 黃靖家 | Full Stack DevOps                 | 1/4 |
+| 楊盛評 | Full Stack DevOps                 | 1/4 |
+| 羅煜翔 | Full Stack DevOps                 | 1/4 |
+| 郭恩偕 | Full Stack DevOps                 | 1/4 |
+
+---
