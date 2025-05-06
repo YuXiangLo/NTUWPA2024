@@ -61,9 +61,6 @@ function LandingPageInner() {
           <button className="sidebar-btn" onClick={() => navigate("/admin-review-applications")}>
             管理場館申請
           </button>
-          <button className="sidebar-btn" onClick={() => navigate("/admin-review-applications")}>
-            管理維護者申請
-          </button>
           <button className="sidebar-btn" onClick={() => navigate("/my-venues")}>
             我的場地
           </button>

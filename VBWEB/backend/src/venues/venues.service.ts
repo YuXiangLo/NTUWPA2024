@@ -13,20 +13,21 @@ export class VenuesService {
   /** 列出當前使用者自己所有 venue（pending apps + approved venues） */
   async getMyVenues(userId: string) {
     try {
-      // pending applications
+      // 1) 只抓 status = 'pending' 的申請
       const { data: apps, error: appsErr } = await this.supabase.client
         .from('maintainer_applications')
         .select('id, venue_name, status')
-        .eq('user_id', userId);
+        .eq('user_id', userId)
+        .eq('status', 'pending');         // ← 新增這行，只留 pending
       if (appsErr) throw appsErr;
 
       const pending = (apps || []).map(a => ({
-        id: a.id,
-        name: a.venue_name,
+        id:     a.id,
+        name:   a.venue_name,
         status: a.status,
       }));
 
-      // approved venues
+      // 2) Approved venues (unchanged)
       const { data: venues, error: venuesErr } = await this.supabase.client
         .from('venues')
         .select('id, name')
@@ -34,8 +35,8 @@ export class VenuesService {
       if (venuesErr) throw venuesErr;
 
       const approved = (venues || []).map(v => ({
-        id: v.id,
-        name: v.name,
+        id:     v.id,
+        name:   v.name,
         status: 'approved',
       }));
 

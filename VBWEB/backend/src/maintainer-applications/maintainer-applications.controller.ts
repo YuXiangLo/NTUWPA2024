@@ -35,7 +35,7 @@ export class MaintainerApplicationsController {
     @Body() dto: CreateMaintainerApplicationDto,
     @Request() req,
   ) {
-    const userId = req.user.id;
+    const userId = req.user?.userid;
     const result = await this.service.create(dto, userId, files);
     return {
       id: result.id,
