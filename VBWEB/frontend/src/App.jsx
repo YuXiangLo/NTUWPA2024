@@ -14,6 +14,7 @@ import ChatRoomPage from './pages/ChatRoomPage';
 import TestPage from './pages/TestPage';
 import './App.css';
 import FriendListWidget from './components/FriendListWidget';
+import VenueApplication from './pages/VenueApplication';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path="/search-venue" element={<SearchVenueListPage />} />
           <Route path="/ChatRoom" element={<ChatRoomPage />} />
           <Route path="/test" element={<TestPage />} />
+          <Route path="/venue-application" element={<VenueApplication />} />
           {/* Add more routes as needed */}
         </Routes>
       </main>
