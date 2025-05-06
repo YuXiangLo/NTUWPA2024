@@ -1,0 +1,61 @@
+/* src/pages/MyVenues.css */
+.my-venues {
+    max-width: 900px;
+    margin: 2rem auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+  .my-venues h2 {
+    background: #343a40;
+    color: #fff;
+    padding: 1rem;
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  .my-venues table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .my-venues th,
+  .my-venues td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e9ecef;
+  }
+  .my-venues th {
+    background: #f8f9fa;
+    font-weight: 600;
+  }
+  .my-venues tr:nth-child(even) {
+    background: #fdfdfe;
+  }
+  .status-pending {
+    color: #ffc107;
+    font-weight: 500;
+  }
+  .status-approved {
+    color: #28a745;
+    font-weight: 500;
+  }
+  .btn-add-court {
+    background: #007bff;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .btn-add-court:hover {
+    background: #0056b3;
+  }
+  .text-muted {
+    color: #6c757d;
+  }
+  .error {
+    color: #dc3545;
+    text-align: center;
+    padding: 1rem;
+  }
+  

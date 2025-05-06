@@ -31,7 +31,6 @@ export class AdminReviewService {
     reviewerId: string,
     location?: LocationInput,
   ) {
-    console.log('location', location);
     // 1) fetch application record
     const { data: app, error: findErr } = await this.client
       .from('maintainer_applications')

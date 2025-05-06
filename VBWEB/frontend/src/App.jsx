@@ -18,6 +18,7 @@ import FriendListWidget from './components/FriendListWidget';
 import VenueApplication from './pages/VenueApplication';
 import AdminReviewApplications from './pages/AdminReviewApplications';
 import AdminReviewDetail from './pages/AdminReviewDetail';
+import MyVenues from './pages/MyVenues';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
           <Route path="/venue-application" element={<VenueApplication />} />
           <Route path="/admin-review-applications" element={<AdminReviewApplications />} />
           <Route path="/admin-review-applications/:id" element={<AdminReviewDetail />} />
+          <Route path="/my-venues" element={<MyVenues />} />
           {/* Add more routes as needed */}
         </Routes>
       </main>
