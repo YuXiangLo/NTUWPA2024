@@ -11,7 +11,8 @@ import Notificatoins from './pages/Notifications';
 import CourtInfoPage from './pages/CourtInfoPage';
 import SchedulePage from './pages/CourtSchedule';
 import SearchVenueListPage from './pages/SearchVenueListPage';
-import ChatRoomPage from './pages/ChatRoomPage'
+import ChatRoomPage from './pages/ChatRoomPage';
+import TestPage from './pages/TestPage';
 import './App.css';
 import FriendListWidget from './components/FriendListWidget';
 
@@ -30,6 +31,7 @@ function App() {
           <Route path="/court-info" element={<CourtInfoPage />} />
           <Route path="/search-venue" element={<SearchVenueListPage />} />
           <Route path="/ChatRoom" element={<ChatRoomPage />} />
+          <Route path="/test" element={<TestPage />} />
           {/* Add more routes as needed */}
         </Routes>
       </main>
