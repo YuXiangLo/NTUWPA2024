@@ -1,138 +1,179 @@
-/* ----------------------------------------
-   Event styling (if you still want it)
-   ---------------------------------------- */
-   .calendar_default_event_inner {
-    background: #2e78d6;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    font-size: 10pt;
-    padding: 5px;
-    opacity: 0.8;
+/* ────────────
+   Color system
+   ──────────── */
+   :root {
+    --dp-bg          : #ffffff;
+    --dp-bg-alt      : #f7f7f9;
+    --dp-border      : #e0e0e6;
+    --dp-primary     : #2563eb;          /* indigo-600 */
+    --dp-primary-dark: #1e40af;          /* indigo-800 */
+    --dp-text        : #1f2937;          /* gray-800 */
+    --dp-text-light  : #6b7280;          /* gray-500 */
+    --dp-shadow      : 0 8px 24px rgba(0,0,0,.08);
+    --dp-radius      : 0.75rem;          /* 12 px */
+    --dp-timing      : .25s cubic-bezier(.4,0,.2,1);
+    font-family      : -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   }
   
-  /* ----------------------------------------
-     Modal container: rounded + shadow + border
-     ---------------------------------------- */
+  /* ────────────
+     Main modal
+     ──────────── */
   .modal_default_main {
-    background: #fff;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-    overflow: hidden;
-  }
-  
-  /* ----------------------------------------
-     Inner padding
-     ---------------------------------------- */
-  .modal_default_inner {
-    padding: 24px;
-  }
-  
-  /* ----------------------------------------
-     Form‐item spacing
-     ---------------------------------------- */
-  .modal_default_form_item {
-    margin-bottom: 20px;
-  }
-  
-  /* ----------------------------------------
-     Labels
-     ---------------------------------------- */
-  .modal_default_form_item_label {
-    display: block;
-    margin-bottom: 6px;
-    font-size: 0.95em;
-    font-weight: 500;
-    color: #333;
-  }
-  
-  /* ----------------------------------------
-     Text input and select styling
-     ---------------------------------------- */
-  .modal_default_form_item_text input,
-  .modal_default_form_item_select select {
-    width: 100%;
-    padding: 8px 12px;
-    font-size: 0.95em;
-    line-height: 1.4;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-  
-  .modal_default_form_item_text input:focus,
-  .modal_default_form_item_select select:focus {
+    width: clamp(320px, 90vw, 600px);
+    border: 0;
+    border-radius: var(--dp-radius);
+    background: var(--dp-bg);
+    box-shadow: var(--dp-shadow);
     outline: none;
-    border-color: #1e90ff;
-    box-shadow: 0 0 0 2px rgba(30,144,255,0.2);
+    animation: dpZoomIn var(--dp-timing);
   }
   
-  /* ----------------------------------------
-     Button bar background + padding
-     ---------------------------------------- */
-  .modal_default_buttons {
-    background: #f9f9f9;
-    padding: 16px 24px;
-    border-top: 1px solid #e0e0e0;
-    text-align: right;
+  @keyframes dpZoomIn {
+    from { transform: scale(.96); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
   }
   
-  /* ----------------------------------------
+  /* overlay */
+  .modal_default_background {
+    position: fixed; /* fill viewport */
+    inset: 0;
+    background: rgba(0,0,0,.4);
+    backdrop-filter: blur(2px);
+    opacity: 1;       /* override DayPilot’s .5 */
+  }
+  
+  /* inner padding */
+  .modal_default_inner { padding: 2rem 2.25rem; }
+  
+  /* ────────────
+     Form elements
+     ──────────── */
+  .modal_default_form_item {
+    margin-block: .75rem;
+  }
+  
+  .modal_default_form_item_label {
+    font-weight: 500;
+    color: var(--dp-text);
+    margin-bottom: .25rem;
+  }
+  
+  .modal_default_form_item input[type=text],
+  .modal_default_form_item textarea,
+  .modal_default_form_item select {
+    width: 100%;
+    padding: .625rem .75rem;
+    border: 1px solid var(--dp-border);
+    border-radius: .5rem;
+    background: var(--dp-bg-alt);
+    color: var(--dp-text);
+    font-size: .95rem;
+    transition: border-color var(--dp-timing), box-shadow var(--dp-timing);
+  }
+  
+  .modal_default_form_item input[type=text]:focus,
+  .modal_default_form_item textarea:focus,
+  .modal_default_form_item select:focus {
+    border-color: var(--dp-primary);
+    box-shadow: 0 0 0 3px rgba(37,99,235,.25);
+    outline: none;
+  }
+  
+  /* radio + checkbox */
+  .modal_default_form_item_radio input,
+  .modal_default_form_item_checkbox input {
+    accent-color: var(--dp-primary); /* modern browsers */
+  }
+  
+  /* validation message */
+  .modal_default_form_item_invalid_message {
+    background: var(--dp-primary);
+    border-radius: .25rem;
+    padding: .125rem .5rem;
+    top: 0;
+  }
+  
+  /* date / time icons align */
+  .modal_default_form_item_date:after,
+  .modal_default_form_item_time_icon:after,
+  .modal_default_form_item_searchable_icon:after {
+    filter: invert(46%) sepia(73%) saturate(2744%) hue-rotate(215deg) brightness(93%) contrast(92%);
+    opacity: .75;
+  }
+  
+  /* scrollable */
+  .modal_default_form_item_scrollable_scroll {
+    border-radius: .5rem;
+    border: 1px solid var(--dp-border);
+  }
+  
+  /* tabular (grid) */
+  .modal_default_form_item_tabular_table {
+    border-collapse: collapse;
+  }
+  .modal_default_form_item_tabular_cell {
+    padding: .375rem;
+    border-bottom: 1px solid var(--dp-border);
+  }
+  .modal_default_form_item_tabular_header .modal_default_form_item_tabular_cell {
+    font-weight: 600;
+    color: var(--dp-text-light);
+  }
+  
+  /* ────────────
      Buttons
-     ---------------------------------------- */
-  .modal_default_buttons button {
-    font-size: 0.9em;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: opacity 0.2s;
+     ──────────── */
+  .modal_default_buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: .5rem;
+    margin-top: 1.5rem;
   }
   
-  .modal_default_buttons button:hover {
-    opacity: 0.9;
+  .modal_default_ok,
+  .modal_default_cancel {
+    all: unset;
+    cursor: pointer;
+    min-width: 96px;
+    text-align: center;
+    padding: .625rem 1rem;
+    font-weight: 600;
+    font-size: .95rem;
+    border-radius: .5rem;
+    transition: background var(--dp-timing), transform var(--dp-timing);
+    user-select: none;
   }
   
   .modal_default_ok {
-    background: #1e90ff;
+    background: var(--dp-primary);
     color: #fff;
-    margin-left: 8px;
   }
+  .modal_default_ok:hover { background: var(--dp-primary-dark); }
+  .modal_default_ok:active { transform: translateY(1px); }
   
   .modal_default_cancel {
-    background: transparent;
-    color: #666;
+    background: var(--dp-bg-alt);
+    color: var(--dp-text);
+  }
+  .modal_default_cancel:hover { background: #e5e7eb; }
+  .modal_default_cancel:active { transform: translateY(1px); }
+  
+  /* keyboard focus ring */
+  .modal_default_ok:focus-visible,
+  .modal_default_cancel:focus-visible {
+    box-shadow: 0 0 0 3px rgba(37,99,235,.35);
   }
   
-  /* ----------------------------------------
-     Option 2: Native radios, tinted with accent-color
-     ---------------------------------------- */
-  .modal_default_form_item_radio {
-    margin-bottom: 16px;
+  /* ────────────
+     Mobile tweaks
+     ──────────── */
+  @media (max-width: 440px) {
+    .modal_default_inner { padding: 1.5rem; }
+    .modal_default_buttons { flex-direction: column-reverse; }
+    .modal_default_ok, .modal_default_cancel { width: 100%; }
   }
   
-  .modal_default_form_item_radio label {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    font-size: 0.95em;
-    color: #333;
-    user-select: none;
-    padding: 6px 0;
+  .modal_default_form_item_checkbox {
+    color: #c00;
+    font-weight: bold;
   }
-  
-  .modal_default_form_item_radio input[type="radio"] {
-    /* make it visible and clickable */
-    position: relative;
-    opacity: 1;
-    width: 18px;
-    height: 18px;
-    margin-right: 8px;
-    cursor: pointer;
-  
-    /* modern browsers will tint the inner dot */
-    accent-color: #1e90ff;
-  }
-  
