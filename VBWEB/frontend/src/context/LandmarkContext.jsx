@@ -13,21 +13,21 @@ export const LandmarkProvider = ({ children }) => {
   useEffect(() => {
     const fetchVenues = async () => {
       try {
-        const res = await fetch('http://localhost:3000/venues', {
+        const res = await fetch(`${API_DOMAIN}/venues`, {
           headers: { 'Accept': 'application/json' }
         });
         if (!res.ok) throw new Error(`API error: ${res.status}`);
+  
         const data = await res.json();
-
         const mapped = data.map(venue => ({
-          name: venue.name,
-          coords: venue.coords,
-          venueId: venue.venue_id,
-          status: venue.status,
-          openingHours: venue.opening_hours,
-          courts: venue.court
+          name:        venue.name,
+          coords:      { lng: venue.location[0], lat: venue.location[1] },
+          venueId:     venue.id,
+          address:     venue.address,
+          phone:       venue.phone,
+          // if you want courts/openingHours later, fetch /venues/:id
         }));
-
+  
         setLandmarks(mapped);
         setSelectedPosition(mapped[0]?.coords || null);
       } catch (err) {
@@ -36,9 +36,9 @@ export const LandmarkProvider = ({ children }) => {
         // fallback to your bundled data
         setLandmarks(initialLandmarks);
         setSelectedPosition(initialLandmarks[0]?.coords || null);
-      } 
+      }
     };
-
+  
     fetchVenues();
   }, []);
 
