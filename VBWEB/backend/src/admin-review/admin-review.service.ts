@@ -3,6 +3,11 @@ import { Injectable, NotFoundException, InternalServerErrorException } from '@ne
 import { SupabaseService } from '../supabase/supabase.service';
 import { SupabaseClient } from '@supabase/supabase-js';
 
+interface LocationInput {
+  longitude: number;
+  latitude: number;
+}
+
 @Injectable()
 export class AdminReviewService {
   private readonly client: SupabaseClient;
@@ -20,15 +25,23 @@ export class AdminReviewService {
     return data;
   }
 
-  async updateStatus(id: string, status: 'approved' | 'rejected', reviewerId: string) {
-    const { data: existing, error: findErr } = await this.client
+  async updateStatus(
+    id: string,
+    status: 'approved' | 'rejected',
+    reviewerId: string,
+    location?: LocationInput,
+  ) {
+    console.log('location', location);
+    // 1) fetch application record
+    const { data: app, error: findErr } = await this.client
       .from('maintainer_applications')
-      .select('id')
+      .select('*')
       .eq('id', id)
       .single();
-    if (findErr || !existing) throw new NotFoundException('Application not found');
+    if (findErr || !app) throw new NotFoundException('Application not found');
 
-    const { data, error } = await this.client
+    // 2) update application status only
+    const { data: updatedApp, error: updateErr } = await this.client
       .from('maintainer_applications')
       .update({
         status,
@@ -36,8 +49,29 @@ export class AdminReviewService {
         reviewed_at: new Date().toISOString(),
       })
       .eq('id', id)
-      .select('id, status, reviewed_at');
-    if (error) throw new InternalServerErrorException(error.message);
-    return data[0];
+      .select('*')
+      .single();
+    if (updateErr) throw new InternalServerErrorException(updateErr.message);
+
+    // 3) if approved, insert into venues table
+    if (status === 'approved') {
+      const venuePayload: any = {
+        application_id: id,
+        maintainer_id: app.user_id,
+        name: app.venue_name,
+        address: app.address,
+        phone: app.phone,
+        detail: app.detail,
+        location: location
+          ? [location.longitude, location.latitude]
+          : null,
+      };
+      const { error: venueErr } = await this.client
+        .from('venues')
+        .insert([venuePayload]);
+      if (venueErr) throw new InternalServerErrorException(venueErr.message);
+    }
+
+    return updatedApp;
   }
 }
