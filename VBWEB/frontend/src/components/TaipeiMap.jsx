@@ -16,6 +16,7 @@ const customIcon = new L.Icon({
 
 // Component to control map view when a landmark is selected
 const MapController = ({ position }) => {
+  console.log(position);
   const map = useMap();
   map.setView(position, 14, { animate: true });
   return null;

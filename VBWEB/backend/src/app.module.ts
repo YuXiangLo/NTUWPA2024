@@ -4,11 +4,13 @@ import { UserModule } from './user/user.module';
 import { SupabaseModule } from './supabase/supabase.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import { VenueModule } from './venue/venue.module';
-import { CourtModule } from './court/court.module';
+import { VenuesModule } from './venues/venues.module';
+// import { CourtModule } from './court/court.module';
 import { ReserveModule } from './reserve/reserve.module';
 import { ChatModule } from './chat/chat.module';
 import { FriendsModule } from './friends/friends.module';
+import { MaintainerApplicationsModule } from './maintainer-applications/maintainer-applications.module';
+import { AdminReviewModule } from './admin-review/admin-review.module';
 
 @Module({
   imports: [
@@ -18,11 +20,13 @@ import { FriendsModule } from './friends/friends.module';
     SupabaseModule,
     AuthModule,
     UserModule,
-    VenueModule,
-    CourtModule,
+    VenuesModule,
+    // CourtModule,
     ReserveModule,
     ChatModule,
     FriendsModule,
+    MaintainerApplicationsModule,
+    AdminReviewModule,
   ]
 })
 export class AppModule {}

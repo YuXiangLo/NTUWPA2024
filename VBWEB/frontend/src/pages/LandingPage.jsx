@@ -55,6 +55,15 @@ function LandingPageInner() {
           <button className="sidebar-btn" onClick={() => navigate("/ChatRoom")}>
             聊天室
           </button>
+          <button className="sidebar-btn" onClick={() => navigate("/venue-application")}>
+            場館申請
+          </button>
+          <button className="sidebar-btn" onClick={() => navigate("/admin-review-applications")}>
+            管理場館申請
+          </button>
+          <button className="sidebar-btn" onClick={() => navigate("/my-venues")}>
+            我的場地
+          </button>
           <LandmarkList />
         </aside>
       </main>
