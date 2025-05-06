@@ -18,6 +18,7 @@ export default function AdminReviewApplications() {
       setLoading(true);
       try {
         const res = await fetch(`${API_DOMAIN}/maintainer_applications`, {
+          method: 'GET',
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) throw new Error(`Error ${res.status}`);
@@ -56,7 +57,7 @@ export default function AdminReviewApplications() {
               <td>{app.venue_name}</td>
               <td>{app.address}</td>
               <td>{app.phone}</td>
-              <td><Link to={`/admin-review-applications/${app.id}`}>詳細</Link></td>
+              <td><Link className="detail-button" to={`/admin-review-applications/${app.id}`}>詳細</Link></td>
             </tr>
           ))}
         </tbody>

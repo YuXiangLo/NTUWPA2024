@@ -32,15 +32,26 @@
   margin: 0.5rem 0 1.5rem;
   line-height: 1.5;
 }
-.images {
+.location-inputs {
   display: flex;
   gap: 1rem;
   margin-bottom: 1.5rem;
-  justify-content: center;
+}
+.location-inputs label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+}
+.location-inputs input {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 .thumbnail {
-  width: 300px;
-  height: 225px;
+  width: 200px;
+  height: 150px;
   object-fit: cover;
   border-radius: 4px;
   cursor: pointer;
@@ -77,41 +88,4 @@
 }
 .actions .reject:hover {
   background: #c82333;
-}
-
-/* Modal styles */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-.modal-content {
-  position: relative;
-  background: #fff;
-  padding: 1rem;
-  border-radius: 8px;
-  max-width: 90%;
-  max-height: 90%;
-  overflow: auto;
-}
-.modal-close {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: transparent;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-.modal-image {
-  width: 100%;
-  height: auto;
-  display: block;
 }
