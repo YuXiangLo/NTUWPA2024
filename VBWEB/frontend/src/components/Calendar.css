@@ -173,3 +173,7 @@
     .modal_default_ok, .modal_default_cancel { width: 100%; }
   }
   
+  .modal_default_form_item_checkbox {
+    color: #c00;
+    font-weight: bold;
+  }
