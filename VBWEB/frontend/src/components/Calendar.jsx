@@ -2,6 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { DayPilot, DayPilotCalendar, DayPilotNavigator } from "@daypilot/daypilot-lite-react";
 import "./Calendar.css";
 
+/**
+ * Calendar component with colored tags and a modal dialog that now also lets
+ * users edit the event Start/End using a single **datetime** field for each.
+ *
+ * The dialog values are pre‑filled using the second parameter of
+ * DayPilot.Modal.form() so the default values work for every field (text, radio
+ * and the two new datetime pickers).
+ */
 const Calendar = () => {
   const [calendar, setCalendar] = useState(null);
   const [events, setEvents] = useState([]);
@@ -15,13 +23,25 @@ const Calendar = () => {
     Another: '#ab12ef'
   };
 
+<<<<<<< HEAD
   // Navigation helpers
+=======
+  // ──────────────────────────────────────────────────────────────────────────────
+  // Navigation helpers
+  // ──────────────────────────────────────────────────────────────────────────────
+>>>>>>> 772c6de (feat: now allow modify date and time in modal)
   const prevWeek = () => setStartDate(new DayPilot.Date(startDate).addDays(-7).toString("yyyy-MM-dd"));
   const nextWeek = () => setStartDate(new DayPilot.Date(startDate).addDays(7).toString("yyyy-MM-dd"));
   const toggleNavigator = () => setShowNav(!showNav);
   const onNavigatorSelect = args => { setStartDate(args.day.toString("yyyy-MM-dd")); setShowNav(false); };
 
+<<<<<<< HEAD
   // Edit an existing event – the dialog is pre‑filled with current values
+=======
+  // ----------------------------------------------------------------------------
+  // Edit an existing event – the dialog is pre‑filled with current values
+  // ----------------------------------------------------------------------------
+>>>>>>> 772c6de (feat: now allow modify date and time in modal)
   const editEvent = async (e) => {
     if (!calendar) return;
     const data = e.data;
@@ -33,8 +53,12 @@ const Calendar = () => {
       { name: "Event Name:", id: "text", type: "text", placeholder: "Event Name" },
       { name: "Tag:",        id: "tag",  type: "radio", options: tagOptions },
       { name: "Start:",      id: "start", type: "datetime" },
+<<<<<<< HEAD
       { name: "End:",        id: "end",   type: "datetime" },
       { name: "Delete this event", id: "delete", type: "checkbox" }  // new
+=======
+      { name: "End:",        id: "end",   type: "datetime" }
+>>>>>>> 772c6de (feat: now allow modify date and time in modal)
     ];
 
     const modal = await DayPilot.Modal.form(form, {
@@ -43,6 +67,7 @@ const Calendar = () => {
       start: data.start,
       end: data.end
     });
+<<<<<<< HEAD
 
     // if dialog was closed via ESC or outside click → do nothing
     if (modal.canceled) {
@@ -59,6 +84,13 @@ const Calendar = () => {
 
     // otherwise update with new values
     const { text, tag, start, end } = result;
+=======
+
+    if (modal.canceled) return;
+
+    const { text, tag, start, end } = modal.result;
+
+>>>>>>> 772c6de (feat: now allow modify date and time in modal)
     data.text      = `${text} (${tag})`;
     data.tag       = tag;
     data.start     = start;
@@ -68,7 +100,13 @@ const Calendar = () => {
     calendar.events.update(e);
   };
 
+<<<<<<< HEAD
   // Calendar configuration (create + clicks + rendering)
+=======
+  // ----------------------------------------------------------------------------
+  // Calendar configuration (create + clicks + context menu + rendering)
+  // ----------------------------------------------------------------------------
+>>>>>>> 772c6de (feat: now allow modify date and time in modal)
   const config = {
     viewType: "Week",
     durationBarVisible: false,
@@ -87,6 +125,10 @@ const Calendar = () => {
       ];
 
       const modal = await DayPilot.Modal.form(form, {
+<<<<<<< HEAD
+=======
+        tag: tagOptions[0].id,
+>>>>>>> 772c6de (feat: now allow modify date and time in modal)
         start: args.start,
         end: args.end
       });
@@ -108,6 +150,17 @@ const Calendar = () => {
 
     onEventClick: async args => editEvent(args.e),
 
+<<<<<<< HEAD
+=======
+    contextMenu: new DayPilot.Menu({
+      items: [
+        { text: "Delete", onClick: args => calendar && calendar.events.remove(args.source) },
+        { text: "-" },
+        { text: "Edit…",  onClick: async args => editEvent(args.source) }
+      ]
+    }),
+
+>>>>>>> 772c6de (feat: now allow modify date and time in modal)
     onBeforeEventRender: args => {
       args.data.areas = [
         { top: 3, right: 3,  width: 20, height: 20, symbol: "icons/daypilot.svg#minichevron-down-2", fontColor: "#fff", toolTip: "Show context menu", action: "ContextMenu" },
@@ -123,7 +176,13 @@ const Calendar = () => {
     }
   };
 
+<<<<<<< HEAD
   // Initial sample events
+=======
+  // ---------------------------------------------------------------------------
+  // Initial sample events
+  // ---------------------------------------------------------------------------
+>>>>>>> 772c6de (feat: now allow modify date and time in modal)
   useEffect(() => {
     setEvents([
       { id: 1, text: "Event 1 (Host)",    start: "2025-10-06T10:30:00", end: "2025-10-06T13:00:00", participants: 2, tag: "Host" },
