@@ -20,7 +20,7 @@ export default function MyVenues() {
         if (!res.ok) throw new Error(`Error ${res.status}`);
         return res.json();
       })
-      .then(data => setVenues(data))
+      .then(setVenues)
       .catch(err => setError(err.message))
       .finally(() => setLoading(false));
   }, [token]);
@@ -39,6 +39,7 @@ export default function MyVenues() {
           <thead>
             <tr>
               <th>場地名稱</th>
+              <th>球場數量</th>
               <th>狀態</th>
               <th>操作</th>
             </tr>
@@ -47,13 +48,14 @@ export default function MyVenues() {
             {venues.map(v => (
               <tr key={v.id}>
                 <td>{v.name}</td>
+                <td>{v.courtCount}</td>
                 <td className={v.status === 'pending' ? 'status-pending' : 'status-approved'}>
                   {v.status}
                 </td>
                 <td>
                   {v.status === 'approved' ? (
-                    <Link to={`/venues/${v.id}/courts`} className="btn-add-court">
-                      新增球場
+                    <Link to={`/venues/${v.id}/courts`} className="btn-manage-courts">
+                      管理球場
                     </Link>
                   ) : (
                     <span className="text-muted">審核中</span>

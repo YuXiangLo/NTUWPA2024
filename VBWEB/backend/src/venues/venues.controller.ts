@@ -5,9 +5,13 @@ import {
   Param,
   UseGuards,
   Request,
+  Post,
+  Body,
+  Delete,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { VenuesService } from './venues.service';
+import { CreateCourtDto } from './dto/create-court.dto';
 
 @Controller('venues')
 export class VenuesController {
@@ -43,4 +47,30 @@ export class VenuesController {
     const userId = req.user?.userid;
     return this.venuesService.getVenueCourts(venueId, userId);
   }
+
+  /** Private: 在 venue 下建立新的 court */
+  @UseGuards(JwtAuthGuard)
+  @Post(':id/courts')
+  async createCourt(
+    @Param('id') venueId: string,
+    @Body() dto: CreateCourtDto,
+    @Request() req: any,
+  ) {
+    const userId = req.user?.userid;
+    return this.venuesService.createCourt(venueId, userId, dto);
+  }
+
+  /** Private: 刪除指定 court（範例） */
+  @UseGuards(JwtAuthGuard)
+  @Delete(':venueId/courts/:courtId')
+  async deleteCourt(
+    @Param('venueId') venueId: string,
+    @Param('courtId') courtId: string,
+    @Request() req: any,
+  ) {
+    // 可以依照你的需求實作 deleteCourt in service
+    const userId = req.user?.userid;
+    return this.venuesService.deleteCourt(venueId, courtId, userId);
+  }
+
 }
