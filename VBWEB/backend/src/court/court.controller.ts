@@ -13,6 +13,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CourtService } from './court.service';
 import { CreateOpeningHourDto } from './dto/create-opening-hour.dto';
 import { UpdateOpeningHourDto } from './dto/update-opening-hour.dto';
+import { BulkCreateOpeningHoursDto } from './dto/bulk-create-opening-hours.dto';
 
 @Controller('venues/:venueId/courts/:courtId/opening-hours')
 @UseGuards(JwtAuthGuard)
@@ -57,5 +58,16 @@ export class CourtController {
   ) {
     const userId = req.user?.userid;
     return this.service.deleteOpeningHour(courtId, ohId, userId);
+  }
+
+  /** Delete all old periods, then insert the new array */
+  @Post('bulk')
+  async bulk(
+    @Param('courtId') courtId: string,
+    @Body() dto: BulkCreateOpeningHoursDto,
+    @Request() req: any,
+  ) {
+    const userId = req.user?.userid;
+    return this.service.bulkCreateOpeningHours(courtId, userId, dto.periods);
   }
 }

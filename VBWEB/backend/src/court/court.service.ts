@@ -109,5 +109,35 @@ import {
       }
       return { success: true };
     }
+
+    async bulkCreateOpeningHours(
+      courtId: string,
+      userId: string,
+      periods: CreateOpeningHourDto[],
+    ) {
+      await this.ensureCourtBelongsToUser(courtId, userId);
+  
+      // 1) Delete all
+      const { error: delErr } = await this.supabase.client
+        .from('court_opening_hours')
+        .delete()
+        .eq('court_id', courtId);
+      if (delErr) throw new InternalServerErrorException(delErr.message);
+  
+      // 2) Insert new
+      const payload = periods.map(p => ({
+        court_id:    courtId,
+        day_of_week: p.dayOfWeek,
+        open_time:   p.openTime,
+        close_time:  p.closeTime,
+      }));
+      const { data, error: insErr } = await this.supabase.client
+        .from('court_opening_hours')
+        .insert(payload)
+        .select('*');
+      if (insErr) throw new InternalServerErrorException(insErr.message);
+  
+      return data;
+    }
   }
   
