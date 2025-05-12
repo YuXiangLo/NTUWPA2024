@@ -5,40 +5,52 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { SupabaseService } from '../supabase/supabase.service';
+import { CreateCourtDto } from './dto/create-court.dto';
 
 @Injectable()
 export class VenuesService {
   constructor(private readonly supabase: SupabaseService) {}
 
-  /** 列出當前使用者自己所有 venue（pending apps + approved venues） */
   async getMyVenues(userId: string) {
     try {
-      // 1) 只抓 status = 'pending' 的申請
+      // 1) Pending applications (courtCount = 0)
       const { data: apps, error: appsErr } = await this.supabase.client
         .from('maintainer_applications')
         .select('id, venue_name, status')
         .eq('user_id', userId)
-        .eq('status', 'pending');         // ← 新增這行，只留 pending
+        .eq('status', 'pending');
       if (appsErr) throw appsErr;
 
-      const pending = (apps || []).map(a => ({
-        id:     a.id,
-        name:   a.venue_name,
-        status: a.status,
+      const pending = apps!.map(a => ({
+        id:         a.id,
+        name:       a.venue_name,
+        status:     a.status,
+        courtCount: 0,
       }));
 
-      // 2) Approved venues (unchanged)
+      // 2) Approved venues + count courts
       const { data: venues, error: venuesErr } = await this.supabase.client
         .from('venues')
         .select('id, name')
         .eq('maintainer_id', userId);
       if (venuesErr) throw venuesErr;
 
-      const approved = (venues || []).map(v => ({
-        id:     v.id,
-        name:   v.name,
-        status: 'approved',
-      }));
+      // For each venue, head-only select to get exact count of courts
+      const approved = await Promise.all(
+        venues!.map(async v => {
+          const { count, error: cErr } = await this.supabase.client
+            .from('courts')
+            .select('id', { count: 'exact', head: true })
+            .eq('venue_id', v.id);
+          if (cErr) throw cErr;
+          return {
+            id:         v.id,
+            name:       v.name,
+            status:     'approved',
+            courtCount: count || 0,
+          };
+        })
+      );
 
       return [...pending, ...approved];
     } catch (e) {
@@ -115,4 +127,78 @@ export class VenuesService {
 
     return courts;
   }
+
+  /** 在已核准的 venue 底下新增 court */
+  async createCourt(
+    venueId: string,
+    userId: string,
+    dto: CreateCourtDto,
+  ) {
+    // 1) 驗證 venue 存在且屬於此 user
+    const { data: venue, error: vErr } = await this.supabase.client
+      .from('venues')
+      .select('maintainer_id')
+      .eq('id', venueId)
+      .single();
+    if (vErr) throw new NotFoundException('場地不存在');
+    if (venue.maintainer_id !== userId) {
+      throw new ForbiddenException('你沒有權限為此場地新增球場');
+    }
+
+    // 2) 插入新的 court
+    const payload = {
+      venue_id: venueId,
+      name:     dto.name,
+      property: dto.property || null,
+      detail:   dto.detail || null,
+    };
+
+    const { data, error } = await this.supabase.client
+      .from('courts')
+      .insert([payload])
+      .select('*')
+      .single();
+    if (error) throw new InternalServerErrorException(error.message);
+
+    return data;
+  }
+
+  async deleteCourt(
+    venueId: string,
+    courtId: string,
+    userId: string,
+  ): Promise<{ success: boolean }> {
+    // 1) 驗證 venue 存在且屬於此 user
+    const { data: venue, error: vErr } = await this.supabase.client
+      .from('venues')
+      .select('maintainer_id')
+      .eq('id', venueId)
+      .single();
+    if (vErr) throw new NotFoundException('場地不存在');
+    if (venue.maintainer_id !== userId) {
+      throw new ForbiddenException('你沒有權限刪除此場地下的球場');
+    }
+
+    // 2) 驗證 court 存在且屬於此 venue
+    const { data: court, error: cErr } = await this.supabase.client
+      .from('courts')
+      .select('id')
+      .eq('id', courtId)
+      .eq('venue_id', venueId)
+      .single();
+    if (cErr) throw new NotFoundException('球場不存在或不屬於此場地');
+
+    // 3) 刪除 court（與其 opening_hours 會自動 cascade）
+    const { error: delErr } = await this.supabase.client
+      .from('courts')
+      .delete()
+      .eq('id', courtId)
+      .eq('venue_id', venueId);
+    if (delErr) {
+      throw new InternalServerErrorException('刪除失敗：' + delErr.message);
+    }
+
+    return { success: true };
+  }
+
 }

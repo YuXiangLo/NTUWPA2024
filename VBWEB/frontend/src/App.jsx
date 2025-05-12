@@ -19,6 +19,9 @@ import VenueApplication from './pages/VenueApplication';
 import AdminReviewApplications from './pages/AdminReviewApplications';
 import AdminReviewDetail from './pages/AdminReviewDetail';
 import MyVenues from './pages/MyVenues';
+import CreateCourt from './pages/CreateCourt';
+import ManageCourts from './pages/ManageCourts.jsx';
+import ManageSchedule from './pages/ManageSchedule.jsx';
 
 function App() {
   return (
@@ -40,6 +43,9 @@ function App() {
           <Route path="/admin-review-applications" element={<AdminReviewApplications />} />
           <Route path="/admin-review-applications/:id" element={<AdminReviewDetail />} />
           <Route path="/my-venues" element={<MyVenues />} />
+          <Route path="/venues/:id/courts/new" element={<CreateCourt />} />
+          <Route path="/venues/:id/courts" element={<ManageCourts />} />
+          <Route path="/venues/:id/courts/:courtId/schedule" element={<ManageSchedule />} />
           {/* Add more routes as needed */}
         </Routes>
       </main>

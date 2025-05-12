@@ -1,0 +1,87 @@
+.create-court {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  .create-court h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  .create-court form {
+    display: flex;
+    flex-direction: column;
+  }
+  .create-court label, 
+  .create-court fieldset {
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+  .create-court input[type="text"],
+  .create-court textarea,
+  .create-court select,
+  .create-court input[type="time"] {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.25rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  .create-court textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+  .periods .period-inputs {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  .period-list {
+    list-style: none;
+    padding: 0;
+  }
+  .period-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8f9fa;
+    padding: 0.5rem;
+    border-radius: 4px;
+    margin-bottom: 0.25rem;
+  }
+  .create-court button[type="submit"] {
+    padding: 0.75rem;
+    background: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .create-court button[type="submit"]:hover:not(:disabled) {
+    background: #218838;
+  }
+  .create-court button[type="button"] {
+    padding: 0.5rem 1rem;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .create-court button[type="button"]:hover {
+    background: #0056b3;
+  }
+  .create-court .status {
+    margin-top: 1rem;
+    text-align: center;
+    color: #dc3545;
+    font-weight: 500;
+  }
+  

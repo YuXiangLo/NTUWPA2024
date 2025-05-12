@@ -11,6 +11,7 @@ import { ChatModule } from './chat/chat.module';
 import { FriendsModule } from './friends/friends.module';
 import { MaintainerApplicationsModule } from './maintainer-applications/maintainer-applications.module';
 import { AdminReviewModule } from './admin-review/admin-review.module';
+import { CourtModule } from './court/court.module';
 
 @Module({
   imports: [
@@ -21,12 +22,13 @@ import { AdminReviewModule } from './admin-review/admin-review.module';
     AuthModule,
     UserModule,
     VenuesModule,
-    // CourtModule,
+    CourtModule,
     ReserveModule,
     ChatModule,
     FriendsModule,
     MaintainerApplicationsModule,
     AdminReviewModule,
+    CourtModule,
   ]
 })
 export class AppModule {}
