@@ -31,10 +31,45 @@
   color: #666;
 }
 
+.header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .header-buttons button {
   margin-left: 1rem;
   padding: 0.5rem 1rem;
   cursor: pointer;
+}
+
+.notification-btn {
+  position: relative;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  color: #fff;
+}
+
+.notification-btn:hover {
+  color: #ffeb3b;
+}
+
+.notification-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%);
+  background: #e53935;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 0.625rem;
+  width: 1rem;
+  height: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .nav ul {

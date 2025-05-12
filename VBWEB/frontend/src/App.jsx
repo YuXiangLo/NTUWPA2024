@@ -7,6 +7,7 @@ import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import ProfilePage from './pages/ProfilePage';
+import Notificatoins from './pages/Notifications';
 import CourtInfoPage from './pages/CourtInfoPage';
 import SchedulePage from './pages/CourtSchedule';
 import SearchVenueListPage from './pages/SearchVenueListPage';
@@ -29,6 +30,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/notifications" element={<Notificatoins />} />
           <Route path="/schedule/:court_id" element={<SchedulePage />} />
           <Route path="/court-info" element={<CourtInfoPage />} />
           <Route path="/search-venue" element={<SearchVenueListPage />} />
