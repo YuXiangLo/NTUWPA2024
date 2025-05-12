@@ -27,6 +27,7 @@ const SearchVenueListPage = () => {
         return response.json();
       })
       .then((data) => {
+        console.log('venues', data);
         setVenues(data);
         setLoading(false);
       })
@@ -116,46 +117,46 @@ const SearchVenueListPage = () => {
       <div className="svl-venue-list">
         {filteredVenues.length > 0 ? (
           filteredVenues.map((venue) => (
-            <div key={venue.venue_id} className="svl-venue-card">
+            <div key={venue.id} className="svl-venue-card">
               <div className="svl-venue-row">
                 <span className="svl-col svl-col-name">{venue.name}</span>
                 <span className="svl-col svl-col-address">{venue.address}</span>
                 <span className="svl-col svl-col-count">
-                  {venue.court ? venue.court.length : 0}
+                  {venue.courts ? venue.courts.length : 0}
                 </span>
                 <span className="svl-col svl-col-status">{venue.status}</span>
                 <span className="svl-col svl-col-actions">
                   <Link
-                    to={`/venue/${venue.venue_id}`}
+                    to={`/venue/${venue.id}`}
                     className="svl-detail-button"
                   >
                     詳情
                   </Link>
                   <button
                     className="svl-toggle-button"
-                    onClick={() => toggleVenue(venue.venue_id)}
+                    onClick={() => toggleVenue(venue.id)}
                   >
-                    {toggledVenues[venue.venue_id] ? '隱藏場地' : '顯示場地'}
+                    {toggledVenues[venue.id] ? '隱藏場地' : '顯示場地'}
                   </button>
                 </span>
               </div>
-              {toggledVenues[venue.venue_id] && (
+              {toggledVenues[venue.id] && (
                 <div className="svl-court-list">
-                  {venue.court && venue.court.length > 0 ? (
-                    venue.court.map((court) => (
-                      <div key={court.court_id} className="svl-court-card">
+                  {venue.courts && venue.courts.length > 0 ? (
+                    venue.courts.map((court) => (
+                      <div key={court.id} className="svl-court-card">
                         <div className="svl-court-info">
                           <span className="svl-court-name">{court.name}</span>
                           <span className="svl-court-material">
-                            材質：{court.material}
+                            材質：{court.property}
                           </span>
                         </div>
                         <div className="svl-court-action">
                           <Link
-                            to={`/schedule/${court.court_id}`}
-                            className="svl-schedule-button"
+                            to={`/venues/${venue.id}/courts/${court.id}/schedule`}
+                            className="svl-detail-button"
                           >
-                            時間表
+                            詳情
                           </Link>
                         </div>
                       </div>

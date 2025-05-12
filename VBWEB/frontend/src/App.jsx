@@ -22,6 +22,9 @@ import MyVenues from './pages/MyVenues';
 import CreateCourt from './pages/CreateCourt';
 import ManageCourts from './pages/ManageCourts.jsx';
 import ManageSchedule from './pages/ManageSchedule.jsx';
+import CourtDetailPage from './pages/CourtDetailPage';
+import CourtReservationApply from './pages/CourtReservationApplyPage';
+import ManageReservationsPage from './pages/ManageReservationsPage';
 
 function App() {
   return (
@@ -29,6 +32,7 @@ function App() {
       <Header />
       <main>
         <Routes>
+          {/* Public / auth */}
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
@@ -39,14 +43,30 @@ function App() {
           <Route path="/search-venue" element={<SearchVenueListPage />} />
           <Route path="/ChatRoom" element={<ChatRoomPage />} />
           <Route path="/test" element={<TestPage />} />
+
+          {/* Venue applications */}
           <Route path="/venue-application" element={<VenueApplication />} />
           <Route path="/admin-review-applications" element={<AdminReviewApplications />} />
           <Route path="/admin-review-applications/:id" element={<AdminReviewDetail />} />
+
+          {/* Maintainer’s own venues */}
           <Route path="/my-venues" element={<MyVenues />} />
-          <Route path="/venues/:id/courts/new" element={<CreateCourt />} />
-          <Route path="/venues/:id/courts" element={<ManageCourts />} />
-          <Route path="/venues/:id/courts/:courtId/schedule" element={<ManageSchedule />} />
-          {/* Add more routes as needed */}
+
+          {/* Courts under a venue */}
+          <Route path="/venues/:venueId/courts">
+            {/* create new court must come first */}
+            <Route path="new" element={<CreateCourt />} />
+            {/* list/manage courts */}
+            <Route path="" element={<ManageCourts />} />
+            {/* maintainer’s schedule editor */}
+            <Route path=":courtId/manage-schedule" element={<ManageSchedule />} />
+            {/* public schedule/details */}
+            <Route path=":courtId/schedule" element={<CourtDetailPage />} />
+            {/* apply for reservation */}
+            <Route path=":courtId/reserve" element={<CourtReservationApply />} />
+            {/* manage reservations */}
+            <Route path=":courtId/reservations" element={<ManageReservationsPage />} />
+          </Route>
         </Routes>
       </main>
       <FriendListWidget />

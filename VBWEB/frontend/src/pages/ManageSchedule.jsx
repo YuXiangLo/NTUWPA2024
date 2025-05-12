@@ -11,7 +11,7 @@ import { API_DOMAIN } from '../config';
 import "./Calendar.css";
 
 export default function ManageSchedule() {
-  const { id: venueId, courtId } = useParams();
+  const { venueId, courtId } = useParams();
   const { user } = useAuth();
   const token = user?.accessToken;
   const navigate = useNavigate();

@@ -12,6 +12,8 @@ import { FriendsModule } from './friends/friends.module';
 import { MaintainerApplicationsModule } from './maintainer-applications/maintainer-applications.module';
 import { AdminReviewModule } from './admin-review/admin-review.module';
 import { CourtModule } from './court/court.module';
+import { CourtReservationsModule } from './court-reservations/court-reservations.module';
+import { ReservationJoinRequestsModule } from './reservation-join-requests/reservation-join-requests.module';
 
 @Module({
   imports: [
@@ -29,6 +31,8 @@ import { CourtModule } from './court/court.module';
     MaintainerApplicationsModule,
     AdminReviewModule,
     CourtModule,
+    CourtReservationsModule,
+    ReservationJoinRequestsModule,
   ]
 })
 export class AppModule {}
