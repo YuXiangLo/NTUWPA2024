@@ -9,6 +9,7 @@ import {
   import { SupabaseService } from '../supabase/supabase.service';
   import { CreateCourtReservationDto } from './dto/create-court-reservation.dto';
   import { ReviewCourtReservationDto } from './dto/review-court-reservation.dto';
+import e from 'express';
   
   @Injectable()
   export class CourtReservationsService {
@@ -80,38 +81,56 @@ import {
       }
   
       const { data, error } = await this.supabase.client
-    .from('court_reservations')
-    .select(`
-      id,
-      start_ts,
-      end_ts,
-      num_players,
-      fee,
-      visibility,
-      detail,
-      status,
-      submitted_at,
-      reviewed_by,
-      reviewed_at,
-      rejection_reason,
-      applicant:users!court_reservations_user_id_fkey (
-        lastname,
-        firstname,
-        nickname
-      )
-    `)
-    .eq('court_id', courtId);
+        .from('court_reservations')
+        .select(`
+          id,
+          start_ts,
+          end_ts,
+          num_players,
+          fee,
+          visibility,
+          detail,
+          status,
+          submitted_at,
+          reviewed_by,
+          reviewed_at,
+          rejection_reason,
+          applicant:users!court_reservations_user_id_fkey (
+            lastname,
+            firstname,
+            nickname
+          )
+        `)
+        .eq('court_id', courtId);
 
-  if (error) throw new InternalServerErrorException(error.message);
-  return data;
+      if (error) throw new InternalServerErrorException(error.message);
+      return data;
     }
   
     /** 使用者查看自己的所有申請 */
     async listMyReservations(userId: string) {
       const { data, error } = await this.supabase.client
         .from('court_reservations')
-        .select('*')
+        .select(`
+          id,
+          start_ts,
+          end_ts,
+          num_players,
+          fee,
+          visibility,
+          detail,
+          status,
+          court: courts!court_reservations_court_id_fkey (
+            id,
+            name,
+            venue: venues!courts_venue_id_fkey (
+              id,
+              name
+            )
+          )
+        `)
         .eq('user_id', userId);
+    
       if (error) throw new InternalServerErrorException(error.message);
       return data;
     }
@@ -181,5 +200,7 @@ import {
       if (error) throw new InternalServerErrorException(error.message);
       return { success: true };
     }
+
+    
   }
   

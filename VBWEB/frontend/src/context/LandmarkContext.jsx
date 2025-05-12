@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import initialLandmarks from '../data/Landmarks.jsx';
+import { API_DOMAIN } from '../config.js';
 
 export const LandmarkContext = createContext();
 

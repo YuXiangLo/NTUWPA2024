@@ -64,6 +64,9 @@ function LandingPageInner() {
           <button className="sidebar-btn" onClick={() => navigate("/my-venues")}>
             我的場地
           </button>
+          <button className="sidebar-btn" onClick={() => navigate("/reservations/my")}>
+            我的預約
+          </button>
           <LandmarkList />
         </aside>
       </main>

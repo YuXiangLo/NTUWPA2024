@@ -25,6 +25,8 @@ import ManageSchedule from './pages/ManageSchedule.jsx';
 import CourtDetailPage from './pages/CourtDetailPage';
 import CourtReservationApply from './pages/CourtReservationApplyPage';
 import ManageReservationsPage from './pages/ManageReservationsPage';
+import MyReservationsPage from './pages/MyReservationsPage';
+import ReservationJoinRequestsPage from './pages/ReservationJoinRequestsPage';
 
 function App() {
   return (
@@ -48,7 +50,8 @@ function App() {
           <Route path="/venue-application" element={<VenueApplication />} />
           <Route path="/admin-review-applications" element={<AdminReviewApplications />} />
           <Route path="/admin-review-applications/:id" element={<AdminReviewDetail />} />
-
+          <Route path="/reservations/my" element={<MyReservationsPage />} />
+          <Route path="/reservations/:reservationId/join-requests" element={<ReservationJoinRequestsPage />} />
           {/* Maintainer’s own venues */}
           <Route path="/my-venues" element={<MyVenues />} />
 
