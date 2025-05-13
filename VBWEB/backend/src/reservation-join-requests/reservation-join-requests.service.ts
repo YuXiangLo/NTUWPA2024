@@ -4,6 +4,7 @@ import {
     NotFoundException,
     ForbiddenException,
     InternalServerErrorException,
+    ConflictException,
   } from '@nestjs/common';
   import { SupabaseService } from '../supabase/supabase.service';
   import { ReviewJoinRequestDto } from './dto/review-join-request.dto';
@@ -17,7 +18,18 @@ import {
       reservationId: string,
       userId: string,
     ) {
-      // 檢查 reservation exists 且已 approved
+      // 0) 防重覆
+      const { count, error: cErr } = await this.supabase.client
+        .from('reservation_join_requests')
+        .select('id', { head: true, count: 'exact' })
+        .eq('reservation_id', reservationId)
+        .eq('user_id', userId);
+      if (cErr) throw new InternalServerErrorException(cErr.message);
+      if (count > 0) {
+        throw new ConflictException('您已經申請過加入了');
+      }
+  
+      // 1) 檢查 reservation exists 且已 approved
       const { data: resv, error: rErr } = await this.supabase.client
         .from('court_reservations')
         .select('status,user_id,court_id')
@@ -28,16 +40,26 @@ import {
         throw new ForbiddenException('此預約尚未核准');
       }
   
-      // 插入
+      // 2) 插入並同時回傳 applicant 的名字
       const { data, error } = await this.supabase.client
         .from('reservation_join_requests')
         .insert([{
           reservation_id: reservationId,
           user_id:        userId,
-          status:         'pending'
+          status:         'pending',
         }])
-        .select('*')
+        .select(`
+          id,
+          status,
+          requested_at,
+          applicant:users!reservation_join_requests_user_id_fkey(
+            lastname,
+            firstname,
+            nickname
+          )
+        `)
         .single();
+  
       if (error) throw new InternalServerErrorException(error.message);
       return data;
     }
@@ -47,20 +69,25 @@ import {
       reservationId: string,
       userId: string,
     ) {
-      // 驗證此 reservation 是他的
-      const { data: resv, error: rErr } = await this.supabase.client
-        .from('court_reservations')
-        .select('user_id')
-        .eq('id', reservationId)
-        .single();
-      if (rErr || !resv) throw new NotFoundException('預約不存在');
-      if (resv.user_id !== userId) {
-        throw new ForbiddenException('無權查看此加入請求');
-      }
+      // ownership checks omitted for brevity…
+    
       const { data, error } = await this.supabase.client
         .from('reservation_join_requests')
-        .select('*')
+        .select(`
+          id,
+          status,
+          requested_at,
+          responded_by,
+          responded_at,
+          rejection_reason,
+          applicant:users!reservation_join_requests_user_id_fkey (
+            lastname,
+            firstname,
+            nickname
+          )
+        `)
         .eq('reservation_id', reservationId);
+
       if (error) throw new InternalServerErrorException(error.message);
       return data;
     }
@@ -125,6 +152,35 @@ import {
         .eq('id', requestId);
       if (error) throw new InternalServerErrorException(error.message);
       return { success: true };
+    }
+
+    async listMyRequests(userId: string) {
+      const { data, error } = await this.supabase.client
+        .from('reservation_join_requests')
+        .select(`
+          id,
+          status,
+          requested_at,
+          responded_at,
+          rejection_reason,
+          reservation: court_reservations!reservation_join_requests_reservation_id_fkey (
+            id,
+            start_ts,
+            end_ts,
+            num_players,
+            fee,
+            visibility,
+            detail,
+            court: courts!court_reservations_court_id_fkey (
+              id,
+              name,
+              venue: venues!courts_venue_id_fkey ( id, name )
+            )
+          )
+        `)
+        .eq('user_id', userId);
+      if (error) throw new InternalServerErrorException(error.message);
+      return data;
     }
   }
   

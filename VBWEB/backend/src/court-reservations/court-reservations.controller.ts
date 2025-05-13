@@ -83,5 +83,10 @@ import {
     ) {
       return this.service.deleteReservation(id, req.user.userid);
     }
+
+    @Get('reservations/available')
+    listAvailable(@Request() req: any) {
+      return this.service.listAvailableReservations(req.user.userid);
+    }
   }
   

@@ -201,6 +201,106 @@ import e from 'express';
       return { success: true };
     }
 
+    async listAvailableReservations(userId: string) {
+      // 1) load friendships where user is either side
+      const { data: rows, error: fErr } = await this.supabase.client
+        .from('friendships')
+        .select('user_id_1,user_id_2')
+        .or(`user_id_1.eq.${userId},user_id_2.eq.${userId}`)
+      if (fErr) throw new InternalServerErrorException(fErr.message);
     
+      // 2) build friendIds = the other column
+      const friendIds = rows.map(r =>
+        r.user_id_1 === userId ? r.user_id_2 : r.user_id_1
+      );
+    
+      // 3) public query
+      const publicQ = this.supabase.client
+        .from('court_reservations')
+        .select(`
+          id,
+          start_ts,
+          end_ts,
+          num_players,
+          fee,
+          visibility,
+          detail,
+          applicant:users!court_reservations_user_id_fkey (
+            lastname,
+            firstname,
+            nickname
+          ),
+          court: courts!court_reservations_court_id_fkey (
+            id,
+            name,
+            venue: venues!courts_venue_id_fkey (
+              id,
+              name
+            )
+          ),
+          requests: reservation_join_requests!reservation_join_requests_reservation_id_fkey (
+            id,
+            status
+          )
+        `)
+        .eq('status', 'approved')
+        .eq('visibility', 'public');
+    
+      // 4) friend-only query
+      const friendQ = this.supabase.client
+        .from('court_reservations')
+        .select(`
+          id,
+          start_ts,
+          end_ts,
+          num_players,
+          fee,
+          visibility,
+          detail,
+          applicant:users!court_reservations_user_id_fkey (
+            lastname,
+            firstname,
+            nickname
+          ),
+          court: courts!court_reservations_court_id_fkey (
+            id,
+            name,
+            venue: venues!courts_venue_id_fkey (
+              id,
+              name
+            )
+          ),
+          requests: reservation_join_requests!reservation_join_requests_reservation_id_fkey (
+            id,
+            status
+          )
+        `)
+        .eq('status', 'approved')
+        .eq('visibility', 'friend')
+        .in('user_id', friendIds);
+    
+      // 5) execute both
+      const [{ data: pubData, error: pubErr }, { data: friData, error: friErr }] =
+        await Promise.all([publicQ, friendQ]);
+      if (pubErr || friErr) throw new InternalServerErrorException((pubErr || friErr).message);
+    
+      // 6) merge & compute currentPlayers
+      const merged = [...(pubData || []), ...(friData || [])];
+      return merged.map(r => {
+        const currentPlayers = (r.requests || []).filter(j => j.status === 'approved').length;
+        return {
+          id:             r.id,
+          start_ts:       r.start_ts,
+          end_ts:         r.end_ts,
+          num_players:    r.num_players,
+          fee:            r.fee,
+          visibility:     r.visibility,
+          detail:         r.detail,
+          applicant:      r.applicant,       // { lastname, firstname, nickname }
+          court:          r.court,           // { id, name, venue: { id, name }}
+          currentPlayers,                     // number
+        };
+      });
+    }
   }
   

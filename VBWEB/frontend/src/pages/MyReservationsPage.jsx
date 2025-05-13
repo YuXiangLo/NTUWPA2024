@@ -61,7 +61,7 @@ export default function MyReservationsPage() {
                 <td>
                   {r.status === 'approved' && (
                     <Link
-                      to={`/reservations/${r.id}/join-requests`}
+                      to={`/reservations/${r.id}/manage-join-requests`}
                       className="btn-manage"
                     >
                       管理加入請求

@@ -83,13 +83,13 @@ const SearchVenueListPage = () => {
 
   return (
     <div className="svl-container">
-      <h1 className="svl-title">搜尋場地</h1>
+      <h1 className="svl-title">搜尋場館</h1>
 
       <div className="svl-search-section">
         <input
           type="text"
           className="svl-search-input"
-          placeholder="搜尋場地名稱或地址..."
+          placeholder="搜尋場館名稱或地址..."
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
         />
@@ -107,7 +107,7 @@ const SearchVenueListPage = () => {
 
       {/* Header row for venues */}
       <div className="svl-header-row">
-        <span className="svl-col svl-col-name">場地名稱</span>
+        <span className="svl-col svl-col-name">場館名稱</span>
         <span className="svl-col svl-col-address">地址</span>
         <span className="svl-col svl-col-count">場地數</span>
         <span className="svl-col svl-col-status">狀態</span>

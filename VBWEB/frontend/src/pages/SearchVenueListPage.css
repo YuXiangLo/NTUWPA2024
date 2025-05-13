@@ -105,16 +105,28 @@
   border: none;
   border-radius: 4px;
   color: #fff;
-  text-decoration: none;
+  background-color: #008CBA;
   cursor: pointer;
+  text-decoration: none;
+
+  /* ensure horizontal text orientation */
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed    !important;
+
+  /* remove any unwanted rotation */
+  transform: rotate(0deg)    !important;
+
+  /* center the text */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  white-space: nowrap;
 }
+
 
 .svl-detail-button {
   background-color: #4CAF50;
-}
-
-.svl-toggle-button {
-  background-color: #008CBA;
 }
 
 /* Court list within a venue */

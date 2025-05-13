@@ -61,7 +61,7 @@ export default function ReservationJoinRequestsPage() {
 
   if (loading) return <p>載入中…</p>;
   if (error)   return <p className="error">錯誤：{error}</p>;
-
+  console.log(requests);
   return (
     <div className="join-req-page">
       <h2>管理加入請求</h2>

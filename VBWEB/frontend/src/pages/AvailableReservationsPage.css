@@ -1,0 +1,94 @@
+.avail-res-page {
+    padding: 1rem;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .avail-res-page h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  .avail-res-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .avail-res-table th,
+  .avail-res-table td {
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  .avail-res-table thead {
+    background: #f5f5f5;
+  }
+  .avail-res-table tbody tr:nth-child(even) {
+    background: #fafafa;
+  }
+  .avail-res-table tbody tr:hover {
+    background: #f1f1f1;
+  }
+  .btn-join {
+    padding: 0.4rem 0.8rem;
+    background: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    text-decoration: none;
+  }
+  .btn-join:hover {
+    background: #0056b3;
+  }
+  .full {
+    color: #dc3545;
+    font-weight: 600;
+  }
+  .error {
+    color: #dc3545;
+    text-align: center;
+  }
+  .btn-join {
+    padding: 0.4rem 0.8rem;
+    background: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+  }
+  .btn-join:hover {
+    background: #0056b3;
+  }
+  
+  .btn-joining {
+    padding: 0.4rem 0.8rem;
+    background: #ffc107;
+    color: #212529;
+    border-radius: 4px;
+    border: none;
+  }
+  .applied {
+    color: #28a745;
+    font-weight: 600;
+  }
+  .full {
+    color: #dc3545;
+    font-weight: 600;
+  }
+  
+  .btn-pending {
+    padding: 0.3rem 0.6rem;
+    background: #ffc107;
+    color: #212529;
+    border-radius: 4px;
+    border: none;
+  }
+  
+  .btn-rejected {
+    padding: 0.3rem 0.6rem;
+    background: #dc3545;
+    color: #fff;
+    border-radius: 4px;
+    border: none;
+  }
+  
+  .joined {
+    color: #28a745;
+    font-weight: 600;
+  }

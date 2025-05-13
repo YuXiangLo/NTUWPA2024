@@ -47,14 +47,17 @@ function LandingPageInner() {
           <button className="sidebar-btn" onClick={() => navigate("/search-venue")}>
             搜尋場地
           </button>
-          <button className="sidebar-btn">報名比賽</button>
-          <button className="sidebar-btn">新增比賽</button>
-          <button className="sidebar-btn" onClick={() => setAddCourtMode(true)}>
+          <button className="sidebar-btn" onClick={() => navigate("/reservations/available")}>
+            搜尋報隊
+          </button>
+          <button className="sidebar-btn" onClick={() => navigate("/my-join-requests")}>
+            我的報隊
+          </button>
+          {/* <button className="sidebar-btn">報名比賽</button>
+          <button className="sidebar-btn">新增比賽</button> */}
+          {/* <button className="sidebar-btn" onClick={() => setAddCourtMode(true)}>
             新增場館
-          </button>
-          <button className="sidebar-btn" onClick={() => navigate("/ChatRoom")}>
-            聊天室
-          </button>
+          </button> */}
           <button className="sidebar-btn" onClick={() => navigate("/venue-application")}>
             場館申請
           </button>
@@ -65,7 +68,7 @@ function LandingPageInner() {
             我的場地
           </button>
           <button className="sidebar-btn" onClick={() => navigate("/reservations/my")}>
-            我的預約
+            管理報隊申請
           </button>
           <LandmarkList />
         </aside>

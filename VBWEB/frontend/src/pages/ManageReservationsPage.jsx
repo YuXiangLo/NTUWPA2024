@@ -54,6 +54,7 @@ export default function ManageReservationsPage() {
   if (loading) return <p>載入中…</p>;
   if (error)   return <p className="error">錯誤：{error}</p>;
 
+
   return (
     <div className="manage-res-page">
       <h2>管理預約申請</h2>

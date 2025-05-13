@@ -66,4 +66,9 @@ export class ReservationJoinRequestsController {
   ) {
     return this.service.deleteRequest(id, req.user.userid);
   }
+
+  @Get('join-requests/my')
+  listMy(@Request() req: any) {
+    return this.service.listMyRequests(req.user.userid);
+  }
 }
