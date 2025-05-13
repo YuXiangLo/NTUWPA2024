@@ -30,6 +30,7 @@ import ReservationJoinRequestsPage from './pages/ReservationJoinRequestsPage';
 import AvailableReservationsPage from './pages/AvailableReservationsPage';
 import MyJoinRequestsPage from './pages/MyJoinRequestsPage';
 import ReservationDetailPage from './pages/ReservationDetailPage';
+import CustomReservationPage from './pages/CustomReservationPage';
 
 function App() {
   return (
@@ -51,12 +52,16 @@ function App() {
 
           {/* Venue applications */}
           <Route path="/venue-application" element={<VenueApplication />} />
+          <Route path="/custom-reservation" element={<CustomReservationPage />} />
           <Route path="/admin-review-applications" element={<AdminReviewApplications />} />
           <Route path="/admin-review-applications/:id" element={<AdminReviewDetail />} />
           <Route path="/reservations/my" element={<MyReservationsPage />} />
           <Route path="/reservations/available" element={<AvailableReservationsPage />} />
-          <Route path="/reservations/:id" element={<ReservationDetailPage />} />
-          <Route path="/reservations/:reservationId/manage-join-requests" element={<ReservationJoinRequestsPage />} />
+          <Route path="/:type/:reservationId/detail" element={<ReservationDetailPage />} />
+          <Route
+            path="/:type/:reservationId/join-requests"
+            element={<ReservationJoinRequestsPage />}
+          />
           {/* Maintainer’s own venues */}
           <Route path="/my-venues" element={<MyVenues />} />
           <Route path="/my-join-requests" element={<MyJoinRequestsPage />} />

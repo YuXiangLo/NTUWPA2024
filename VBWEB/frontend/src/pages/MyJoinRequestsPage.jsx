@@ -15,39 +15,80 @@ export default function MyJoinRequestsPage() {
   const [error, setError]       = useState(null);
 
   const statusColors = {
-    pending: '#888888',
-    approved: '#1e90ff'
+    pending:  '#888888',
+    approved: '#1e90ff',
+    rejected: '#dc3545'
   };
 
   useEffect(() => {
     if (!token) return;
-    fetch(`${API_DOMAIN}/join-requests/my`, { headers: { Authorization: `Bearer ${token}` } })
-      .then(r => { if (!r.ok) throw new Error(`Error ${r.status}`); return r.json(); })
-      .then(data => setRequests(data))
+    setLoading(true);
+
+    Promise.all([
+      fetch(`${API_DOMAIN}/join-requests/my`, {
+        headers: { Authorization: `Bearer ${token}` }
+      }),
+      fetch(`${API_DOMAIN}/custom-reservations/my`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+    ])
+      .then(async ([r1, r2]) => {
+        if (!r1.ok) throw new Error(`Error ${r1.status}`);
+        if (!r2.ok) throw new Error(`Error ${r2.status}`);
+        const [data1, data2] = await Promise.all([r1.json(), r2.json()]);
+
+        console.log(data1);
+        
+        // tag each with type and combine
+        const combined = [
+          ...data1.map(req => ({ ...req, type: 'court' })),
+          ...data2.map(req => ({ ...req, type: 'custom' })),
+        ];
+        setRequests(combined);
+      })
       .catch(e => setError(e.message))
       .finally(() => setLoading(false));
   }, [token]);
 
-  if (loading) return <p>載入中…</p>;
-  if (error)   return <p className='error'>錯誤：{error}</p>;
+  console.log(requests);
 
+  if (loading) return <p>載入中…</p>;
+  if (error)   return <p className="error">錯誤：{error}</p>;
+
+  // build events for calendar
   const calendarEvents = requests
     .filter(req => req.status === 'pending' || req.status === 'approved')
     .map(req => {
-      const { reservation } = req;
-      const { court, start_ts, end_ts, num_players } = reservation;
-      return {
-        id: req.id,
-        start: start_ts,
-        end: end_ts,
-        text: `${court.venue.name} - ${court.name}`,
-        participants: num_players,
-        tag: req.status
-      };
+      // unified reservation object
+      if (req.type === 'court') {
+        const res = req.reservation;
+        const venue = res.court.venue.name;
+        const court = res.court.name;
+        return {
+          id:           req.id,
+          start:        res.start_ts,
+          end:          res.end_ts,
+          text:         `${venue} - ${court}`,
+          participants: res.num_players,
+          tag:          req.status
+        };
+      } else {
+        const res = req.reservation;
+        const venue = res.venue_name;
+        const court = res.court_name;
+        return {
+          id:           req.id,
+          start:        res.start_ts,
+          end:          res.end_ts,
+          text:         `${venue} - ${court}`,
+          participants: res.num_players,
+          tag:          req.status
+        };
+      } 
     });
 
   return (
-    <div className='my-join-page'>
+    <div className="my-join-page">
       <h2>排程日曆</h2>
       <Calendar eventsData={calendarEvents} />
 
@@ -55,29 +96,63 @@ export default function MyJoinRequestsPage() {
       {requests.length === 0 ? (
         <p>目前沒有任何加入請求。</p>
       ) : (
-        <table className='my-join-table'>
+        <table className="my-join-table">
           <thead>
             <tr>
-              <th>場地</th><th>球場</th><th>時段</th><th>人數/費用</th><th>可見性</th><th>狀態</th><th>操作</th>
+              <th>場地</th>
+              <th>球場</th>
+              <th>時段</th>
+              <th>人數</th>
+              <th>費用</th>
+              <th>可見性</th>
+              <th>狀態</th>
+              <th>操作</th>
             </tr>
           </thead>
           <tbody>
             {requests.map(req => {
-              const { reservation } = req;
-              const { court, start_ts, end_ts, num_players, fee, visibility } = reservation;
-              const timeslot = `${new Date(start_ts).toLocaleString()} – ${new Date(end_ts).toLocaleString()}`;
+              let res, court, venue;
+              if (req.type === 'court') {
+                res = req.reservation;
+                venue = res.court.venue.name;
+                court = res.court.name;
+              } else {
+                res = req.reservation;
+                venue = res.venue_name;
+                court = res.court_name;
+              }
+              const timeslot = `${new Date(res.start_ts).toLocaleString()} – ${new Date(res.end_ts).toLocaleString()}`;
               return (
-                <tr key={req.id}>  
-                  <td>{court.venue.name}</td>
-                  <td>{court.name}</td>
+                <tr key={`${req.type}-${req.id}`}>
+                  <td>{venue}</td>
+                  <td>{court}</td>
                   <td>{timeslot}</td>
-                  <td>{num_players} / {fee ?? '免費'}</td>
-                  <td>{visibility}</td>
-                  <td style={{ color: statusColors[req.status] }}>{req.status}</td>
+                  <td>{res.num_players}</td>
+                  <td><em>{res.fee ?? '免費'}</em></td>
+                  <td>{res.visibility}</td>
+                  <td style={{ color: statusColors[req.status] }}>
+                    {req.status}
+                  </td>
                   <td>
                     {req.status === 'approved' ? (
-                      <Link to={`/reservations/${reservation.id}`} className='btn-detail'>查看詳情</Link>
-                    ) : <em>—</em>}
+                      req.type === 'court' ? (
+                        <Link
+                          to={`/reservations/${res.id}/detail`}
+                          className="btn-detail"
+                        >
+                          查看詳情
+                        </Link>
+                      ) : (
+                        <Link
+                          to={`/custom-reservations/${res.id}/detail`}
+                          className="btn-detail"
+                        >
+                          查看詳情
+                        </Link>
+                      )
+                    ) : (
+                      <em>—</em>
+                    )}
                   </td>
                 </tr>
               );

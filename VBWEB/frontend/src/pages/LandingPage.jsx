@@ -50,6 +50,9 @@ function LandingPageInner() {
           <button className="sidebar-btn" onClick={() => navigate("/reservations/available")}>
             搜尋報隊
           </button>
+          <button className="sidebar-btn" onClick={() => navigate("/custom-reservation")}>
+            自訂報隊
+          </button>
           <button className="sidebar-btn" onClick={() => navigate("/my-join-requests")}>
             我的報隊
           </button>
