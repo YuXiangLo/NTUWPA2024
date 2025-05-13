@@ -27,6 +27,7 @@ const SearchVenueListPage = () => {
         return response.json();
       })
       .then((data) => {
+        console.log('venues', data);
         setVenues(data);
         setLoading(false);
       })
@@ -82,13 +83,13 @@ const SearchVenueListPage = () => {
 
   return (
     <div className="svl-container">
-      <h1 className="svl-title">搜尋場地</h1>
+      <h1 className="svl-title">搜尋場館</h1>
 
       <div className="svl-search-section">
         <input
           type="text"
           className="svl-search-input"
-          placeholder="搜尋場地名稱或地址..."
+          placeholder="搜尋場館名稱或地址..."
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
         />
@@ -106,7 +107,7 @@ const SearchVenueListPage = () => {
 
       {/* Header row for venues */}
       <div className="svl-header-row">
-        <span className="svl-col svl-col-name">場地名稱</span>
+        <span className="svl-col svl-col-name">場館名稱</span>
         <span className="svl-col svl-col-address">地址</span>
         <span className="svl-col svl-col-count">場地數</span>
         <span className="svl-col svl-col-status">狀態</span>
@@ -116,46 +117,46 @@ const SearchVenueListPage = () => {
       <div className="svl-venue-list">
         {filteredVenues.length > 0 ? (
           filteredVenues.map((venue) => (
-            <div key={venue.venue_id} className="svl-venue-card">
+            <div key={venue.id} className="svl-venue-card">
               <div className="svl-venue-row">
                 <span className="svl-col svl-col-name">{venue.name}</span>
                 <span className="svl-col svl-col-address">{venue.address}</span>
                 <span className="svl-col svl-col-count">
-                  {venue.court ? venue.court.length : 0}
+                  {venue.courts ? venue.courts.length : 0}
                 </span>
                 <span className="svl-col svl-col-status">{venue.status}</span>
                 <span className="svl-col svl-col-actions">
                   <Link
-                    to={`/venue/${venue.venue_id}`}
+                    to={`/venue/${venue.id}`}
                     className="svl-detail-button"
                   >
                     詳情
                   </Link>
                   <button
                     className="svl-toggle-button"
-                    onClick={() => toggleVenue(venue.venue_id)}
+                    onClick={() => toggleVenue(venue.id)}
                   >
-                    {toggledVenues[venue.venue_id] ? '隱藏場地' : '顯示場地'}
+                    {toggledVenues[venue.id] ? '隱藏場地' : '顯示場地'}
                   </button>
                 </span>
               </div>
-              {toggledVenues[venue.venue_id] && (
+              {toggledVenues[venue.id] && (
                 <div className="svl-court-list">
-                  {venue.court && venue.court.length > 0 ? (
-                    venue.court.map((court) => (
-                      <div key={court.court_id} className="svl-court-card">
+                  {venue.courts && venue.courts.length > 0 ? (
+                    venue.courts.map((court) => (
+                      <div key={court.id} className="svl-court-card">
                         <div className="svl-court-info">
                           <span className="svl-court-name">{court.name}</span>
                           <span className="svl-court-material">
-                            材質：{court.material}
+                            材質：{court.property}
                           </span>
                         </div>
                         <div className="svl-court-action">
                           <Link
-                            to={`/schedule/${court.court_id}`}
-                            className="svl-schedule-button"
+                            to={`/venues/${venue.id}/courts/${court.id}/schedule`}
+                            className="svl-detail-button"
                           >
-                            時間表
+                            詳情
                           </Link>
                         </div>
                       </div>

@@ -59,11 +59,30 @@ export class VenuesService {
   }
 
   /** 列出公開所有已核准的 venues （不需登入） */
+  /** 取得所有已核准場地，並帶入 courts + opening_hours */
   async getAllApprovedVenues() {
     const { data, error } = await this.supabase.client
       .from('venues')
-      .select('id, name, address, phone, location');
-    if (error) throw new InternalServerErrorException(error.message);
+      .select(`
+        id,
+        name,
+        address,
+        phone,
+        location,
+        courts (
+          id,
+          name,
+          property,
+          opening_hours: court_opening_hours (
+            day_of_week,
+            open_time,
+            close_time
+          )
+        )
+      `)
+    if (error) {
+      throw new InternalServerErrorException(error.message);
+    }
     return data;
   }
 
@@ -75,7 +94,9 @@ export class VenuesService {
       .select('id, name, address, phone, detail, location')
       .eq('id', venueId)
       .single();
-    if (vErr) throw new NotFoundException('場地不存在');
+    if (vErr || !venue) {
+      throw new NotFoundException('場地不存在');
+    }
 
     // courts + hours
     const { data: courts, error: cErr } = await this.supabase.client
@@ -91,7 +112,9 @@ export class VenuesService {
         )
       `)
       .eq('venue_id', venueId);
-    if (cErr) throw new InternalServerErrorException(cErr.message);
+    if (cErr) {
+      throw new InternalServerErrorException(cErr.message);
+    }
 
     return { ...venue, courts };
   }

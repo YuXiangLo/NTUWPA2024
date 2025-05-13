@@ -5,7 +5,7 @@ import './CreateCourt.css';
 import { API_DOMAIN } from '../config';
 
 export default function CreateCourt() {
-  const { id: venueId } = useParams();
+  const { venueId } = useParams();
   const { user } = useAuth();
   const token = user?.accessToken;
   const navigate = useNavigate();

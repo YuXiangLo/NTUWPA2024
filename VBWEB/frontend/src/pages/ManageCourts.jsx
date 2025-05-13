@@ -5,7 +5,7 @@ import './ManageCourts.css';
 import { API_DOMAIN } from '../config';
 
 export default function ManageCourts() {
-  const { id: venueId } = useParams();
+  const { venueId } = useParams();
   const { user } = useAuth();
   const token = user?.accessToken;
   const navigate = useNavigate();
@@ -75,9 +75,15 @@ export default function ManageCourts() {
                 <td>
                   <button
                     className="btn-maintain"
-                    onClick={() => navigate(`/venues/${venueId}/courts/${c.id}/schedule`)}
+                    onClick={() => navigate(`/venues/${venueId}/courts/${c.id}/manage-schedule`)}
                   >
                     維護時段
+                  </button>
+                  <button
+                    className="btn-maintain"
+                    onClick={() => navigate(`/venues/${venueId}/courts/${c.id}/reservations`)}
+                  >
+                    管理預約申請
                   </button>
                   <button
                     className="btn-delete"
