@@ -20,9 +20,18 @@ export const LandmarkProvider = ({ children }) => {
         if (!res.ok) throw new Error(`API error: ${res.status}`);
   
         const data = await res.json();
-        const mapped = data.map(venue => ({
+        const filteredData = data.filter(venue => 
+          Array.isArray(venue.location) && 
+          venue.location.length === 2 && 
+          typeof venue.location[0] === 'number' && 
+          typeof venue.location[1] === 'number' &&
+          !isNaN(venue.location[0]) && 
+          !isNaN(venue.location[1])
+        );
+        
+        const mapped = filteredData.map(venue => ({
           name:        venue.name,
-          coords:      { lng: venue.location[0], lat: venue.location[1] },
+          coords:      venue.location,
           venueId:     venue.id,
           address:     venue.address,
           phone:       venue.phone,
