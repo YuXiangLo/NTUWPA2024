@@ -63,7 +63,6 @@ export default function ManageSchedule() {
   const editEvent = async (e) => {
     if (!calendar) return;
     const data = e.data;
-    console.log(data);
 
     // Weekday options
     const weekdays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];

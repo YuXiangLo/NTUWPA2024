@@ -27,7 +27,6 @@ export default function AvailableReservationsPage() {
       }).then(r => r.ok ? r.json() : Promise.reject(r.status)),
     ])
     .then(([courtData, customData]) => {
-      console.log(courtData, customData);
       // 2) normalize shape
       const normalized = [
         // court-based

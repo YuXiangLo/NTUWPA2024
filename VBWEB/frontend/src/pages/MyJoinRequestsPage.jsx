@@ -37,8 +37,6 @@ export default function MyJoinRequestsPage() {
         if (!r2.ok) throw new Error(`Error ${r2.status}`);
         const [data1, data2] = await Promise.all([r1.json(), r2.json()]);
 
-        console.log(data1);
-        
         // tag each with type and combine
         const combined = [
           ...data1.map(req => ({ ...req, type: 'court' })),
@@ -50,7 +48,6 @@ export default function MyJoinRequestsPage() {
       .finally(() => setLoading(false));
   }, [token]);
 
-  console.log(requests);
 
   if (loading) return <p>載入中…</p>;
   if (error)   return <p className="error">錯誤：{error}</p>;

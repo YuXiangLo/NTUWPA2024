@@ -42,7 +42,6 @@ function SignupPage() {
         });
         const data = await response.json();
         login(data);
-        console.log('User registered:', data);
         navigate('/profile');
       } else {
         const errorData = await response.json();
