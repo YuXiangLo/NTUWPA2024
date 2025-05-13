@@ -7,76 +7,98 @@ import './AvailableReservationsPage.css';
 export default function AvailableReservationsPage() {
   const { user } = useAuth();
   const userId = user?.userid;
-  const token = user?.accessToken;
+  const token  = user?.accessToken;
 
-  const [resvs, setResvs]     = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError]     = useState(null);
+  const [items,    setItems]    = useState([]);
+  const [loading,  setLoading]  = useState(true);
+  const [error,    setError]    = useState(null);
 
   useEffect(() => {
-    if (!token) return;
+    if (!token) return setError('尚未登入');
     setLoading(true);
 
-    fetch(`${API_DOMAIN}/reservations/available`, {
-      headers: { Authorization: `Bearer ${token}` },
+    // 1) fetch court-based + custom in parallel
+    Promise.all([
+      fetch(`${API_DOMAIN}/reservations/available`, {
+        headers: { Authorization: `Bearer ${token}` }
+      }).then(r => r.ok ? r.json() : Promise.reject(r.status)),
+      fetch(`${API_DOMAIN}/custom-reservations/available`, {
+        headers: { Authorization: `Bearer ${token}` }
+      }).then(r => r.ok ? r.json() : Promise.reject(r.status)),
+    ])
+    .then(([courtData, customData]) => {
+      // 2) normalize shape
+      const normalized = [
+        // court-based
+        ...courtData.map(r => ({
+          id:            r.id,
+          type:          'court',
+          venueName:     r.court.venue.name,
+          courtName:     r.court.name,
+          address:       null,
+          applicant:     r.applicant,
+          start_ts:      r.start_ts,
+          end_ts:        r.end_ts,
+          num_players:   r.num_players,
+          currentPlayers:r.currentPlayers,
+          visibility:    r.visibility,
+          requests:      r.requests || []
+        })),
+        // custom
+        ...customData.map(r => ({
+          id:            r.id,
+          type:          'custom',
+          venueName:     r.venue_name,
+          courtName:     r.court_name,
+          address:       r.address,
+          applicant:     r.applicant,
+          start_ts:      r.start_ts,
+          end_ts:        r.end_ts,
+          num_players:   r.num_players,
+          currentPlayers:r.currentPlayers,
+          visibility:    r.visibility,
+          requests:      r.requests || []
+        }))
+      ];
+      // 3) annotate userStatus & sort by start_ts
+      const annotated = normalized.map(r => {
+        const myReq = r.requests.find(j => j.user_id === userId);
+        return {
+          ...r,
+          userStatus: myReq ? myReq.status : 'none'
+        };
+      }).sort((a,b) => new Date(a.start_ts) - new Date(b.start_ts));
+      setItems(annotated);
     })
-      .then(r => {
-        if (!r.ok) throw new Error(`Error ${r.status}`);
-        return r.json();
-      })
-      .then(data => {
-        console.log(data);
-        // annotate each reservation with userStatus
-        const annotated = data.map(r => {
-          const myReq = (r.requests || []).find(j => j.user_id === userId);
-          const userStatus = myReq
-            ? myReq.status   // "pending" / "rejected" / "approved"
-            : 'none';
-          return { ...r, userStatus };
-        });
-        setResvs(annotated);
-      })
-      .catch(e => setError(e.message))
-      .finally(() => setLoading(false));
+    .catch(e => setError(`載入失敗：${e}`))
+    .finally(() => setLoading(false));
   }, [token, userId]);
 
-  const handleJoin = async (reservationId) => {
+  // unified join handler
+  const handleJoin = async (item) => {
+    const url = item.type === 'court'
+      ? `${API_DOMAIN}/reservations/${item.id}/join-requests`
+      : `${API_DOMAIN}/custom-reservations/${item.id}/join-requests`;
     try {
-      const res = await fetch(
-        `${API_DOMAIN}/reservations/${reservationId}/join-requests`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (!res.ok) {
-        // if conflict (already applied), we still set to pending
-        if (res.status === 409) {
-          setResvs(rs =>
-            rs.map(r =>
-              r.id === reservationId ? { ...r, userStatus: 'pending' } : r
-            )
-          );
-          return;
-        }
-        throw new Error(`Error ${res.status}`);
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.status === 409 || res.ok) {
+        // mark pending
+        setItems(xs => xs.map(x =>
+          x.id === item.id ? { ...x, userStatus: 'pending' } : x
+        ));
+      } else {
+        throw new Error(res.status);
       }
-      // success → mark pending
-      setResvs(rs =>
-        rs.map(r =>
-          r.id === reservationId ? { ...r, userStatus: 'pending' } : r
-        )
-      );
     } catch (err) {
-      alert(`申請失敗：${err.message}`);
+      alert(`申請失敗：${err}`);
     }
   };
 
   if (loading) return <p>載入中…</p>;
-  if (error)   return <p className="error">錯誤：{error}</p>;
+  if (error)   return <p className="error">{error}</p>;
 
   return (
     <div className="avail-res-page">
@@ -86,6 +108,7 @@ export default function AvailableReservationsPage() {
           <tr>
             <th>場地</th>
             <th>球場</th>
+            <th>地址</th>
             <th>發起者</th>
             <th>時段</th>
             <th>名額</th>
@@ -94,46 +117,45 @@ export default function AvailableReservationsPage() {
           </tr>
         </thead>
         <tbody>
-          {resvs.map(r => {
-            const a = r.applicant;
-            const label = `${a.lastname} ${a.firstname}${a.nickname?` (${a.nickname})`:''}`;
-            const isFull = r.currentPlayers >= r.num_players;
+          {items.map(item => {
+            const { id, type,
+                    venueName, courtName, address,
+                    applicant, start_ts, end_ts,
+                    num_players, currentPlayers,
+                    userStatus
+                  } = item;
+            const label = `${applicant.lastname} ${applicant.firstname}${applicant.nickname?` (${applicant.nickname})`:''}`;
+            const isFull = currentPlayers >= num_players;
 
-            // decide button based solely on annotated userStatus
             let actionNode;
-            switch (r.userStatus) {
-              case 'pending':
-                actionNode = <button className="btn-pending" disabled>已申請</button>;
-                break;
-              case 'rejected':
-                actionNode = <button className="btn-rejected" disabled>被拒絕</button>;
-                break;
-              case 'approved':
-                actionNode = <span className="joined">已加入</span>;
-                break;
-              default:
-                // no request yet
-                actionNode = isFull
-                  ? <span className="full">額滿</span>
-                  : <button
-                      className="btn-join"
-                      onClick={() => handleJoin(r.id)}
-                    >
-                      申請加入
-                    </button>;
+            if (userStatus === 'pending') {
+              actionNode = <button disabled className="btn-pending">已申請</button>;
+            } else if (userStatus === 'rejected') {
+              actionNode = <button disabled className="btn-rejected">被拒絕</button>;
+            } else if (userStatus === 'approved') {
+              actionNode = <span className="joined">已加入</span>;
+            } else if (isFull) {
+              actionNode = <span className="full">額滿</span>;
+            } else {
+              actionNode = (
+                <button className="btn-join" onClick={() => handleJoin(item)}>
+                  申請加入
+                </button>
+              );
             }
 
             return (
-              <tr key={r.id}>
-                <td>{r.court.venue.name}</td>
-                <td>{r.court.name}</td>
+              <tr key={`${type}-${id}`}>
+                <td>{venueName}</td>
+                <td>{courtName}</td>
+                <td>{address || '—'}</td>
                 <td>{label}</td>
                 <td>
-                  {new Date(r.start_ts).toLocaleString()}<br/>
-                  {new Date(r.end_ts).toLocaleString()}
+                  {new Date(start_ts).toLocaleString()}<br/>
+                  {new Date(end_ts).toLocaleString()}
                 </td>
-                <td>{r.num_players}</td>
-                <td>{r.currentPlayers}/{r.num_players}</td>
+                <td>{num_players}</td>
+                <td>{currentPlayers}/{num_players}</td>
                 <td>{actionNode}</td>
               </tr>
             );

@@ -27,7 +27,6 @@ const SearchVenueListPage = () => {
         return response.json();
       })
       .then((data) => {
-        console.log('venues', data);
         setVenues(data);
         setLoading(false);
       })

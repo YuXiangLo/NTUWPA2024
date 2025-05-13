@@ -6,7 +6,8 @@ import { API_DOMAIN } from '../config';
 import './ReservationJoinRequestsPage.css';
 
 export default function ReservationJoinRequestsPage() {
-  const { reservationId } = useParams();
+  // now we get both the resource type and ID
+  const { type, reservationId } = useParams();
   const { user } = useAuth();
   const token = user?.accessToken;
   const navigate = useNavigate();
@@ -15,11 +16,17 @@ export default function ReservationJoinRequestsPage() {
   const [loading, setLoading]   = useState(true);
   const [error, setError]       = useState(null);
 
-  // Load all join-requests for this reservation
+  // build the correct base URL for list & actions
+  const baseUrl = `${API_DOMAIN}/${type}/${reservationId}/join-requests`;
+  const actionBase = type === 'reservations'
+    ? `${API_DOMAIN}/join-requests`
+    : `${API_DOMAIN}/custom-reservations/join-requests`;
+
+  // 1) Load all join-requests for this reservation
   useEffect(() => {
     if (!token) return;
     setLoading(true);
-    fetch(`${API_DOMAIN}/reservations/${reservationId}/join-requests`, {
+    fetch(baseUrl, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => {
@@ -29,14 +36,14 @@ export default function ReservationJoinRequestsPage() {
       .then(data => setRequests(data))
       .catch(err => setError(err.message))
       .finally(() => setLoading(false));
-  }, [reservationId, token]);
+  }, [baseUrl, token]);
 
-  // Approve or reject a join request
+  // 2) Approve or reject a join request
   const handleAction = async (id, action) => {
-    const url = `${API_DOMAIN}/join-requests/${id}/${action}`;
+    const url = `${actionBase}/${id}/${action}`;
     const opts = {
       method: 'PATCH',
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     };
 
     if (action === 'reject') {
@@ -51,9 +58,7 @@ export default function ReservationJoinRequestsPage() {
       if (!res.ok) throw new Error(`Error ${res.status}`);
       const updated = await res.json();
       // update local state
-      setRequests(rs =>
-        rs.map(r => r.id === id ? updated : r)
-      );
+      setRequests(rs => rs.map(r => (r.id === id ? updated : r)));
     } catch (err) {
       alert(`操作失敗：${err.message}`);
     }
@@ -61,7 +66,7 @@ export default function ReservationJoinRequestsPage() {
 
   if (loading) return <p>載入中…</p>;
   if (error)   return <p className="error">錯誤：{error}</p>;
-  console.log(requests);
+
   return (
     <div className="join-req-page">
       <h2>管理加入請求</h2>

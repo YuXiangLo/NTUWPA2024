@@ -88,7 +88,6 @@ const SchedulePage = () => {
     )
       .then(res => res.ok ? res.json() : Promise.reject())
       .then(bookings => {
-        console.log('Bookings:', bookings);
         bookings.forEach(({ start_time, user_id }) => {
           const dt = new Date(start_time);
           const dayIdx = daysOfWeek.findIndex(
@@ -167,7 +166,6 @@ const SchedulePage = () => {
       fee: parseFloat(fee),
       remark
     };
-    console.log(body);
     try {
       const res = await fetch(`${API_DOMAIN}reserve`, {
         method: 'POST',

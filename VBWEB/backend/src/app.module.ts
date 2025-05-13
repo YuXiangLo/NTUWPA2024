@@ -14,6 +14,7 @@ import { AdminReviewModule } from './admin-review/admin-review.module';
 import { CourtModule } from './court/court.module';
 import { CourtReservationsModule } from './court-reservations/court-reservations.module';
 import { ReservationJoinRequestsModule } from './reservation-join-requests/reservation-join-requests.module';
+import { CustomReservationsModule } from './custom-reservations/custom-reservations.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ReservationJoinRequestsModule } from './reservation-join-requests/reser
     CourtModule,
     CourtReservationsModule,
     ReservationJoinRequestsModule,
+    CustomReservationsModule,
   ]
 })
 export class AppModule {}

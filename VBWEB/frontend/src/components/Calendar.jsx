@@ -39,10 +39,15 @@ const Calendar = ({ eventsData }) => {
   const config = {
     viewType: "Week",
     durationBarVisible: false,
-    timeRangeSelectedHandling: "Enabled",
-    onTimeRangeSelected: async args => { /* ... */ },
-    onEventClick: async args => await editEvent(args.e),
-    contextMenu: new DayPilot.Menu({ items: [/* ... */] }),
+  
+    // —— Disable all user interactions —— 
+    timeRangeSelectedHandling: "Disabled",  // no drag-select to create
+    eventClickHandling:   "Disabled",       // no click
+    eventMoveHandling:    "Disabled",       // no drag-move
+    eventResizeHandling:  "Disabled",       // no drag-resize
+    contextMenu:          null,             // no right-click menu
+  
+    // Keep your render hook so colors still apply
     onBeforeEventRender: args => {
       args.data.backColor = statusColors[args.data.tag];
     }
