@@ -10,10 +10,12 @@ export default function AdminReviewDetail() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const token = user?.accessToken;
+
   const [app, setApp] = useState(null);
   const [error, setError] = useState(null);
   const [longitude, setLongitude] = useState('');
   const [latitude, setLatitude] = useState('');
+  const [coords, setCoords] = useState(''); // combined lat,lon input
 
   useEffect(() => {
     const fetchDetail = async () => {
@@ -22,13 +24,15 @@ export default function AdminReviewDetail() {
         const res = await fetch(`${API_DOMAIN}/maintainer_applications`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+        if (!res.ok) throw new Error(`Error ${res.status}`);
         const data = await res.json();
         const item = data.find(a => a.id === id);
         setApp(item);
-        // prefill if location exists
         if (item?.location) {
-          setLongitude(item.location[0]);
-          setLatitude(item.location[1]);
+          const [lon, lat] = item.location;
+          setLongitude(lon);
+          setLatitude(lat);
+          setCoords(`${lat}, ${lon}`);
         }
       } catch (err) {
         setError(err.message);
@@ -37,7 +41,21 @@ export default function AdminReviewDetail() {
     fetchDetail();
   }, [id, token]);
 
-  const handleReview = async (action) => {
+  const handleCoordChange = e => {
+    const val = e.target.value;
+    setCoords(val);
+    const parts = val.split(',');
+    if (parts.length === 2) {
+      const lat = parseFloat(parts[0].trim());
+      const lon = parseFloat(parts[1].trim());
+      if (!isNaN(lat) && !isNaN(lon)) {
+        setLatitude(lat);
+        setLongitude(lon);
+      }
+    }
+  };
+
+  const handleReview = async action => {
     try {
       const body =
         action === 'approve'
@@ -72,44 +90,24 @@ export default function AdminReviewDetail() {
         <div><strong>地址：</strong> {app.address}</div>
         <div><strong>電話：</strong> {app.phone}</div>
       </div>
-      <div className="description"><strong>說明：</strong><p>{app.detail}</p></div>
+      <div className="description">
+        <strong>說明：</strong>
+        <p>{app.detail}</p>
+      </div>
       <div className="location-inputs">
         <label>
-          經度 (Longitude)
+          經緯度 (緯度, 經度)
           <input
-            type="number"
-            value={longitude}
-            onChange={e => setLongitude(e.target.value)}
-            placeholder="e.g. 121.5654"
-          />
-        </label>
-        <label>
-          緯度 (Latitude)
-          <input
-            type="number"
-            value={latitude}
-            onChange={e => setLatitude(e.target.value)}
-            placeholder="e.g. 25.0330"
+            type="text"
+            value={coords}
+            onChange={handleCoordChange}
+            placeholder="25.031291572016002, 121.5303620693936"
           />
         </label>
       </div>
       <div className="images">
-        {app.image1 && (
-          <img
-            src={app.image1}
-            alt="證明1"
-            className="thumbnail"
-            onClick={() => {}}
-          />
-        )}
-        {app.image2 && (
-          <img
-            src={app.image2}
-            alt="證明2"
-            className="thumbnail"
-            onClick={() => {}}
-          />
-        )}
+        {app.image1 && <img src={app.image1} alt="證明1" className="thumbnail" />}
+        {app.image2 && <img src={app.image2} alt="證明2" className="thumbnail" />}
       </div>
       <div className="actions">
         <button onClick={() => handleReview('approve')} className="approve">
