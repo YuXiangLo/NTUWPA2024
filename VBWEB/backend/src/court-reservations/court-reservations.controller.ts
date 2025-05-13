@@ -88,5 +88,13 @@ import {
     listAvailable(@Request() req: any) {
       return this.service.listAvailableReservations(req.user.userid);
     }
+
+    @Get('reservations/:id')
+    getDetail(
+      @Param('id') id: string,
+      @Request() req: any
+    ) {
+      return this.service.getReservationDetail(id, req.user.userid);
+    } 
   }
   

@@ -1,0 +1,125 @@
+/* ReservationDetailPage.css */
+.resv-detail-page {
+  max-width: 720px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  font-family: sans-serif;
+}
+
+.btn-back {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: #1e90ff;
+  background-color: #f2f2f2;
+  border: 1px solid #1e90ff;
+  text-decoration: none;
+  font-weight: bold;
+}
+.btn-back:hover {
+  text-decoration: underline;
+}
+
+.card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.card-title {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 0.5rem;
+}
+.card-subtitle {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 0.3rem;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+.info-item {
+  display: flex;
+  flex-direction: column;
+}
+.info-item.full-width {
+  grid-column: 1 / -1;
+}
+.label {
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+  color: #555;
+}
+.value {
+  color: #333;
+  line-height: 1.4;
+}
+
+.status {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  text-transform: capitalize;
+}
+.status.pending {
+  background: #f0f0f0;
+  color: #555;
+}
+.status.approved {
+  background: #e6f0ff;
+  color: #1e90ff;
+}
+
+.loader {
+  text-align: center;
+  padding: 2rem 0;
+  color: #888;
+}
+
+.error {
+  color: #dc3545;
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.participants-card {
+  padding: 1rem 1.5rem;
+}
+.participants-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.participant-item {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+.empty {
+  color: #888;
+}
+
+.resv-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr; /* 小螢幕一欄 */
+}
+
+@media (min-width: 768px) {
+  .resv-grid {
+    grid-template-columns: 2fr 1fr; /* 大螢幕 2:1 比例 */
+  }
+}
+/* ReservationDetailPage.css */
+.info-item {
+  background-color: #f9f9f9;
+  padding: 0.75rem;
+  border-radius: 4px;
+}
+

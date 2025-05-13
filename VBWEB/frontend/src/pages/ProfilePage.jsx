@@ -192,7 +192,7 @@ function ProfilePage() {
         </form>
       </div>
 
-      <UserDashboard />
+      {/* <UserDashboard /> */}
     </div>
   );
 }

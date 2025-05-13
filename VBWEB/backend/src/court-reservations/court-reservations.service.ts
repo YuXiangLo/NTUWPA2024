@@ -302,5 +302,84 @@ import e from 'express';
         };
       });
     }
+
+    /** 取得單一 Reservation 的詳細 (host + participants)，權限限 host 或 approved 參加者 */
+  async getReservationDetail(reservationId: string, userId: string) {
+    // 1) 先抓 reservation 本身 + hoster + court + venue
+    const { data: resv, error: rErr } = await this.supabase.client
+    .from('court_reservations')
+    .select(`
+      id,
+      start_ts,
+      end_ts,
+      num_players,
+      fee,
+      visibility,
+      detail,
+      status,
+      user_id,
+      applicant:users!court_reservations_user_id_fkey(
+        lastname,
+        firstname,
+        nickname
+      ),
+      court: courts!court_reservations_court_id_fkey(
+        id,
+        name,
+        venue: venues!courts_venue_id_fkey(
+          id,
+          name,
+          address
+        )
+      )
+    `)
+    .eq('id', reservationId)
+    .single();
+    if (rErr || !resv) throw new NotFoundException('Reservation 不存在');
+
+    // 2) 檢查權限：host 或 approved participant 才能看
+    if (resv.user_id !== userId) {
+      const { data: jr, error: jErr } = await this.supabase.client
+        .from('reservation_join_requests')
+        .select('status')
+        .eq('reservation_id', reservationId)
+        .eq('user_id', userId)
+        .single();
+      if (jErr || !jr || jr.status !== 'approved') {
+        throw new ForbiddenException('無權查看此預約詳情');
+      }
+    }
+
+    // 3) 抓所有 approved 的參加者
+    const { data: joiners, error: jErr2 } = await this.supabase.client
+      .from('reservation_join_requests')
+      .select(`
+        id,
+        user_id,
+        applicant:users!reservation_join_requests_user_id_fkey(
+          lastname,
+          firstname,
+          nickname
+        )
+      `)
+      .eq('reservation_id', reservationId)
+      .eq('status', 'approved');
+    if (jErr2) throw new InternalServerErrorException(jErr2.message);
+
+    return {
+      ...resv,
+      venue: {
+        id: resv.court.venue.id,
+        name: resv.court.venue.name,
+        address: resv.court.venue.address,
+      },
+      participants: joiners.map(j => ({
+        id: j.user_id,
+        lastname: j.applicant.lastname,
+        firstname: j.applicant.firstname,
+        nickname: j.applicant.nickname,
+      })),
+    };
+  }
   }
   

@@ -29,6 +29,7 @@ import MyReservationsPage from './pages/MyReservationsPage';
 import ReservationJoinRequestsPage from './pages/ReservationJoinRequestsPage';
 import AvailableReservationsPage from './pages/AvailableReservationsPage';
 import MyJoinRequestsPage from './pages/MyJoinRequestsPage';
+import ReservationDetailPage from './pages/ReservationDetailPage';
 
 function App() {
   return (
@@ -54,6 +55,7 @@ function App() {
           <Route path="/admin-review-applications/:id" element={<AdminReviewDetail />} />
           <Route path="/reservations/my" element={<MyReservationsPage />} />
           <Route path="/reservations/available" element={<AvailableReservationsPage />} />
+          <Route path="/reservations/:id" element={<ReservationDetailPage />} />
           <Route path="/reservations/:reservationId/manage-join-requests" element={<ReservationJoinRequestsPage />} />
           {/* Maintainer’s own venues */}
           <Route path="/my-venues" element={<MyVenues />} />
