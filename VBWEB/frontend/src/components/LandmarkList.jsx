@@ -49,7 +49,7 @@ export default function LandmarkList() {
         overflowY: 'auto'
       }}
     >
-      <h3 style={{ color: "#333", marginTop: 0 }}>Courts</h3>
+      <h3 style={{ color: "#333", marginTop: 0 }}>球館</h3>
       <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
         {items.map((item, i) => {
           const isSelected =
