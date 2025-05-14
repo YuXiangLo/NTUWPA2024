@@ -102,8 +102,6 @@
   text-align: left;
   margin-bottom: var(--spacing-sm);
   padding: var(--spacing-sm) var(--spacing-md);
-  background: var(--color-surface);
-  border: 1px solid #ddd;
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: background var(--transition-fast);
