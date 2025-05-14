@@ -13,6 +13,12 @@
   flex: 1;
 }
 
+.landing-page-title {
+	display: flex;
+	justify-content: center;
+	margin: 2vh;
+}
+
 /* Header */
 .landing-header {
   display: flex;

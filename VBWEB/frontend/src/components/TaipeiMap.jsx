@@ -61,7 +61,7 @@ export default function TaipeiMap() {
         {/* render the user’s location too */}
         {userLocation && (
           <Marker position={userLocation.coords} icon={customIcon}>
-            <Popup>You are here</Popup>
+            <Popup>我的位置</Popup>
           </Marker>
         )}
 

@@ -21,7 +21,7 @@ export default function LandmarkList() {
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => {
         const coordsArr = [coords.latitude, coords.longitude];
-        setUserLocation({ name: "My Location", coords: coordsArr });
+        setUserLocation({ name: "我的位置", coords: coordsArr });
         setSelectedPosition(coordsArr);
         setLocLoading(false);
       },
@@ -34,7 +34,7 @@ export default function LandmarkList() {
   };
 
   const items = [
-    { name: locLoading ? "Locating…" : "My Location", coords: userLocation?.coords, isUser: true },
+    { name: locLoading ? "定位中…" : "我的位置", coords: userLocation?.coords, isUser: true },
     ...landmarks,
   ];
 

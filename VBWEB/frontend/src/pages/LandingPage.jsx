@@ -51,6 +51,7 @@ function LandingPageInner() {
   return (
     <div className='landing-wrapper'>
       <div className="landing-page">
+        <h1 className="landing-page-title">走 打球！</h1>
         <main className="landing-main">
           <div className="map-container" ref={mapContainerRef}>
             {addCourtMode && (
