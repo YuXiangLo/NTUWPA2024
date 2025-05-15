@@ -74,12 +74,19 @@ function LandingPageInner() {
             <button className="sidebar-btn" onClick={() => navigate("/my-join-requests")}>
               我的報隊
             </button>
+            {/* <button className="sidebar-btn">報名比賽</button>
+            <button className="sidebar-btn">新增比賽</button> */}
+            {/* <button className="sidebar-btn" onClick={() => setAddCourtMode(true)}>
+              新增場館
+            </button> */}
             <button className="sidebar-btn" onClick={() => navigate("/venue-application")}>
               場館申請
             </button>
-            <button className="sidebar-btn" onClick={() => navigate("/admin-review-applications")}>
-              管理場館申請
-            </button>
+            {isAdmin && (
+              <button className="sidebar-btn" onClick={() => navigate("/admin-review-applications")}>
+                管理場館申請
+              </button>
+            )}
             <button className="sidebar-btn" onClick={() => navigate("/my-venues")}>
               我的場地
             </button>
