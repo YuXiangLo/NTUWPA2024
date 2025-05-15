@@ -134,7 +134,13 @@ function ProfilePage() {
     }
   };
 
-  if (isLoading) return <div className="user-info-form"><h2>Loading...</h2></div>;
+  if (isLoading)
+    return (
+      <div className="profile-page">
+        <h1>Loading...</h1>
+      </div>
+    );
+  
 
   return (
     <div className="profile-page">
