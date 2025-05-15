@@ -46,8 +46,8 @@ export default function TaipeiMap() {
   const { landmarks, selectedPosition, userLocation } = useContext(LandmarkContext);
 
   return (
-    <div style={{ width: 800, height: 600 }}>
-      <MapContainer center={selectedPosition} zoom={12} style={{ width: "100%", height: "100%" }}>
+    <div style={{ width: 800, height: 600, zIndex: 0 }}>
+      <MapContainer center={selectedPosition} zoom={12} style={{ width: "100%", height: "100%"}}>
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <MapController position={selectedPosition} />
 
