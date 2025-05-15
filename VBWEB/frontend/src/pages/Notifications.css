@@ -32,12 +32,19 @@
 /* Notification header */
 .notification-header {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem;
+  justify-content: space-between;
+  align-items: center; /* This aligns buttons vertically */
+  gap: 1rem;
+  margin-bottom: 1rem;
   font-size: 1rem;
-  margin-bottom: 0.75rem;
+  font-weight: 500;
 }
+
+.notification-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
 
 /* Text highlights */
 .notification-header strong {

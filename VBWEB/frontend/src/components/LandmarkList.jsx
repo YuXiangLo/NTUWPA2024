@@ -42,6 +42,7 @@ export default function LandmarkList() {
     <div
       style={{
         width: '100%',
+        maxHeight: '25vh',
         background: "#fff",
         padding: 10,
         borderRadius: 5,
