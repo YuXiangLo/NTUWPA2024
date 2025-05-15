@@ -153,7 +153,7 @@ function ProfilePage() {
             alt=""
             className="avatar-preview"
           />
-          <div className="file-input-wrapper">
+          <div className="upload-btn file-input-wrapper">
             <input
               id="file-upload"
               type="file"
@@ -161,7 +161,7 @@ function ProfilePage() {
               onChange={handlePhotoUpload}
               disabled={uploading}
             />
-            <label htmlFor="file-upload" className="upload-btn">
+            <label htmlFor="file-upload">
               {uploading ? '上傳中' : '選擇照片'}
             </label>
           </div>

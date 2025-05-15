@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { API_DOMAIN } from '../config';
-import './ReservationJoinRequestsPage.css';
 
 export default function ReservationJoinRequestsPage() {
   // now we get both the resource type and ID

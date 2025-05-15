@@ -12,7 +12,6 @@ import SchedulePage from './pages/CourtSchedule';
 import SearchVenueListPage from './pages/SearchVenueListPage';
 import ChatRoomPage from './pages/ChatRoomPage';
 import TestPage from './pages/TestPage';
-import './App.css';
 import FriendListWidget from './components/FriendListWidget';
 import VenueApplication from './pages/VenueApplication';
 import AdminReviewApplications from './pages/AdminReviewApplications';
@@ -35,7 +34,7 @@ function App() {
   return (
     <Router>
       <Header />
-      <main>
+      <main className="global-main">
         <Routes>
           {/* Public / auth */}
           <Route path="/" element={<LandingPage />} />

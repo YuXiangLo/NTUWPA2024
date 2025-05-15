@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import './ManageCourts.css';
 import { API_DOMAIN } from '../config';
 
 export default function ManageCourts() {

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
-import './MyVenues.css';
 import { API_DOMAIN } from '../config';
 
 export default function MyVenues() {

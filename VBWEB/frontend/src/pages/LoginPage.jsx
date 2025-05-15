@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { API_DOMAIN } from '../config.js';
 import { useAuth } from '../context/AuthContext';
-import './LoginPage.css';
 
 function LoginPage() {
   const navigate = useNavigate();

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { API_DOMAIN } from '../config';
-import './ManageReservationsPage.css';
 
 export default function ManageReservationsPage() {
   const { courtId } = useParams();
