@@ -76,9 +76,6 @@ import e from 'express';
         .eq('id', court.venue_id)
         .single();
       if (vErr || !venue) throw new NotFoundException('場地不存在');
-      // if (venue.maintainer_id !== userId) {
-      //   throw new ForbiddenException('無權查看此球場的預約');
-      // }
   
       const { data, error } = await this.supabase.client
         .from('court_reservations')

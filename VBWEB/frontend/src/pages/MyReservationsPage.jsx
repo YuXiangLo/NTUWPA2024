@@ -36,15 +36,17 @@ export default function MyReservationsPage() {
             end_ts:      r.end_ts,
             status:      r.status
           })),
-          ...customData.map(r => ({
+          ...customData.map(r => {
+            console.log(r);
+            return({
             id:          r.id,
             type:        'custom',
-            venueName:   r.venue_name,
-            courtName:   r.court_name,
-            start_ts:    r.start_ts,
-            end_ts:      r.end_ts,
+            venueName:   r.reservation.venue_name,
+            courtName:   r.reservation.court_name,
+            start_ts:    r.reservation.start_ts,
+            end_ts:      r.reservation.end_ts,
             status:      r.status
-          }))
+          })})
         ];
         // sort by time
         setItems(normalized.sort((a,b)=>new Date(a.start_ts)-new Date(b.start_ts)));
@@ -73,7 +75,9 @@ export default function MyReservationsPage() {
             </tr>
           </thead>
           <tbody>
-            {items.map(r => (
+            {items.map(r => {
+              console.log(r);
+              return (
               <tr key={`${r.type}-${r.id}`}>
                 <td>{r.venueName}</td>
                 <td>{r.courtName}</td>
@@ -104,7 +108,7 @@ export default function MyReservationsPage() {
                   )}
                 </td>
               </tr>
-            ))}
+            )})}
           </tbody>
         </table>
       )}
