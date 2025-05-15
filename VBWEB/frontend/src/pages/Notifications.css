@@ -1,0 +1,102 @@
+/* Outer wrapper */
+.notifications-container {
+  padding: 4vh 0;
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Section titles */
+.notifications-container h2 {
+  font-size: 1.4rem;
+  margin: 2rem 0 1.5rem;
+  color: #2d3748;
+  text-align: center;
+  width: 100%;
+}
+
+/* Each notification block */
+.notification-item {
+  width: 50vw;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid #e0e0e0;
+  border-radius: 1rem;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+/* Notification header */
+.notification-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Text highlights */
+.notification-header strong {
+  color: #1877f2;
+}
+
+.notification-header em {
+  font-style: normal;
+  font-weight: 500;
+  color: #805ad5;
+}
+
+/* Action buttons (pill-shaped) */
+.accept-btn,
+.reject-btn {
+  padding: 0.5rem 0.9rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  margin-left: auto;
+  margin-right: 0.25rem;
+}
+
+.accept-btn {
+  background-color: #38a169;
+  color: white;
+}
+
+.reject-btn {
+  background-color: #e53e3e;
+  color: white;
+}
+
+.accept-btn:hover,
+.reject-btn:hover {
+  transform: translateY(-1px) scale(1.05);
+}
+
+/* Detail table */
+.notification-table {
+  width: 100%;
+  font-size: 0.95rem;
+  color: #4a5568;
+}
+
+.notification-table td {
+  padding: 4px 0;
+  vertical-align: top;
+}
+
+.notification-table td:first-child {
+  font-weight: 600;
+  color: #2d3748;
+  width: 80px;
+}
+

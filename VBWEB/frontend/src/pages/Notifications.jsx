@@ -1,8 +1,17 @@
 import React from 'react';
 import { FaUserFriends, FaUser } from 'react-icons/fa';
+import './Notifications.css';
 
 function Notifications() {
   const friendRequests = [
+    {
+      id: 1,
+      friendName: 'Alice',
+      eventName: 'Beach Volleyball Meetup',
+      venueName: 'Daan Beach Court',
+      venueAddress: 'No.123, Daan Road, Taipei',
+      details: 'Casual game, bring your own ball.',
+    },
     {
       id: 1,
       friendName: 'Alice',
