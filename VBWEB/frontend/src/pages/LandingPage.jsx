@@ -49,51 +49,51 @@ function LandingPageInner() {
   }, [addCourtMode, setAddCourtMode]);
 
   return (
-    <div className="landing-page">
-      <main className="landing-main">
-        <div className="map-container" ref={mapContainerRef}>
-          {addCourtMode && (
-            <div className="add-court-hint">
-              請在地圖上點一下以新增場館
-            </div>
-          )}
-          <TaipeiMap />
-        </div>
-        <aside className={`sidebar ${addCourtMode ? 'dimmed' : ''}`}>
-          <button className="sidebar-btn" onClick={() => navigate("/search-venue")}>
-            搜尋場地
-          </button>
-          <button className="sidebar-btn" onClick={() => navigate("/reservations/available")}>
-            搜尋報隊
-          </button>
-          <button className="sidebar-btn" onClick={() => navigate("/custom-reservation")}>
-            自訂報隊
-          </button>
-          <button className="sidebar-btn" onClick={() => navigate("/my-join-requests")}>
-            我的報隊
-          </button>
-          {/* <button className="sidebar-btn">報名比賽</button>
-          <button className="sidebar-btn">新增比賽</button> */}
-          {/* <button className="sidebar-btn" onClick={() => setAddCourtMode(true)}>
-            新增場館
-          </button> */}
-          <button className="sidebar-btn" onClick={() => navigate("/venue-application")}>
-            場館申請
-          </button>
-          {isAdmin && (
+    <div className='landing-wrapper'>
+      <div className="landing-page">
+        <main className="landing-main">
+          <div className="map-container" ref={mapContainerRef}>
+            {addCourtMode && (
+              <div className="add-court-hint">
+                請在地圖上點一下以新增場館
+              </div>
+            )}
+            <TaipeiMap />
+          </div>
+          <aside className={`sidebar ${addCourtMode ? 'dimmed' : ''}`}>
+            <button className="sidebar-btn" onClick={() => navigate("/search-venue")}>
+              搜尋場地
+            </button>
+            <button className="sidebar-btn" onClick={() => navigate("/reservations/available")}>
+              搜尋報隊
+            </button>
+            <button className="sidebar-btn" onClick={() => navigate("/custom-reservation")}>
+              自訂報隊
+            </button>
+            <button className="sidebar-btn" onClick={() => navigate("/my-join-requests")}>
+              我的報隊
+            </button>
+            {/* <button className="sidebar-btn">報名比賽</button>
+            <button className="sidebar-btn">新增比賽</button> */}
+            {/* <button className="sidebar-btn" onClick={() => setAddCourtMode(true)}>
+              新增場館
+            </button> */}
+            <button className="sidebar-btn" onClick={() => navigate("/venue-application")}>
+              場館申請
+            </button>
             <button className="sidebar-btn" onClick={() => navigate("/admin-review-applications")}>
               管理場館申請
             </button>
-          )}
-          <button className="sidebar-btn" onClick={() => navigate("/my-venues")}>
-            我的場地
-          </button>
-          <button className="sidebar-btn" onClick={() => navigate("/reservations/my")}>
-            管理報隊申請
-          </button>
-          <LandmarkList />
-        </aside>
-      </main>
+            <button className="sidebar-btn" onClick={() => navigate("/my-venues")}>
+              我的場地
+            </button>
+            <button className="sidebar-btn" onClick={() => navigate("/reservations/my")}>
+              管理報隊申請
+            </button>
+            <LandmarkList />
+          </aside>
+        </main>
+      </div>
     </div>
   );
 }
