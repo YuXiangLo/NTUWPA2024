@@ -144,4 +144,19 @@ export class UserService {
     // 5. 回傳完整更新後的使用者資料
     return this.getUserInfoByUserID(userId);
   }
+
+  async isAdmin(userId: string): Promise<boolean> {
+    const { data, error } = await this.client
+      .from('users')
+      .select('IsAdmin')
+      .eq('userid', userId)
+      .maybeSingle();
+    if (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    if (!data) {
+      throw new NotFoundException('User not found');
+    }
+    return data?.IsAdmin;
+  }
 }

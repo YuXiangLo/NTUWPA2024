@@ -92,4 +92,21 @@ export class UserController {
       );
     }
   }
+
+  @Get('isadmin')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: 'Check if current user is admin' })
+  @ApiResponse({ status: 200, description: 'User is admin' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 500, description: 'Server error' })
+  async isAdmin(@Req() req: Request) {
+    try {
+      const uid = (req.user as any).userid;
+      if (!uid) throw new BadRequestException('Missing user ID');
+      return await this.userService.isAdmin(uid);
+    } catch (err) {
+      throw new InternalServerErrorException(err.message);
+    }
+  }
 }
