@@ -10,6 +10,7 @@ import {
 import ChatWindow from './ChatWindow.jsx';
 import './FriendListWidget.css';
 import { API_DOMAIN } from '../config.js';
+import { MessageCircle, X } from 'lucide-react';
 
 export default function FriendListWidget() {
   const { user, isAuthLoaded } = useAuth();
@@ -141,8 +142,9 @@ export default function FriendListWidget() {
       <button
         className="friend-toggle-button"
         onClick={() => { setIsOpen(o => !o); setActiveChat(null); }}
+        title={isOpen ? '關閉聊天室' : '開啟聊天室'}
       >
-        {isOpen ? 'Close Chats' : 'Open Chats'}
+        {isOpen ? <X size={24} /> : <MessageCircle size={24} />}
       </button>
 
       {isOpen && (

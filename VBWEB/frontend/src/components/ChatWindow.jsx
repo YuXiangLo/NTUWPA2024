@@ -107,13 +107,6 @@ export default function ChatWindow({ chatId, partnerName, onClose }) {
 
   return (
     <div className="chat-window">
-      <header className="chat-header">
-        <button className="back-btn" onClick={onClose}>←</button>
-        <div className="chat-title">
-          <span className="partner-name">{partnerName}</span>
-        </div>
-      </header>
-
       <div className="messages">
         {grouped.map((item, i) => {
           if (item.type === 'date') {
