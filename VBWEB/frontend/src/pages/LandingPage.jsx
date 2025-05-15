@@ -22,7 +22,6 @@ function LandingPageInner() {
         'Authorization': `Bearer ${user?.accessToken}`
       }
     }).then(res => res.json()).then(data => {
-      console.log(data);
       setIsAdmin(data);
     });
   }, [user]);

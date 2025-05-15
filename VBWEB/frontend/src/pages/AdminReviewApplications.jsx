@@ -4,13 +4,35 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './AdminReviewApplications.css';
 import { API_DOMAIN } from '../config';
+import { useNavigate } from 'react-router-dom';
 
 export default function AdminReviewApplications() {
   const { user } = useAuth();
   const token = user?.accessToken;
+  const navigate = useNavigate();
   const [apps, setApps] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchAdminStatus = async () => {
+      if (!token) return;
+      try {
+        const res = await fetch(`${API_DOMAIN}/user/isadmin`, {
+          method: 'GET',
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        if (!data) {
+          alert('你並沒有管理員權限');
+          navigate('/');
+        } 
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchAdminStatus();
+  }, [token]);
 
   useEffect(() => {
     const fetchList = async () => {
