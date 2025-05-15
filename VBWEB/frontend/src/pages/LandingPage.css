@@ -13,16 +13,12 @@
   flex: 1;
 }
 
-<<<<<<< HEAD
 .landing-page-title {
 	display: flex;
 	justify-content: center;
 	margin: 2vh;
 	font-family: "Dela Gothic One", sans-serif;
 }
-
-=======
->>>>>>> 62cb32d (refactor: remove footer, refactor header, center pages)
 /* Header */
 .landing-header {
   display: flex;
