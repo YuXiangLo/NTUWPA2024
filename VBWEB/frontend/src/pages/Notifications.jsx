@@ -1,5 +1,4 @@
 import React from "react";
-import { FaUserFriends, FaUser } from "react-icons/fa";
 import "./Notifications.css";
 
 function Notifications() {
@@ -57,8 +56,6 @@ function Notifications() {
         <div key={req.id} className="notification-item">
           <div className="notification-header">
             <span>
-              <FaUserFriends size={20} />
-              &nbsp;
               <strong>{req.friendName}</strong> asks you to join{" "}
               <em>{req.eventName}</em>:
             </span>
@@ -96,8 +93,6 @@ function Notifications() {
           
           <div className="notification-header">
             <span>
-              <FaUser size={20} />
-              &nbsp;
               <strong>{req.userName}</strong> asks to join your event{" "}
               <em>{req.eventName}</em>:
             </span>
