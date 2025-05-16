@@ -21,7 +21,7 @@ export default function LandmarkList() {
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => {
         const coordsArr = [coords.latitude, coords.longitude];
-        setUserLocation({ name: "My Location", coords: coordsArr });
+        setUserLocation({ name: "我的位置", coords: coordsArr });
         setSelectedPosition(coordsArr);
         setLocLoading(false);
       },
@@ -34,15 +34,15 @@ export default function LandmarkList() {
   };
 
   const items = [
-    { name: locLoading ? "Locating…" : "My Location", coords: userLocation?.coords, isUser: true },
+    { name: locLoading ? "定位中…" : "我的位置", coords: userLocation?.coords, isUser: true },
     ...landmarks,
   ];
 
   return (
     <div
       style={{
-        width: 250,
-        height: '20%',
+        width: '100%',
+        maxHeight: '25vh',
         background: "#fff",
         padding: 10,
         borderRadius: 5,
@@ -50,7 +50,7 @@ export default function LandmarkList() {
         overflowY: 'auto'
       }}
     >
-      <h3 style={{ color: "#333", marginTop: 0 }}>Courts</h3>
+      <h3 style={{ color: "#333", marginTop: 0 }}>球館</h3>
       <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
         {items.map((item, i) => {
           const isSelected =

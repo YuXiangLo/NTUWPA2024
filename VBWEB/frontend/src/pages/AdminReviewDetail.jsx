@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import './AdminReviewDetail.css';
 import { API_DOMAIN } from '../config';
 
 export default function AdminReviewDetail() {

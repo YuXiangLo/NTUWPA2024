@@ -8,7 +8,6 @@ import {
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { API_DOMAIN } from '../config';
-import "./Calendar.css";
 
 export default function ManageSchedule() {
   const { venueId, courtId } = useParams();

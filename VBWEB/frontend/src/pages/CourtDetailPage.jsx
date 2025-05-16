@@ -4,7 +4,6 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { API_DOMAIN } from '../config';
 import { DayPilot } from "@daypilot/daypilot-lite-react";
-import './CourtDetailPage.css';
 
 export default function CourtDetailPage() {
   const { venueId, courtId } = useParams();

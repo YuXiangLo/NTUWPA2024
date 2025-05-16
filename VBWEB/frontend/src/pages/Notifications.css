@@ -1,88 +1,109 @@
+/* Outer wrapper */
 .notifications-container {
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 1rem;
-  font-family: sans-serif;
+  padding: 4vh 0;
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
+/* Section titles */
 .notifications-container h2 {
-  margin-top: 1.5rem;
-  margin-bottom: 0.75rem;
-  color: #333;
-  font-size: 1.25rem;
-  border-bottom: 2px solid #e0e0e0;
-  padding-bottom: 0.25rem;
+  font-size: 1.4rem;
+  margin: 2rem 0 1.5rem;
+  color: #2d3748;
+  text-align: center;
+  width: 100%;
 }
 
+/* Each notification block */
 .notification-item {
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  margin-bottom: 1rem;
-  padding: 0.75rem 1rem;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  width: 50vw;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid #e0e0e0;
+  border-radius: 1rem;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
+  position: relative;
 }
 
+/* Notification header */
 .notification-header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center; /* This aligns buttons vertically */
+  gap: 1rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.notification-actions {
+  display: flex;
   gap: 0.5rem;
-  font-size: 0.95rem;
-  color: #444;
+}
+
+
+/* Text highlights */
+.notification-header strong {
+  color: #1877f2;
 }
 
 .notification-header em {
   font-style: normal;
   font-weight: 500;
-  color: #007bff;
+  color: #805ad5;
 }
 
+/* Action buttons (pill-shaped) */
 .accept-btn,
 .reject-btn {
-  background: transparent;
-  border: none;
-  cursor: pointer;
+  padding: 0.5rem 0.9rem;
   font-size: 1rem;
-  margin-left: 0.5rem;
-  line-height: 1;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  margin-left: auto;
+  margin-right: 0.25rem;
 }
 
 .accept-btn {
-  color: #28a745;
+  background-color: #38a169;
+  color: white;
 }
 
 .reject-btn {
-  color: #dc3545;
+  background-color: #e53e3e;
+  color: white;
 }
 
-.accept-btn:hover {
-  color: #218838;
-}
-
+.accept-btn:hover,
 .reject-btn:hover {
-  color: #c82333;
+  transform: translateY(-1px) scale(1.05);
 }
 
+/* Detail table */
 .notification-table {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 0.5rem;
-  font-size: 0. nine rem;
-  color: #555;
+  font-size: 0.95rem;
+  color: #4a5568;
 }
 
 .notification-table td {
-  padding: 0.5rem 0.75rem;
-  border-bottom: 1px solid #eee;
-}
-
-.notification-table tr:last-child td {
-  border-bottom: none;
+  padding: 4px 0;
+  vertical-align: top;
 }
 
 .notification-table td:first-child {
   font-weight: 600;
-  width: 4rem;
-  color: #333;
+  color: #2d3748;
+  width: 80px;
 }
+

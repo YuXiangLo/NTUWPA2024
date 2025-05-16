@@ -2,7 +2,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
-import Footer from './components/Footer';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
@@ -13,7 +12,6 @@ import SchedulePage from './pages/CourtSchedule';
 import SearchVenueListPage from './pages/SearchVenueListPage';
 import ChatRoomPage from './pages/ChatRoomPage';
 import TestPage from './pages/TestPage';
-import './App.css';
 import FriendListWidget from './components/FriendListWidget';
 import VenueApplication from './pages/VenueApplication';
 import AdminReviewApplications from './pages/AdminReviewApplications';
@@ -36,7 +34,7 @@ function App() {
   return (
     <Router>
       <Header />
-      <main>
+      <main className="global-main">
         <Routes>
           {/* Public / auth */}
           <Route path="/" element={<LandingPage />} />
@@ -84,7 +82,6 @@ function App() {
         </Routes>
       </main>
       <FriendListWidget />
-      <Footer />
     </Router>
   );
 }

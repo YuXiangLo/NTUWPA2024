@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './CourtInfoPage.css';
 import ntuImage from '../assets/ntu.png'; // adjust the path as needed
 
 

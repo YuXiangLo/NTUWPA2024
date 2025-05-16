@@ -1,18 +1,23 @@
-/* src/components/ProfilePage.css */
+.profile-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 10rem);
+}
+
 .user-info-form.grid-layout {
   display: grid;
   grid-template-areas:
     "avatar header"
     "avatar form";
-  /* 調整總寬度與欄位比例 */
-  grid-template-columns: 250px 1fr;
-  width: 800px;
-  grid-gap: 20px;
-  align-items: start;
-  padding: 20px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  grid-template-columns: 10vw 1fr;
+  width: 100%;
+  max-width: 50vw;
+  gap: 2vw;
+  padding: 3vh 3vw;
+  background: #ffffff;
+  border-radius: 1vw;
+  box-shadow: 0 0.4vh 2vh rgba(0, 0, 0, 0.1);
 }
 
 .avatar-section {
@@ -23,24 +28,30 @@
 }
 
 .avatar-preview {
-  width: 150px;
-  height: 150px;
+  width: 8vw;
+  height: 8vw;
   object-fit: cover;
   border-radius: 50%;
-  margin-bottom: 10px;
-  border: 2px solid #ddd;
+  margin-bottom: 1vh;
+  border: 0.15vw solid #ddd;
+  transition: transform 0.3s;
+}
+
+.avatar-preview:hover {
+  transform: scale(1.05);
 }
 
 .form-section {
   grid-area: form;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .form-row {
   display: flex;
-  gap: 20px;
-  margin-bottom: 15px;
+  gap: 1vw;
+  margin-bottom: 1.5vh;
 }
 
 .form-row label,
@@ -50,46 +61,75 @@
   flex: 1;
 }
 
-.save-btn {
-  width: 120px;
-  padding: 8px;
-  margin-top: 10px;
-  align-self: flex-end;
-  background: #2c92ff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-
-.upload-btn {
-  display: inline-block;
-  margin-top: 10px;
-  padding: 6px 12px;
-  background: #2c92ff;
-  color: #fff;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
 .file-input-wrapper {
   position: relative;
-  width: 150px;
-  height: 36px;
 }
 
-/* 隱藏原生 file input 的文字 */
 .file-input-wrapper input[type="file"] {
   opacity: 0;
   position: absolute;
-  width: 150px;
-  height: 36px;
   cursor: pointer;
 }
 
-
 .error {
   color: #c00;
-  margin-bottom: 10px;
+  margin-bottom: 1vh;
 }
+
+input[type="text"],
+input[type="tel"],
+input[type="date"],
+input[type="number"] {
+  padding: 1vh 1vw;
+  border: 0.1vw solid #ccc;
+  border-radius: 1vw;
+  font-size: 1rem;
+  background: #fafafa;
+  transition: border 0.3s;
+}
+
+input:focus {
+  border-color: #2c92ff;
+  outline: none;
+}
+
+.save-btn {
+  padding: 1.2vh 1vw;
+  margin-top: 2vh;
+  align-self: flex-end;
+  background: linear-gradient(135deg, #a5d8ff, #d0bfff);
+  color: #2d3748;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 1vw;
+  cursor: pointer;
+  box-shadow: 0 0.6vh 1.2vh rgba(165, 216, 255, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.save-btn:hover {
+  transform: translateY(-0.4vh);
+  box-shadow: 0 1vh 2vh rgba(165, 216, 255, 0.4);
+}
+
+.upload-btn {
+  display: block;
+  margin: 1.2vh auto 0;
+  padding: 1vh 1vw;
+  background: linear-gradient(135deg, #D8BFD8, #F8C8DC);
+  color: #2d3748;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 1vw;
+  cursor: pointer;
+  box-shadow: 0 0.6vh 1.2vh rgba(251, 207, 232, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.upload-btn:hover {
+  transform: translateY(-0.4vh);
+  box-shadow: 0 1vh 2vh rgba(251, 207, 232, 0.4);
+}
+

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { API_DOMAIN } from '../config';
 import { Link } from 'react-router-dom';
-import './MyReservationsPage.css';
 
 export default function MyReservationsPage() {
   const { user } = useAuth();

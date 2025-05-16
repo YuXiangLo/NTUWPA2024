@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { API_DOMAIN } from '../config';
-import './ReservationDetailPage.css';
 
 export default function ReservationDetailPage() {
   const { type, reservationId } = useParams();

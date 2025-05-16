@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { API_DOMAIN } from '../config';
-import './CourtReservationApplyPage.css';
 
 export default function CourtReservationApplyPage() {
   const { venueId, courtId } = useParams();
