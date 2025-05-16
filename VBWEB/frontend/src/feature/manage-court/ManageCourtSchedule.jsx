@@ -6,10 +6,10 @@ import {
   DayPilotNavigator
 } from "@daypilot/daypilot-lite-react";
 import { useParams, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { API_DOMAIN } from '../config';
+import { useAuth } from '../../context/AuthContext';
+import { API_DOMAIN } from '../../config';
 
-export default function ManageSchedule() {
+export default function ManageCourtSchedule() {
   const { venueId, courtId } = useParams();
   const { user } = useAuth();
   const token = user?.accessToken;

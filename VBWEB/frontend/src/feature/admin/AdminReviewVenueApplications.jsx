@@ -1,8 +1,8 @@
-// src/pages/AdminReviewApplications.jsx
+// src/pages/admin/AdminReviewVenueApplications.jsx
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { API_DOMAIN } from '../config';
+import { useAuth } from '../../context/AuthContext';
+import { API_DOMAIN } from '../../config';
 import { useNavigate } from 'react-router-dom';
 
 export default function AdminReviewApplications() {

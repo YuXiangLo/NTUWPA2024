@@ -1,10 +1,10 @@
 // src/pages/ManageReservationsPage.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { API_DOMAIN } from '../config';
+import { useAuth } from '../../context/AuthContext';
+import { API_DOMAIN } from '../../config';
 
-export default function ManageReservationsPage() {
+export default function ManageReservationsApplyPage() {
   const { courtId } = useParams();
   const { user } = useAuth();
   const token = user?.accessToken;

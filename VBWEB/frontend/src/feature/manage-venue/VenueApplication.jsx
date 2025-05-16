@@ -1,7 +1,7 @@
 /* VenueApplication.jsx */
 import React, { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { API_DOMAIN } from '../config';
+import { useAuth } from '../../context/AuthContext';
+import { API_DOMAIN } from '../../config';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 

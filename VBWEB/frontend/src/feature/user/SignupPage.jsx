@@ -1,8 +1,8 @@
 // src/pages/SignupPage.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { API_DOMAIN } from '../config.js';
-import { useAuth } from '../context/AuthContext';
+import { API_DOMAIN } from '../../config.js';
+import { useAuth } from '../../context/AuthContext.jsx';
 
 function SignupPage() {
   const navigate = useNavigate();  

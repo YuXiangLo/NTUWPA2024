@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { API_DOMAIN } from '../config';
+import { useAuth } from '../../context/AuthContext';
+import { API_DOMAIN } from '../../config';
 import { Link } from 'react-router-dom';
 
-export default function MyReservationsPage() {
+export default function ReservationsDashboardPage() {
   const { user } = useAuth();
   const userId = user?.userid;
   const token  = user?.accessToken;

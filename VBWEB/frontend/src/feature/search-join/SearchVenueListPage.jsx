@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { API_DOMAIN } from '../config.js';
+import { API_DOMAIN } from '../../config.js';
 
 const SearchVenueListPage = () => {
   // Search/filter states

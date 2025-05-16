@@ -1,10 +1,10 @@
 // src/pages/CourtReservationApplyPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useLocation, useParams, useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { API_DOMAIN } from '../config';
+import { useAuth } from '../../context/AuthContext';
+import { API_DOMAIN } from '../../config';
 
-export default function CourtReservationApplyPage() {
+export default function ReservationApplyPage() {
   const { venueId, courtId } = useParams();
   const { user } = useAuth();
   const token = user?.accessToken;

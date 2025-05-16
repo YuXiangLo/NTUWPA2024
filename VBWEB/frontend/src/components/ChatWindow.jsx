@@ -123,20 +123,6 @@ export default function ChatWindow({ chatId, partnerName, onClose }) {
               </div>
             );
           }
-          if (item.orderId) {
-            return (
-              <div key={item.id} className="order-card">
-                <img src={item.orderImage} alt="" />
-                <div className="order-info">
-                  <div>訂單編號：{item.orderId}</div>
-                  <div>總額：${item.orderTotal}</div>
-                  <div className={`status ${item.orderStatus}`}>
-                    {item.orderStatus}
-                  </div>
-                </div>
-              </div>
-            );
-          }
           const mine = item.sender_id === userId;
           return (
             <div

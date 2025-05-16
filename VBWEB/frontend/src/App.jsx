@@ -2,33 +2,29 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
-import LandingPage from './pages/LandingPage';
-import LoginPage from './pages/LoginPage';
-import SignupPage from './pages/SignupPage';
-import ProfilePage from './pages/ProfilePage';
-import Notificatoins from './pages/Notifications';
-import CourtInfoPage from './pages/CourtInfoPage';
-import SchedulePage from './pages/CourtSchedule';
-import SearchVenueListPage from './pages/SearchVenueListPage';
-import ChatRoomPage from './pages/ChatRoomPage';
-import TestPage from './pages/TestPage';
+import LandingPage from './feature/landing/LandingPage.jsx';
+import LoginPage from './feature/user/LoginPage';
+import SignupPage from './feature/user/SignupPage';
+import ProfilePage from './feature/user/ProfilePage';
+import MyPlayPage from './feature/user/MyPlayPage.jsx';
+import PlayDetailPage from './feature/user/PlayDetailPage.jsx';
+import AdminReviewApplications from './feature/admin/AdminReviewVenueApplications';
+import AdminReviewDetail from './feature/admin/AdminReviewDetail';
+import MyVenues from './feature/manage-venue/MyVenues.jsx';
+import VenueApplication from './feature/manage-venue/VenueApplication.jsx';
+import CreateCourt from './feature/manage-court/CreateCourt';
+import CourtsDashboard from './feature/manage-court/CourtsDashboard.jsx';
+import ManageCourtSchedule from './feature/manage-court/ManageCourtSchedule.jsx';
+import ManageReservationsApplyPage from './feature/manage-court/ManageReservationsApplyPage.jsx';
+import ReservationsDashboardPage from './feature/manage-reservation/ReservationsDashboardPage.jsx';
+import ReservationJoinRequestsPage from './feature/manage-reservation/ReservationJoinRequestsPage.jsx';
+import ReservationApplyPage from './feature/manage-reservation/ReservationApplyPage.jsx';
+import CustomReservationPage from './feature/self-court-reservation/CustomReservationPage';
+import AvailableReservationsPage from './feature/search-join/AvailableReservationsPage.jsx';
+import SearchVenueListPage from './feature/search-join/SearchVenueListPage';
+import CourtDetailPage from './feature/search-join/CourtDetailPage.jsx';
+import ChatRoomPage from './feature/chat/ChatRoomPage';
 import FriendListWidget from './components/FriendListWidget';
-import VenueApplication from './pages/VenueApplication';
-import AdminReviewApplications from './pages/AdminReviewApplications';
-import AdminReviewDetail from './pages/AdminReviewDetail';
-import MyVenues from './pages/MyVenues';
-import CreateCourt from './pages/CreateCourt';
-import ManageCourts from './pages/ManageCourts.jsx';
-import ManageSchedule from './pages/ManageSchedule.jsx';
-import CourtDetailPage from './pages/CourtDetailPage';
-import CourtReservationApply from './pages/CourtReservationApplyPage';
-import ManageReservationsPage from './pages/ManageReservationsPage';
-import MyReservationsPage from './pages/MyReservationsPage';
-import ReservationJoinRequestsPage from './pages/ReservationJoinRequestsPage';
-import AvailableReservationsPage from './pages/AvailableReservationsPage';
-import MyJoinRequestsPage from './pages/MyJoinRequestsPage';
-import ReservationDetailPage from './pages/ReservationDetailPage';
-import CustomReservationPage from './pages/CustomReservationPage';
 
 function App() {
   return (
@@ -41,44 +37,33 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/notifications" element={<Notificatoins />} />
-          <Route path="/schedule/:court_id" element={<SchedulePage />} />
-          <Route path="/court-info" element={<CourtInfoPage />} />
-          <Route path="/search-venue" element={<SearchVenueListPage />} />
-          <Route path="/ChatRoom" element={<ChatRoomPage />} />
-          <Route path="/test" element={<TestPage />} />
-
-          {/* Venue applications */}
-          <Route path="/venue-application" element={<VenueApplication />} />
-          <Route path="/custom-reservation" element={<CustomReservationPage />} />
+          <Route path="/my-play" element={<MyPlayPage />} />
+          <Route path="/:type/:reservationId/detail" element={<PlayDetailPage />} />
+          {/* admin */}
           <Route path="/admin-review-applications" element={<AdminReviewApplications />} />
           <Route path="/admin-review-applications/:id" element={<AdminReviewDetail />} />
-          <Route path="/reservations/my" element={<MyReservationsPage />} />
-          <Route path="/reservations/available" element={<AvailableReservationsPage />} />
-          <Route path="/:type/:reservationId/detail" element={<ReservationDetailPage />} />
-          <Route
-            path="/:type/:reservationId/join-requests"
-            element={<ReservationJoinRequestsPage />}
-          />
-          {/* Maintainer’s own venues */}
+          {/* Venue related */}
+          <Route path="/venue-application" element={<VenueApplication />} />
           <Route path="/my-venues" element={<MyVenues />} />
-          <Route path="/my-join-requests" element={<MyJoinRequestsPage />} />
-
-          {/* Courts under a venue */}
+          {/* Court related */}
           <Route path="/venues/:venueId/courts">
-            {/* create new court must come first */}
+            <Route path="" element={<CourtsDashboard />} />
             <Route path="new" element={<CreateCourt />} />
-            {/* list/manage courts */}
-            <Route path="" element={<ManageCourts />} />
-            {/* maintainer’s schedule editor */}
-            <Route path=":courtId/manage-schedule" element={<ManageSchedule />} />
-            {/* public schedule/details */}
+            <Route path=":courtId/manage-schedule" element={<ManageCourtSchedule />} />
             <Route path=":courtId/schedule" element={<CourtDetailPage />} />
-            {/* apply for reservation */}
-            <Route path=":courtId/reserve" element={<CourtReservationApply />} />
-            {/* manage reservations */}
-            <Route path=":courtId/reservations" element={<ManageReservationsPage />} />
+            <Route path=":courtId/reserve" element={<ReservationApplyPage />} />
+            <Route path=":courtId/reservations" element={<ManageReservationsApplyPage />} />
           </Route>
+          {/* Reservation related */}
+          <Route path="/reservations/my" element={<ReservationsDashboardPage />} />
+          <Route path=":type/:reservationId/join-requests" element={<ReservationJoinRequestsPage />} />
+          {/* Custom reservation */}
+          <Route path="/custom-reservation" element={<CustomReservationPage />} />
+          {/*search-join*/}
+          <Route path="/search-venue" element={<SearchVenueListPage />} />
+          <Route path="/reservations/available" element={<AvailableReservationsPage />} />
+          {/*chat*/}
+          <Route path="/ChatRoom" element={<ChatRoomPage />} />
         </Routes>
       </main>
       <FriendListWidget />

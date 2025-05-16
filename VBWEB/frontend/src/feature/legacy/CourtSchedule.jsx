@@ -1,7 +1,7 @@
 // src/pages/SchedulePage.jsx
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { API_DOMAIN } from '../config.js';
+import { API_DOMAIN } from '../../config.js';
 
 // Generate hourly slots from startHour to endHour
 function generateTimeSlots(startHour = 9, endHour = 22) {
