@@ -1,10 +1,10 @@
 // src/pages/ReservationDetailPage.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { API_DOMAIN } from '../config';
+import { useAuth } from '../../context/AuthContext';
+import { API_DOMAIN } from '../../config';
 
-export default function ReservationDetailPage() {
+export default function PlayDetailPage() {
   const { type, reservationId } = useParams();
   const { user }                = useAuth();
   const token                   = user?.accessToken;

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { API_DOMAIN } from '../config';
+import { useAuth } from '../../context/AuthContext';
+import { API_DOMAIN } from '../../config';
 
-export default function ManageCourts() {
+export default function CourtsDashboard() {
   const { venueId } = useParams();
   const { user } = useAuth();
   const token = user?.accessToken;

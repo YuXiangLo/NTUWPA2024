@@ -75,7 +75,7 @@ function LandingPageInner() {
             <button className="sidebar-btn" onClick={() => navigate("/custom-reservation")}>
               自訂報隊
             </button>
-            <button className="sidebar-btn" onClick={() => navigate("/my-join-requests")}>
+            <button className="sidebar-btn" onClick={() => navigate("/my-play")}>
               我的報隊
             </button>
             <button className="sidebar-btn" onClick={() => navigate("/venue-application")}>

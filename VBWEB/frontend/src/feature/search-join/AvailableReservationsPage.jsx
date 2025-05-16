@@ -1,7 +1,7 @@
 // src/pages/AvailableReservationsPage.jsx
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { API_DOMAIN } from '../config';
+import { useAuth } from '../../context/AuthContext';
+import { API_DOMAIN } from '../../config';
 
 export default function AvailableReservationsPage() {
   const { user } = useAuth();

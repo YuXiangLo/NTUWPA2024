@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import { Link } from 'react-router-dom';
-import { API_DOMAIN } from '../config';
+import { API_DOMAIN } from '../../config';
 
 export default function MyVenues() {
   const { user } = useAuth();
