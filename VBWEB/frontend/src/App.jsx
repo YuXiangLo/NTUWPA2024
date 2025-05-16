@@ -26,10 +26,13 @@ import CourtDetailPage from './feature/search-join/CourtDetailPage.jsx';
 import ChatRoomPage from './feature/chat/ChatRoomPage';
 import FriendListWidget from './components/FriendListWidget';
 
+import { AnimatedBackground } from 'animated-backgrounds';
+
 function App() {
   return (
     <Router>
       <Header />
+	  <AnimatedBackground animationName="geometricShapes" style={{ "background": "linear-gradient(to bottom right, #e3f2fd, #fce4ec)"}}/>
       <main className="global-main">
         <Routes>
           {/* Public / auth */}
