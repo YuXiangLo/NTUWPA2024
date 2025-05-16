@@ -32,7 +32,12 @@ function App() {
   return (
     <Router>
       <Header />
-	  <AnimatedBackground animationName="geometricShapes" style={{ "background": "linear-gradient(to bottom right, #e3f2fd, #fce4ec)"}}/>
+	  <
+        AnimatedBackground
+        animationName="geometricShapes"
+		blendMode="normal"
+        style={{ "background": "linear-gradient(to bottom right, #e3f2fd, #fce4ec)"}}
+      />
       <main className="global-main">
         <Routes>
           {/* Public / auth */}
