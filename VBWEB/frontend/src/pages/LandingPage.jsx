@@ -1,30 +1,14 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import './LandingPage.css';
 import { useNavigate } from 'react-router-dom';
 import { LandmarkProvider, LandmarkContext } from '../context/LandmarkContext.jsx';
 import TaipeiMap from '../components/TaipeiMap.jsx';
 import LandmarkList from '../components/LandmarkList.jsx';
-import { useAuth } from '../context/AuthContext.jsx';
-import { API_DOMAIN } from '../config';
 
 function LandingPageInner() {
   const navigate = useNavigate();
   const { setAddCourtMode, addCourtMode } = useContext(LandmarkContext);
   const mapContainerRef = useRef(null);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const { user } = useAuth();
-
-  useEffect(() => {
-    fetch(`${API_DOMAIN}/user/isadmin`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${user?.accessToken}`
-      }
-    }).then(res => res.json()).then(data => {
-      setIsAdmin(data);
-    });
-  }, [user]);
 
   // Handle Escape key
   useEffect(() => {
@@ -74,19 +58,12 @@ function LandingPageInner() {
             <button className="sidebar-btn" onClick={() => navigate("/my-join-requests")}>
               我的報隊
             </button>
-            {/* <button className="sidebar-btn">報名比賽</button>
-            <button className="sidebar-btn">新增比賽</button> */}
-            {/* <button className="sidebar-btn" onClick={() => setAddCourtMode(true)}>
-              新增場館
-            </button> */}
             <button className="sidebar-btn" onClick={() => navigate("/venue-application")}>
               場館申請
             </button>
-            {isAdmin && (
-              <button className="sidebar-btn" onClick={() => navigate("/admin-review-applications")}>
-                管理場館申請
-              </button>
-            )}
+            <button className="sidebar-btn" onClick={() => navigate("/admin-review-applications")}>
+              管理場館申請
+            </button>
             <button className="sidebar-btn" onClick={() => navigate("/my-venues")}>
               我的場地
             </button>
