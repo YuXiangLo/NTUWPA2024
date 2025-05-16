@@ -94,7 +94,7 @@
   flex-direction: column;
   align-items: flex-start;
   padding: var(--spacing-md);
-  border-left: 1px solid #e2e8f0;
+  /*border-left: 1px solid #e2e8f0;*/
 }
 
 .sidebar-btn {
