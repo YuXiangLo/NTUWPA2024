@@ -9,7 +9,6 @@
 .landing-page {
   display: flex;
   flex-direction: column;
-  font-family: sans-serif;
   flex: 1;
 }
 
