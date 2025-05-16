@@ -1,8 +1,8 @@
-// src/pages/LoginPage.jsx
+// src/pages/user/LoginPage.jsx
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { API_DOMAIN } from '../config.js';
-import { useAuth } from '../context/AuthContext';
+import { API_DOMAIN } from '../../config.js';
+import { useAuth } from '../../context/AuthContext.jsx';
 
 function LoginPage() {
   const navigate = useNavigate();

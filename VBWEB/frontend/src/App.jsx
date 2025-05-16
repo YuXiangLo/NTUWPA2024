@@ -2,20 +2,19 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
-import LandingPage from './pages/LandingPage';
-import LoginPage from './pages/LoginPage';
-import SignupPage from './pages/SignupPage';
-import ProfilePage from './pages/ProfilePage';
-import Notificatoins from './pages/Notifications';
+import LandingPage from './pages/landing/LandingPage.jsx';
+import LoginPage from './pages/user/LoginPage';
+import SignupPage from './pages/user/SignupPage';
+import ProfilePage from './pages/user/ProfilePage';
+// import Notificatoins from './components/Notifications.jsx';
 import CourtInfoPage from './pages/CourtInfoPage';
 import SchedulePage from './pages/CourtSchedule';
 import SearchVenueListPage from './pages/SearchVenueListPage';
-import ChatRoomPage from './pages/ChatRoomPage';
-import TestPage from './pages/TestPage';
+import ChatRoomPage from './pages/chat/ChatRoomPage';
 import FriendListWidget from './components/FriendListWidget';
 import VenueApplication from './pages/VenueApplication';
-import AdminReviewApplications from './pages/AdminReviewApplications';
-import AdminReviewDetail from './pages/AdminReviewDetail';
+import AdminReviewApplications from './pages/admin/AdminReviewVenueApplications';
+import AdminReviewDetail from './pages/admin/AdminReviewDetail';
 import MyVenues from './pages/MyVenues';
 import CreateCourt from './pages/CreateCourt';
 import ManageCourts from './pages/ManageCourts.jsx';
@@ -41,12 +40,11 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/notifications" element={<Notificatoins />} />
+          {/* <Route path="/notifications" element={<Notificatoins />} /> */}
           <Route path="/schedule/:court_id" element={<SchedulePage />} />
           <Route path="/court-info" element={<CourtInfoPage />} />
           <Route path="/search-venue" element={<SearchVenueListPage />} />
           <Route path="/ChatRoom" element={<ChatRoomPage />} />
-          <Route path="/test" element={<TestPage />} />
 
           {/* Venue applications */}
           <Route path="/venue-application" element={<VenueApplication />} />

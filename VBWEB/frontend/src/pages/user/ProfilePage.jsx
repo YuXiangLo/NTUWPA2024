@@ -2,9 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ProfilePage.css';
-import { API_DOMAIN } from '../config.js';
-import { useAuth } from '../context/AuthContext.jsx';
-import UserDashboard from '../components/userDashboard.jsx';
+import { API_DOMAIN } from '../../config.js';
+import { useAuth } from '../../context/AuthContext.jsx';
 
 function ProfilePage() {
   const navigate = useNavigate();

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo, useRef } from 'react';
 import io from 'socket.io-client';
-import { API_DOMAIN } from '../config.js';
-import { useAuth } from '../context/AuthContext';
+import { API_DOMAIN } from '../../config.js';
+import { useAuth } from '../../context/AuthContext';
 
 function ChatRoomPage() {
   const { user, isAuthLoaded } = useAuth();
