@@ -149,7 +149,7 @@ const SearchVenueListPage = () => {
                 <span className="svl-col svl-col-actions">
                   <Link
                     to={`/venue/${venue.id}`}
-                    className="svl-detail-button"
+                    className="svl-detail-button button"
                   >
                     詳情
                   </Link>
@@ -175,7 +175,7 @@ const SearchVenueListPage = () => {
                         <div>
                           <Link
                             to={`/venues/${venue.id}/courts/${court.id}/schedule`}
-                            className="svl-detail-button"
+                            className="svl-detail-button button"
                           >
                             詳情
                           </Link>

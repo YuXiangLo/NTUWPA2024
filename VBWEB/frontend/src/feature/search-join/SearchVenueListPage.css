@@ -25,7 +25,7 @@
 .svl-header-row {
   display: flex;
   background-color: #f9f9f9;
-  padding: 10px 15px;
+  padding: 0.3rem 0.5rem;
   font-weight: bold;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -34,8 +34,8 @@
 .svl-header-row .svl-col {
   flex: 1;
   text-align: left;
-  padding: 0 10px;  /* Adds padding on both sides */
-  padding-left: 15px; /* Increase left padding for extra gap from separator */
+  padding: 0 0.3rem;  /* Adds padding on both sides */
+  padding-left: 0.5rem; /* Increase left padding for extra gap from separator */
   border-right: 1px solid #ddd;
 }
 
@@ -48,14 +48,14 @@
 .svl-venue-list {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  margin-top: 10px;
+  gap: 0.5rem;
+  margin-top: 0.3rem;
 }
 
 .svl-venue-card {
   border: 1px solid #ddd;
   border-radius: 8px;
-  padding: 10px 15px;
+  padding: 0.3rem 0.5rem;
   background-color: #f9f9f9;
 }
 
@@ -63,14 +63,14 @@
 .svl-venue-row {
   display: flex;
   align-items: center;
-  padding: 10px 0;
+  padding: 0.3rem 0;
   border-bottom: 1px solid #eee;
 }
 
 .svl-venue-row .svl-col {
   flex: 1;
   text-align: left;
-  padding: 0 15px;  /* Increased padding adds extra gap */
+  padding: 0 0.5rem;  /* Increased padding adds extra gap */
   border-right: 1px solid #eee;
 }
 
@@ -87,7 +87,7 @@
 /* Actions column buttons */
 .svl-col-actions {
   display: flex;
-  gap: 8px;
+  gap: 0.5rem;
   align-items: center;
 }
 
@@ -133,7 +133,7 @@
 }
 
 .svl-no-courts {
-  padding-left: 10px;
+  padding-left: 0.3rem;
   color: #999;
   font-style: italic;
 }
@@ -148,7 +148,12 @@
   background-color: #89baf0;
   color: #fff;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+
+  /* Center the button */
+  display: block;
+  margin: 1rem auto 0 auto; /* Top margin optional, auto left/right centers block elements */
 }
+
 
 .svl-to-top-button:hover {
   background-color: #95bdff;
