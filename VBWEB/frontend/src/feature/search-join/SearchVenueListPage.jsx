@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { API_DOMAIN } from '../../config.js';
+import './SearchVenueListPage.css'
 
 const SearchVenueListPage = () => {
   // Search/filter states
@@ -73,11 +74,33 @@ const SearchVenueListPage = () => {
 
   // Basic loading and error messages
   if (loading) {
-    return <div className="svl-container">Loading...</div>;
+    return (
+      <h1 style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+		height: '80vh',
+        margin: 0
+      }}>
+        Loading...
+      </h1>
+    );
   }
+  
   if (error) {
-    return <div className="svl-container">Error: {error}</div>;
+    return (
+      <h1 style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+		height: '80vh',
+        margin: 0
+      }}>
+        Error: {error}
+      </h1>
+    );
   }
+  
 
   return (
     <div className="svl-container">
@@ -149,7 +172,7 @@ const SearchVenueListPage = () => {
                             材質：{court.property}
                           </span>
                         </div>
-                        <div className="svl-court-action">
+                        <div>
                           <Link
                             to={`/venues/${venue.id}/courts/${court.id}/schedule`}
                             className="svl-detail-button"
