@@ -25,7 +25,7 @@ import SearchVenueListPage from './feature/search-join/SearchVenueListPage';
 import CourtDetailPage from './feature/search-join/CourtDetailPage.jsx';
 import ChatRoomPage from './feature/chat/ChatRoomPage';
 import FriendListWidget from './components/FriendListWidget';
-
+import GoogleCallback from './feature/user/google-callback';
 import { AnimatedBackground } from 'animated-backgrounds';
 
 function App() {
@@ -47,6 +47,7 @@ function App() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/my-play" element={<MyPlayPage />} />
           <Route path="/:type/:reservationId/detail" element={<PlayDetailPage />} />
+          <Route path="/google-callback" element={<GoogleCallback />} />
           {/* admin */}
           <Route path="/admin-review-applications" element={<AdminReviewApplications />} />
           <Route path="/admin-review-applications/:id" element={<AdminReviewDetail />} />

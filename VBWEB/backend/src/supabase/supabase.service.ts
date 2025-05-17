@@ -22,10 +22,10 @@ export class SupabaseService {
     return this.supabase;
   }
 
-  async createUser(email: string, password: string) {
+  async createUser(email: string, password: string, login_method: string) {
     const { data, error } = await this.supabase
       .from('users')
-      .insert([{ gmail: email, password }]);
+      .insert([{ gmail: email, password, login_method }]);
     if (error) throw new Error(error.message);
     return data;
   }
