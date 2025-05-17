@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { API_DOMAIN } from '../../config.js';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { API_DOMAIN } from "../../config.js";
+import CustomSelect from "../../components/CustomSelect"; // Adjust path as needed
+import "./SearchVenueListPage.css";
 
 const SearchVenueListPage = () => {
   // Search/filter states
-  const [searchText, setSearchText] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [searchText, setSearchText] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
   // Fetched venues and loading/error states
   const [venues, setVenues] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -21,7 +23,7 @@ const SearchVenueListPage = () => {
     fetch(`${API_DOMAIN}/venues`)
       .then((response) => {
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error("Network response was not ok");
         }
         return response.json();
       })
@@ -45,13 +47,13 @@ const SearchVenueListPage = () => {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // Scroll to top of the page
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   // Toggle the display of a venue's courts
@@ -67,16 +69,41 @@ const SearchVenueListPage = () => {
     const keywordMatch =
       venue.name.toLowerCase().includes(searchText.toLowerCase()) ||
       venue.address.toLowerCase().includes(searchText.toLowerCase());
-    const statusMatch = statusFilter === 'all' || venue.status === statusFilter;
+    const statusMatch = statusFilter === "all" || venue.status === statusFilter;
     return keywordMatch && statusMatch;
   });
 
   // Basic loading and error messages
   if (loading) {
-    return <div className="svl-container">Loading...</div>;
+    return (
+      <h1
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "80vh",
+          margin: 0,
+        }}
+      >
+        Loading...
+      </h1>
+    );
   }
+
   if (error) {
-    return <div className="svl-container">Error: {error}</div>;
+    return (
+      <h1
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "80vh",
+          margin: 0,
+        }}
+      >
+        Error: {error}
+      </h1>
+    );
   }
 
   return (
@@ -91,16 +118,16 @@ const SearchVenueListPage = () => {
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
         />
-        <select
-          className="svl-search-select"
+        <CustomSelect
           value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-        >
-          <option value="all">全部狀態</option>
-          <option value="open">開放</option>
-          <option value="closed">關閉</option>
-          <option value="test">test</option>
-        </select>
+          onChange={(val) => setStatusFilter(val)}
+          options={[
+            { label: "全部狀態", value: "all" },
+            { label: "開放", value: "open" },
+            { label: "關閉", value: "closed" },
+            { label: "test", value: "test" },
+          ]}
+        />
       </div>
 
       {/* Header row for venues */}
@@ -126,7 +153,7 @@ const SearchVenueListPage = () => {
                 <span className="svl-col svl-col-actions">
                   <Link
                     to={`/venue/${venue.id}`}
-                    className="svl-detail-button"
+                    className="svl-detail-button button"
                   >
                     詳情
                   </Link>
@@ -134,7 +161,7 @@ const SearchVenueListPage = () => {
                     className="svl-toggle-button"
                     onClick={() => toggleVenue(venue.id)}
                   >
-                    {toggledVenues[venue.id] ? '隱藏場地' : '顯示場地'}
+                    {toggledVenues[venue.id] ? "隱藏場地" : "顯示場地"}
                   </button>
                 </span>
               </div>
@@ -149,10 +176,10 @@ const SearchVenueListPage = () => {
                             材質：{court.property}
                           </span>
                         </div>
-                        <div className="svl-court-action">
+                        <div>
                           <Link
                             to={`/venues/${venue.id}/courts/${court.id}/schedule`}
-                            className="svl-detail-button"
+                            className="svl-detail-button button"
                           >
                             詳情
                           </Link>

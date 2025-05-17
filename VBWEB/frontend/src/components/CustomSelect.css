@@ -1,0 +1,45 @@
+.custom-select {
+  position: relative;
+  width: 200px;
+  font-size: 1em;
+}
+
+.custom-select-trigger {
+  width: 100%;
+  padding: 0.6em 1em;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: var(--color-surface);
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.custom-select-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-top: 0.3rem;
+  box-shadow: var(--shadow-md);
+  z-index: 100;
+  list-style: none;
+  padding: 0;
+}
+
+.option {
+  padding: 0.6em 1em;
+  cursor: pointer;
+}
+
+.option:hover,
+.option.selected {
+  background: var(--color-bg);
+}
+
