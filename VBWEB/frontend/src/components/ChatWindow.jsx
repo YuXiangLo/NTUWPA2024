@@ -1,5 +1,4 @@
-// src/components/ChatWindow.jsx
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import io from 'socket.io-client';
 import { API_DOMAIN } from '../config.js';
 import { useAuth } from '../context/AuthContext.jsx';
@@ -12,8 +11,15 @@ export default function ChatWindow({ chatId, partnerName, onClose }) {
 
   const [socket, setSocket] = useState(null);
   const [msgs, setMsgs] = useState([]);
+  const didInit = useRef(false);
   const [input, setInput] = useState('');
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+
+  const containerRef = useRef();
   const endRef = useRef();
+
+  const PAGE_SIZE = 50;
 
   const dedupe = arr => {
     const seen = new Set();
@@ -24,7 +30,44 @@ export default function ChatWindow({ chatId, partnerName, onClose }) {
     });
   };
 
-  // join & load history & listen
+  // load a page of messages (newest first, then reverse)
+  const loadPage = useCallback(
+    async before => {
+      if (!chatId || !token || didInit.current) return;
+      didInit.current = true;
+
+      setLoadingMore(true);
+      try {
+        const url = new URL(`${API_DOMAIN}/chats/${chatId}/messages`);
+        url.searchParams.set('limit', PAGE_SIZE);
+        if (before) url.searchParams.set('before', before);
+
+        const res = await fetch(url, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+        const page = dedupe(data);
+
+        // check if we got less than a full page
+        if (page.length < PAGE_SIZE) setHasMore(false);
+
+        if (before) {
+          // prepend older messages
+          setMsgs(prev => dedupe([...page, ...prev]));
+        } else {
+          // initial load
+          setMsgs(dedupe(page));
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoadingMore(false);
+      }
+    },
+    [chatId, token]
+  );
+
+  // join & load initial history & listen
   useEffect(() => {
     if (!chatId || !token) return;
 
@@ -32,18 +75,14 @@ export default function ChatWindow({ chatId, partnerName, onClose }) {
     setSocket(sock);
     sock.emit('joinChat', { chatId });
 
-    fetch(`${API_DOMAIN}/chats/${chatId}/messages`, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(r => r.json())
-      .then(data => setMsgs(dedupe(data)))
-      .catch(console.error);
+    // initial fetch
+    loadPage();
 
     sock.on('newMessage', m => {
       setMsgs(prev => dedupe([...prev, m]));
     });
 
-    // also mark read when opening
+    // mark read when opening
     fetch(`${API_DOMAIN}/chats/${chatId}/read`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` }
@@ -53,9 +92,25 @@ export default function ChatWindow({ chatId, partnerName, onClose }) {
       sock.disconnect();
       setSocket(null);
     };
-  }, [chatId, token]);
+  }, [chatId, token, loadPage]);
 
-  // scroll on new messages
+  // infinite-scroll: load older when scrolling to top
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container || !hasMore) return;
+
+    const onScroll = () => {
+      if (container.scrollTop < 100 && !loadingMore && msgs.length) {
+        const earliest = msgs[0].created_at;
+        loadPage(earliest);
+      }
+    };
+
+    container.addEventListener('scroll', onScroll);
+    return () => container.removeEventListener('scroll', onScroll);
+  }, [msgs, hasMore, loadingMore, loadPage]);
+
+  // scroll on new messages (bottom)
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [msgs]);
@@ -70,20 +125,15 @@ export default function ChatWindow({ chatId, partnerName, onClose }) {
       chat_id: chatId,
       sender_id: userId,
       content: input,
-      created_at: new Date().toISOString(),
+      created_at: new Date().toISOString()
     };
     setMsgs(prev => [...prev, local]);
 
     socket.emit('sendMessage', { chatId, content: input }, saved => {
-      setMsgs(prev =>
-        dedupe(prev.map(m => (m.id === tmpId ? saved : m)))
-      );
+      setMsgs(prev => dedupe(prev.map(m => (m.id === tmpId ? saved : m))));
     });
 
-    // clear input
     setInput('');
-
-    // mark this chat as read on the server
     fetch(`${API_DOMAIN}/chats/${chatId}/read`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` }
@@ -107,8 +157,11 @@ export default function ChatWindow({ chatId, partnerName, onClose }) {
 
   return (
     <div className="chat-window">
-      <div className="messages">
+      <div className="messages" ref={containerRef}>
+        {loadingMore && <div className="loading-old">載入中…</div>}
+
         {grouped.map((item, i) => {
+          // console.log(item);
           if (item.type === 'date') {
             return (
               <div key={`date-${i}`} className="date-separator">

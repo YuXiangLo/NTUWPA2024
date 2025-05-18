@@ -127,20 +127,26 @@ export class ChatService {
   async getMessages(
     chatId: string,
     userId: string,
-    limit = 50
+    limit = 50,
+    before?: string      // ISO timestamp (e.g. earliestMessage.created_at)
   ): Promise<Message[]> {
-    // Now we pass the real userId
     await this.assertMember(chatId, userId);
-
-    const { data, error } = await this.client
+  
+    let query = this.client
       .from('messages')
       .select('*')
       .eq('chat_id', chatId)
-      .order('created_at', { ascending: true })
+      .order('created_at', { ascending: false })
       .limit(limit);
-
+  
+    if (before) {
+      query = query.lt('created_at', before);
+    }
+  
+    const { data, error } = await query;
     if (error) throw error;
-    return data as Message[];
+  
+    return (data as Message[]).reverse();
   }
 
   /**
