@@ -2,13 +2,16 @@
 
 ## 📚 Table of Contents
 
-- [📋 Work Items](#-work-items)
-- [🎬 Demo Video](#-demo-video)
-- [🖼️ Demo Screenshots](#-demo-screenshots)
-- [🎯 Topics Practiced](#-topics-practiced)
-- [🛠️ Additional Techniques Explored](#️-additional-techniques-explored)
-- [🔌 API Specification](#-api-specification)
-- [👨‍💻 Team Member Contributions](#-team-member-contributions)
+- [� Week 7 Report - Group 1](#-week-7-report---group-1)
+  - [📚 Table of Contents](#-table-of-contents)
+  - [📋 Work Items](#-work-items)
+    - [Mail Verification – Mailgun](#mail-verification--mailgun)
+    - [Deploy](#deploy)
+    - [🔧 Features](#-features)
+  - [🖼️ Demo Screenshots](#️-demo-screenshots)
+  - [🎯 Topics Practiced](#-topics-practiced)
+  - [🛠️ Additional Techniques Explored](#️-additional-techniques-explored)
+  - [👨‍💻 Team Member Contributions](#-team-member-contributions)
 
 ---
 
@@ -39,13 +42,23 @@
   3. Easy configuration with a declarative Caddyfile or JSON
   4. Built-in support for HTTP/3, caching, and logging
 
-### 🖥️ Frontend
+### 🔧 Features
 
-- Decorating...
+1. **Support Google Login** \
+- Integrate Google OAuth 2.0 for third-party authentication \
+- Configure frontend and backend to handle Google login flow
 
-### 🔧 Backend
+2. **Renew Frontend Code Structure** \
+- Refactor project directories and files for improved maintainability \
+- Adopt a modular architecture separating components, features, and services
 
-- Integrating everything together...
+3. **Finish Venue → Reservation → Play Workflow** \
+- make reservation, and initiate play session, including apply, maintain, and review requests for each instance. \
+- Ensure seamless navigation and state management across the workflow.
+
+4. **Renew frontend style (under working)** \
+- Update UI/UX styling to match new design guidelines \
+- Standardize component styling, typography, and frontend design patterns
 
 ---
 
