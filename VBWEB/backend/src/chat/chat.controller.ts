@@ -8,7 +8,8 @@ import {
   UseGuards,
   Req,
   HttpException,
-  HttpStatus
+  HttpStatus,
+  Query
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ChatService, ChatListItem, Chat, Message } from './chat.service';
@@ -91,10 +92,14 @@ export class ChatController {
   @Get(':chatId/messages')
   async getMessages(
     @Req() req: Request,
-    @Param('chatId') chatId: string
+    @Param('chatId') chatId: string,
+    @Query('limit') limit = '50',
+    @Query('before') before?: string,
   ): Promise<Message[]> {
     const userId = (req.user as any).userid;
-    return this.chatSvc.getMessages(chatId, userId);
+    // coerce limit to number
+    const n = Math.max(1, Math.min(500, parseInt(limit, 10)));  
+    return this.chatSvc.getMessages(chatId, userId, n, before);
   }
 
   /** Send a message */
