@@ -1,5 +1,9 @@
 # 🚀 Week 13 Report - Group 1
 
+## ‼️ IMPORTANT ‼️
+- We just deployed our website at [yuxiang.mooo.com](https://yuxiang.mooo.com).
+- If the server closed unexpectedly, please email [linus13514@gmail.com](mailto:linus13514@gmail.com)
+
 ## 📚 Table of Contents
 
 - [🚀 Week 13 Report - Group 1](#-week-7-report---group-1)
