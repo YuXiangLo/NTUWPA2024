@@ -30,6 +30,15 @@
   -F html='Hello Yu Xiang Luo:<br /><br />Welcome! Your verification code is b281a9ba8f350900772c958aa3a3bdb1a95ef3d4ee556188f5e93701de4c3ce3'
 ```
 
+### Deploy
+
+* **FreeDNS**: Register a _free_ subdomain [yuxiang.mooo.com](https://yuxiang.mooo.com) from [freedns.afraid.org](https://freedns.afraid.org/)
+* **Caddy**:
+  1. Automatic HTTPS (TLS certificates via Let’s Encrypt)
+  2. Reverse proxy for routing client requests to backend servers
+  3. Easy configuration with a declarative Caddyfile or JSON
+  4. Built-in support for HTTP/3, caching, and logging
+
 ### 🖥️ Frontend
 
 - Decorating...
