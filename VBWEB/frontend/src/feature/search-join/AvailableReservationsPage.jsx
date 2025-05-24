@@ -97,8 +97,38 @@ export default function AvailableReservationsPage() {
     }
   };
 
-  if (loading) return <p>載入中…</p>;
-  if (error)   return <p className="error">{error}</p>;
+  // Basic loading and error messages
+  if (loading) {
+    return (
+      <h1
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "80vh",
+          margin: 0,
+        }}
+      >
+        Loading...
+      </h1>
+    );
+  }
+
+  if (error) {
+    return (
+      <h1
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "80vh",
+          margin: 0,
+        }}
+      >
+        Error: {error}
+      </h1>
+    );
+  }
 
   return (
     <div className="avail-res-page">
