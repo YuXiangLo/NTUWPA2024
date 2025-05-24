@@ -3,11 +3,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { API_DOMAIN } from '../../config';
+import CustomSelect from '../../components/CustomSelect';
+import './CustomReservationPage.css'
 
 export default function CustomReservationPage() {
   const { user } = useAuth();
   const token = user?.accessToken;
   const navigate = useNavigate();
+  const [statusFilter, setStatusFilter] = useState("public");
 
   const [form, setForm] = useState({
     venueName: '',
@@ -186,15 +189,15 @@ export default function CustomReservationPage() {
 
         <label>
           可見性 *
-          <select
-            name="visibility"
-            value={form.visibility}
-            onChange={onChange}
-          >
-            <option value="public">公開</option>
-            <option value="friend">好友</option>
-            <option value="private">私密</option>
-          </select>
+          <CustomSelect
+            value={statusFilter}
+            onChange={(val) => setStatusFilter(val)}
+            options={[
+              { label: "公開", value: "public" },
+              { label: "好友", value: "friend" },
+              { label: "私密", value: "private" },
+            ]}
+          />
         </label>
 
         <label>

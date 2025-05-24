@@ -54,11 +54,11 @@
 }
 
 .btn-rejected {
-  background-color: var(--color-error, #e53e3e); /* optional fallback */
+  background-color: var(--color-error)
 }
 
 .full {
-  color: var(--color-error, #e53e3e);
+  color: var(--color-error);
   font-weight: bold;
 }
 
