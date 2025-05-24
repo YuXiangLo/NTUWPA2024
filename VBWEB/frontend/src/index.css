@@ -3,10 +3,12 @@
   font-synthesis: none;
 
   /* Colors */
-  --color-primary: #5a67d8;
-  --color-secondary: #805ad5;
+  --color-primary:   #638889;
+  --color-secondary: #99bc85;
+  --color-third: #90ab37;
+  --color-fourth: #908037;
   --color-accent: #9f7aea;
-  --color-bg: #f5f5f5;
+  --color-bg: #f9f9f9;
   --color-surface: #ffffff;
   --color-text: #2d3748;
   --color-muted: #718096;
