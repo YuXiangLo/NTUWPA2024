@@ -25,7 +25,7 @@ const CustomSelect = ({ options, value, onChange }) => {
 
   return (
     <div className="custom-select" ref={ref}>
-      <button className="custom-select-trigger" onClick={toggleOpen}>
+      <button type="button" className="custom-select-trigger" onClick={toggleOpen}>
         {selectedLabel} <span className="arrow">{isOpen ? '▲' : '▼'}</span>
       </button>
       {isOpen && (
