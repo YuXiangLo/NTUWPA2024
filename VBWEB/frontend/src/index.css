@@ -1,3 +1,4 @@
+/*index.css*/
 :root {
   font-synthesis: none;
 
@@ -25,6 +26,8 @@
 
   /* Transitions */
   --transition-fast: 200ms ease-in-out;
+
+  --color-error: #e53e3e;
 }
 
 /* Global Reset */
@@ -52,9 +55,7 @@ body {
   min-height: 100vh;
   height: auto;
   font-family: sans-serif;
-  font-weight: 700;
   font-style: normal;
-  /*background-color: var(--color-bg);*/
   color: var(--color-text);
   line-height: 1.6;
 }

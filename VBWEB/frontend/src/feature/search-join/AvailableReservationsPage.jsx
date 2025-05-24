@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { API_DOMAIN } from '../../config';
+import './AvailableReservationsPage.css';
 
 export default function AvailableReservationsPage() {
   const { user } = useAuth();

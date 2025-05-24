@@ -26,17 +26,6 @@
   border-bottom: 1px solid #ccc;
 }
 
-.header-title h1 {
-  margin: 0;
-  font-size: 2rem;
-}
-
-.header-title p {
-  margin: 0.25rem 0 0;
-  font-size: 0.9rem;
-  color: #666;
-}
-
 .header-buttons button {
   margin-left: 1rem;
   padding: 0.5rem 1rem;
