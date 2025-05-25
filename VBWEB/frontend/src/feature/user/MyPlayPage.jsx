@@ -4,6 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { API_DOMAIN } from '../../config';
 import { Link } from 'react-router-dom';
 import Calendar from '../../components/Calendar';
+import './MyPlayPage.css'
 
 export default function MyPlayPage() {
   const { user } = useAuth();
