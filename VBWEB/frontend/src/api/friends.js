@@ -1,4 +1,5 @@
-const API_BASE = 'http://localhost:3000/friends'; // Or your deployed NestJS endpoint
+import { API_DOMAIN } from '../config';
+const API_BASE = `${API_DOMAIN}/friends`; // Or your deployed NestJS endpoint
 
 export const getFriends = async (userId) => {
   const res = await fetch(`${API_BASE}/${userId}`);
