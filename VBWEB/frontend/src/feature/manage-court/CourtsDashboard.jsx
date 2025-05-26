@@ -44,19 +44,22 @@ export default function CourtsDashboard() {
 
   if (!token)   return <p>請先登入。</p>;
   if (loading)  return <p>載入中…</p>;
-  if (error)    return <p className="error">錯誤：{error}</p>;
+  if (error)    return <p className="app-error">錯誤：{error}</p>;
 
   return (
-    <div className="manage-courts">
+    <div className="app-card-page">
       <h2>管理球場</h2>
-      <Link to={`/venues/${venueId}/courts/new`} className="btn-add-court">
+      <Link to={`/venues/${venueId}/courts/new`} className="app-btn" style={{ marginBottom: 16 }}>
         新增球場
       </Link>
 
       {courts.length === 0 ? (
-        <p>尚未新增任何球場。</p>
+        <p className="app-info text-center">
+          目前沒有任何球場。請點擊上方「新增球場」按鈕來建立新的球場。
+        </p>
+        
       ) : (
-        <table>
+        <table className="app-table">
           <thead>
             <tr>
               <th>名稱</th>
@@ -73,19 +76,21 @@ export default function CourtsDashboard() {
                 <td>{c.detail || '—'}</td>
                 <td>
                   <button
-                    className="btn-maintain"
+                    className="app-btn"
+                    style={{ marginRight: 8 }}
                     onClick={() => navigate(`/venues/${venueId}/courts/${c.id}/manage-schedule`)}
                   >
                     維護時段
                   </button>
                   <button
-                    className="btn-maintain"
+                    className="app-btn"
+                    style={{ marginRight: 8 }}
                     onClick={() => navigate(`/venues/${venueId}/courts/${c.id}/reservations`)}
                   >
                     管理預約申請
                   </button>
                   <button
-                    className="btn-delete"
+                    className="app-btn app-btn-reject"
                     onClick={() => handleDelete(c.id)}
                   >
                     刪除

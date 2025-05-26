@@ -35,9 +35,7 @@ export default function ReservationsDashboardPage() {
             end_ts:      r.end_ts,
             status:      r.status
           })),
-          ...customData.map(r => {
-            console.log(r);
-            return({
+          ...customData.map(r => ({
             id:          r.id,
             type:        'custom',
             venueName:   r.reservation.venue_name,
@@ -45,9 +43,8 @@ export default function ReservationsDashboardPage() {
             start_ts:    r.reservation.start_ts,
             end_ts:      r.reservation.end_ts,
             status:      r.status
-          })})
+          }))
         ];
-        // sort by time
         setItems(normalized.sort((a,b)=>new Date(a.start_ts)-new Date(b.start_ts)));
       })
       .catch(e => setError(`載入失敗：${e}`))
@@ -55,15 +52,15 @@ export default function ReservationsDashboardPage() {
   }, [token]);
 
   if (loading) return <p>載入中…</p>;
-  if (error)   return <p className="error">{error}</p>;
+  if (error)   return <p className="app-error">{error}</p>;
 
   return (
-    <div className="my-res-page">
+    <div className="app-card-page">
       <h2>我的預約</h2>
       {items.length === 0 ? (
         <p>目前沒有任何預約。</p>
       ) : (
-        <table className="my-res-table">
+        <table className="app-table">
           <thead>
             <tr>
               <th>場地</th>
@@ -74,9 +71,7 @@ export default function ReservationsDashboardPage() {
             </tr>
           </thead>
           <tbody>
-            {items.map(r => {
-              console.log(r);
-              return (
+            {items.map(r => (
               <tr key={`${r.type}-${r.id}`}>
                 <td>{r.venueName}</td>
                 <td>{r.courtName}</td>
@@ -90,14 +85,14 @@ export default function ReservationsDashboardPage() {
                     r.type === 'court' ? (
                       <Link
                         to={`/reservations/${r.id}/join-requests`}
-                        className="btn-manage"
+                        className="app-btn"
                       >
                         管理預約
                       </Link>
                     ) : (
                       <Link
                         to={`/custom-reservations/${r.id}/join-requests`}
-                        className="btn-manage"
+                        className="app-btn"
                       >
                         管理預約
                       </Link>
@@ -107,7 +102,7 @@ export default function ReservationsDashboardPage() {
                   )}
                 </td>
               </tr>
-            )})}
+            ))}
           </tbody>
         </table>
       )}

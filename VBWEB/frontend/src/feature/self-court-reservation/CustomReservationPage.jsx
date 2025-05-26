@@ -84,12 +84,13 @@ export default function CustomReservationPage() {
   };
 
   return (
-    <div className="custom-res-page">
+    <div className="app-card-page" style={{ maxWidth: 600 }}>
       <h2>自訂建立預約</h2>
-      <form className="custom-res-form" onSubmit={handleSubmit}>
+      <form className="app-form-group" onSubmit={handleSubmit}>
         <label>
           場地名稱（選填）
-          <input
+          <input 
+            className='app-input'
             type="text"
             name="venueName"
             value={form.venueName}
@@ -97,9 +98,10 @@ export default function CustomReservationPage() {
           />
         </label>
 
-        <label>
+        <label className = "app-form-group">
           地址 *
           <input
+            className='app-input'
             type="text"
             name="address"
             value={form.address}
@@ -108,9 +110,10 @@ export default function CustomReservationPage() {
           />
         </label>
 
-        <label>
+        <label className = "app-form-group">
           球場名稱（選填）
           <input
+            className='app-input'
             type="text"
             name="courtName"
             value={form.courtName}
@@ -118,9 +121,10 @@ export default function CustomReservationPage() {
           />
         </label>
 
-        <label>
+        <label className = "app-form-group">
           球場屬性（選填）
           <input
+            className='app-input'
             type="text"
             name="courtProperty"
             value={form.courtProperty}
@@ -128,9 +132,10 @@ export default function CustomReservationPage() {
           />
         </label>
 
-        <label>
+        <label className = "app-form-group">
           日期 *
           <input
+            className='app-input'
             type="date"
             name="startDate"
             value={form.startDate}
@@ -138,9 +143,11 @@ export default function CustomReservationPage() {
             required
           />
         </label>
-        <label>
+
+        <label className = "app-form-group">
           開始時間 *
           <input
+            className='app-input'
             type="time"
             name="startTime"
             value={form.startTime}
@@ -149,9 +156,10 @@ export default function CustomReservationPage() {
           />
         </label>
 
-        <label>
+        <label className = "app-form-group">
           結束時間 *
           <input
+            className='app-input'
             type="time"
             name="endTime"
             value={form.endTime}
@@ -160,9 +168,10 @@ export default function CustomReservationPage() {
           />
         </label>
 
-        <label>
+        <label className = "app-form-group">
           人數 *
           <input
+            className='app-input'
             type="number"
             name="numPlayers"
             min="1"
@@ -172,9 +181,10 @@ export default function CustomReservationPage() {
           />
         </label>
 
-        <label>
+        <label className = "app-form-group">
           費用（選填）
           <input
+            className='app-input'
             type="number"
             name="fee"
             min="0"
@@ -184,7 +194,7 @@ export default function CustomReservationPage() {
           />
         </label>
 
-        <label>
+        <label className = "app-form-group">
           可見性 *
           <select
             name="visibility"
@@ -197,17 +207,18 @@ export default function CustomReservationPage() {
           </select>
         </label>
 
-        <label>
+        <label className = "app-form-group">
           詳細說明（選填）
           <textarea
+            className='app-input'
             name="detail"
             value={form.detail}
             onChange={onChange}
           />
         </label>
 
-        <button type="submit">建立預約</button>
-        {statusMsg && <p className="status">{statusMsg}</p>}
+        <button type="submit" className="app-btn">建立預約</button>
+        {statusMsg && <p className="app-error">{statusMsg}</p>}
       </form>
     </div>
   );

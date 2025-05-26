@@ -176,3 +176,336 @@ header {
     animation: logo-spin infinite 20s linear;
   }
 }
+
+/* --- Common Table Styles --- */
+.app-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--color-surface, #fff);
+  border-radius: var(--radius-md, 8px);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm, 0 1px 4px rgba(0,0,0,0.04));
+}
+
+.app-table th,
+.app-table td {
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  font-size: 1rem;
+  color: var(--color-text, #444);
+}
+
+.app-table th {
+  background: #e8f0fe;
+  color: #333;
+  font-weight: 600;
+}
+
+.app-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* --- Common Button Styles --- */
+.app-btn {
+  background: #5a67d8;
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md, 8px);
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+.app-btn:hover {
+  background: #9f7aea;
+}
+
+.app-btn-pending {
+  background: #ffd54f;
+  color: #333;
+  cursor: not-allowed;
+}
+
+.app-btn-rejected {
+  background: #e57373;
+  color: #fff;
+  cursor: not-allowed;
+}
+
+.app-btn-approve {
+  background: #66bb6a;
+  color: #fff;
+}
+
+.app-btn-approve:hover {
+  background: #388e3c;
+}
+.app-btn-reject {
+  background: #e57373;
+  color: #fff;
+}
+.app-btn-reject:hover {
+  background: #d32f2f;
+}
+.app-btn-group {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.app-status-joined {
+  color: #388e3c;
+  font-weight: bold;
+}
+
+.app-status-full {
+  color: #d32f2f;
+  font-weight: bold;
+}
+
+/* --- Common Card/Page Container --- */
+.app-card-page {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem 1rem;
+  background: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+
+.app-card-page h2, .app-card-page h1 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+/* --- Error Message --- */
+.app-error {
+  color: #d32f2f;
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 1.1rem;
+}
+
+
+
+/* --- Venue List Components  --- */
+
+/* Search section styles */
+.app-search-section {
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.app-search-input {
+  flex: 1;
+  margin-right: 1rem;
+}
+
+/* Header row styles */
+.app-venue-header-row {
+  display: flex;
+  background-color: #f9f9f9;
+  padding: 0.3rem 0.5rem;
+  font-weight: bold;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.app-venue-header-row .app-venue-col {
+  flex: 1;
+  text-align: left;
+  padding: 0 0.3rem;
+  padding-left: 0.5rem;
+  border-right: 1px solid #ddd;
+}
+
+.app-venue-header-row .app-venue-col:last-child {
+  border-right: none;
+}
+
+/* Venue card styles */
+.app-venue-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.3rem;
+}
+
+.app-venue-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 0.3rem 0.5rem;
+  background-color: #f9f9f9;
+}
+
+/* Venue row styles in horizontal layout */
+.app-venue-row {
+  display: flex;
+  align-items: center;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.app-venue-row .app-venue-col {
+  flex: 1;
+  text-align: left;
+  padding: 0 0.5rem;
+  border-right: 1px solid #eee;
+}
+
+.app-venue-row .app-venue-col:last-child {
+  border-right: none;
+}
+
+/* Styling for specific columns (optional tweaks) */
+.app-venue-col-name {
+  font-weight: bold;
+  color: #333;
+}
+
+/* Actions column buttons */
+.app-venue-col-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.app-venue-detail-button,
+.app-venue-toggle-button {
+  height: 2rem;
+  color: #fff;
+  background-color: #5a67d8;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.app-venue-detail-button {
+  background-color: #805ad5;
+}
+
+/* Court list within a venue */
+.app-court-list {
+  margin: 0.5rem;
+}
+
+.app-court-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.5rem 0;
+}
+
+.app-court-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.app-court-info span {
+  font-size: 1em;
+  color: #666;
+}
+
+.app-no-courts {
+  padding-left: 0.3rem;
+  color: #999;
+  font-style: italic;
+}
+
+.app-no-venues {
+  text-align: center;
+  padding: 20px;
+  color: #999;
+}
+
+.app-to-top-button {
+  background-color: #89baf0;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  display: block;
+  margin: 1rem auto 0 auto;
+}
+
+.app-to-top-button:hover {
+  background-color: #95bdff;
+}
+
+
+/* --- Venue Application Form Styles --- */
+.app-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.app-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.app-input {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  background: #fff;
+  width: 100%;
+}
+
+/* --- Admin Review Detail Styles --- */
+.app-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 2rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 600px) {
+  .app-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.app-description {
+  margin-bottom: 1.5rem;
+  background: #f5f5f5;
+  padding: 1rem;
+  border-radius: var(--radius-md);
+}
+
+.app-location-inputs {
+  margin-bottom: 1.5rem;
+}
+
+.app-location-inputs label {
+  font-weight: 500;
+  color: #444;
+}
+
+.app-images {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.app-img-preview {
+  max-width: 200px;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 0 4px rgba(0,0,0,0.1);
+}
+
+.app-review-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+

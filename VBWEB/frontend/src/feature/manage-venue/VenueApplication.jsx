@@ -94,12 +94,13 @@ export default function VenueApplication() {
   };
 
   return (
-    <div className="venue-app-form">
-      <h2>申請場地管理員</h2>
-      <form onSubmit={handleSubmit} encType="multipart/form-data">
-        <label>
+    <div className="app-card-page">
+      <h1>申請場地管理員</h1>
+      <form className="app-form" onSubmit={handleSubmit} encType="multipart/form-data">
+        <label className="app-form-group">
           場地名稱
           <input
+            className="app-input"
             type="text"
             value={venueName}
             onChange={(e) => setVenueName(e.target.value)}
@@ -107,9 +108,10 @@ export default function VenueApplication() {
           />
         </label>
 
-        <label>
+        <label className="app-form-group">
           地址
           <input
+            className="app-input"
             type="text"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
@@ -117,9 +119,10 @@ export default function VenueApplication() {
           />
         </label>
 
-        <label>
+        <label className="app-form-group">
           聯絡電話
           <input
+            className="app-input"
             type="tel"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
@@ -127,18 +130,20 @@ export default function VenueApplication() {
           />
         </label>
 
-        <label>
+        <label className="app-form-group">
           詳細說明
           <textarea
+            className="app-input"
             value={detail}
             onChange={(e) => setDetail(e.target.value)}
           />
         </label>
 
-        <div className="file-upload-group">
+        <div className="file-upload-group app-form-group">
           <label className="image-label">
             上傳證明圖片1
             <input
+              className="app-input"
               type="file"
               name="image1"
               accept="image/*"
@@ -150,15 +155,16 @@ export default function VenueApplication() {
             <img
               src={URL.createObjectURL(images.image1)}
               alt="證明1預覽"
-              className="preview-image"
+              className="app-img-preview"
             />
           )}
         </div>
 
-        <div className="file-upload-group">
+        <div className="file-upload-group app-form-group">
           <label className="image-label">
             上傳證明圖片2
             <input
+              className="app-input"
               type="file"
               name="image2"
               accept="image/*"
@@ -170,19 +176,19 @@ export default function VenueApplication() {
             <img
               src={URL.createObjectURL(images.image2)}
               alt="證明2預覽"
-              className="preview-image"
+              className="app-img-preview"
             />
           )}
         </div>
 
-        <button type="submit" disabled={submitting}>
+        <button type="submit" className="app-btn" disabled={submitting}>
           {submitting ? '送出中…' : '送出申請'}
         </button>
       </form>
 
-      {statusMessage && <p className="status">{statusMessage}</p>}
+      {statusMessage && <p className="app-error">{statusMessage}</p>}
       {applicationId && (
-        <p className="application-id">申請編號：{applicationId}</p>
+        <p className="app-status-joined">申請編號：{applicationId}</p>
       )}
     </div>
   );

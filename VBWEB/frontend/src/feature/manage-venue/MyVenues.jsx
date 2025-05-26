@@ -26,15 +26,15 @@ export default function MyVenues() {
 
   if (!token)   return <p>請先登入才能查看「我的場地」。</p>;
   if (loading)  return <p>載入中…</p>;
-  if (error)    return <p className="error">錯誤：{error}</p>;
+  if (error)    return <p className="app-error">錯誤：{error}</p>;
 
   return (
-    <div className="my-venues">
+    <div className="app-card-page">
       <h2>我的場地管理</h2>
       {venues.length === 0 ? (
         <p>目前沒有任何場地申請或已核准場地。</p>
       ) : (
-        <table>
+        <table className="app-table">
           <thead>
             <tr>
               <th>場地名稱</th>
@@ -53,7 +53,7 @@ export default function MyVenues() {
                 </td>
                 <td>
                   {v.status === 'approved' ? (
-                    <Link to={`/venues/${v.id}/courts`} className="btn-manage-courts">
+                    <Link to={`/venues/${v.id}/courts`} className="app-btn">
                       管理球場
                     </Link>
                   ) : (

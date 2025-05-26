@@ -51,16 +51,15 @@ export default function ManageReservationsApplyPage() {
   };
 
   if (loading) return <p>載入中…</p>;
-  if (error)   return <p className="error">錯誤：{error}</p>;
-
+  if (error)   return <p className="app-error">錯誤：{error}</p>;
 
   return (
-    <div className="manage-res-page">
+    <div className="app-card-page">
       <h2>管理預約申請</h2>
       {requests.length === 0 ? (
-        <p>目前沒有任何預約申請。</p>
+        <p className="text-center">目前沒有任何預約申請。</p>
       ) : (
-        <table className="res-table">
+        <table className="app-table">
           <thead>
             <tr>
               <th>申請者</th>
@@ -91,14 +90,20 @@ export default function ManageReservationsApplyPage() {
                 <td>{req.status}</td>
                 <td>
                   {req.status === 'pending' && (
-                    <>
-                      <button onClick={() => handleAction(req.id, 'approve')}>
+                    <div className="app-btn-group">
+                      <button
+                        className="app-btn app-btn-approve"
+                        onClick={() => handleAction(req.id, 'approve')}
+                      >
                         批准
                       </button>
-                      <button onClick={() => handleAction(req.id, 'reject')}>
+                      <button
+                        className="app-btn app-btn-reject"
+                        onClick={() => handleAction(req.id, 'reject')}
+                      >
                         拒絕
                       </button>
-                    </>
+                    </div>
                   )}
                 </td>
               </tr>

@@ -81,19 +81,19 @@ export default function AdminReviewDetail() {
   if (!app) return <p>{error ? `錯誤：${error}` : '載入中…'}</p>;
 
   return (
-    <div className="admin-review-detail">
+    <div className="app-card-page">
       <h2>申請詳情</h2>
-      <div className="detail-grid">
+      <div className="app-detail-grid">
         <div><strong>申請者：</strong> {app.user_id}</div>
         <div><strong>場地名稱：</strong> {app.venue_name}</div>
         <div><strong>地址：</strong> {app.address}</div>
         <div><strong>電話：</strong> {app.phone}</div>
       </div>
-      <div className="description">
+      <div className="app-description">
         <strong>說明：</strong>
         <p>{app.detail}</p>
       </div>
-      <div className="location-inputs">
+      <div className="app-location-inputs">
         <label>
           經緯度 (緯度, 經度)
           <input
@@ -101,18 +101,19 @@ export default function AdminReviewDetail() {
             value={coords}
             onChange={handleCoordChange}
             placeholder="25.031291572016002, 121.5303620693936"
+            className="app-input"
           />
         </label>
       </div>
-      <div className="images">
-        {app.image1 && <img src={app.image1} alt="證明1" className="thumbnail" />}
-        {app.image2 && <img src={app.image2} alt="證明2" className="thumbnail" />}
+      <div className="app-images">
+        {app.image1 && <img src={app.image1} alt="證明1" className="app-img-preview" />}
+        {app.image2 && <img src={app.image2} alt="證明2" className="app-img-preview" />}
       </div>
-      <div className="actions">
-        <button onClick={() => handleReview('approve')} className="approve">
+      <div className="app-review-actions">
+        <button onClick={() => handleReview('approve')} className="app-btn app-btn-approve">
           通過
         </button>
-        <button onClick={() => handleReview('reject')} className="reject">
+        <button onClick={() => handleReview('reject')} className="app-btn app-btn-reject">
           拒絕
         </button>
       </div>
