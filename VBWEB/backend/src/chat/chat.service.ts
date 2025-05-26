@@ -166,6 +166,4 @@ export class ChatService {
       .match({ chat_id: chatId, user_id: userId });
     if (error) throw error;
   }
-
-  
 }
