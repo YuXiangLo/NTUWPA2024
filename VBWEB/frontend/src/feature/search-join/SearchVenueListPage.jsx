@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { API_DOMAIN } from "../../config.js";
 import CustomSelect from "../../components/CustomSelect"; // Adjust path as needed
-import "./SearchVenueListPage.css";
 
 const SearchVenueListPage = () => {
   // Search/filter states
@@ -107,13 +106,13 @@ const SearchVenueListPage = () => {
   }
 
   return (
-    <div className="svl-container">
-      <h1 className="svl-title">搜尋場館</h1>
+    <div className="app-card-page">
+      <h1 className="h1">搜尋場館</h1>
 
-      <div className="svl-search-section">
+      <div className="app-search-section">
         <input
           type="text"
-          className="svl-search-input"
+          className="app-search-input"
           placeholder="搜尋場館名稱或地址..."
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
@@ -131,34 +130,34 @@ const SearchVenueListPage = () => {
       </div>
 
       {/* Header row for venues */}
-      <div className="svl-header-row">
-        <span className="svl-col svl-col-name">場館名稱</span>
-        <span className="svl-col svl-col-address">地址</span>
-        <span className="svl-col svl-col-count">場地數</span>
-        <span className="svl-col svl-col-status">狀態</span>
-        <span className="svl-col svl-col-actions">詳細資料</span>
+      <div className="app-venue-header-row">
+        <span className="app-venue-col app-venue-col-name">場館名稱</span>
+        <span className="app-venue-col app-venue-col-address">地址</span>
+        <span className="app-venue-col app-venue-col-count">場地數</span>
+        <span className="app-venue-col app-venue-col-status">狀態</span>
+        <span className="app-venue-col app-venue-col-actions">詳細資料</span>
       </div>
 
-      <div className="svl-venue-list">
+      <div className="app-venue-list">
         {filteredVenues.length > 0 ? (
           filteredVenues.map((venue) => (
-            <div key={venue.id} className="svl-venue-card">
-              <div className="svl-venue-row">
-                <span className="svl-col svl-col-name">{venue.name}</span>
-                <span className="svl-col svl-col-address">{venue.address}</span>
-                <span className="svl-col svl-col-count">
+            <div key={venue.id} className="app-venue-card">
+              <div className="app-venue-row">
+                <span className="app-venue-col app-venue-col-name">{venue.name}</span>
+                <span className="app-venue-col app-venue-col-address">{venue.address}</span>
+                <span className="app-venue-col app-venue-col-count">
                   {venue.courts ? venue.courts.length : 0}
                 </span>
-                <span className="svl-col svl-col-status">{venue.status}</span>
-                <span className="svl-col svl-col-actions">
+                <span className="app-venue-col app-venue-col-status">{venue.status}</span>
+                <span className="app-venue-col app-venue-col-actions">
                   <Link
                     to={`/venue/${venue.id}`}
-                    className="svl-detail-button button"
+                    className="app-btn app-venue-detail-button"
                   >
                     詳情
                   </Link>
                   <button
-                    className="svl-toggle-button"
+                    className="app-venue-toggle-button"
                     onClick={() => toggleVenue(venue.id)}
                   >
                     {toggledVenues[venue.id] ? "隱藏場地" : "顯示場地"}
@@ -166,20 +165,20 @@ const SearchVenueListPage = () => {
                 </span>
               </div>
               {toggledVenues[venue.id] && (
-                <div className="svl-court-list">
+                <div className="app-court-list">
                   {venue.courts && venue.courts.length > 0 ? (
                     venue.courts.map((court) => (
-                      <div key={court.id} className="svl-court-card">
-                        <div className="svl-court-info">
-                          <span className="svl-court-name">{court.name}</span>
-                          <span className="svl-court-material">
+                      <div key={court.id} className="app-court-card">
+                        <div className="app-court-info">
+                          <span className="app-court-name">{court.name}</span>
+                          <span className="app-court-material">
                             材質：{court.property}
                           </span>
                         </div>
                         <div>
                           <Link
                             to={`/venues/${venue.id}/courts/${court.id}/schedule`}
-                            className="svl-detail-button button"
+                            className="app-btn"
                           >
                             詳情
                           </Link>
@@ -187,20 +186,20 @@ const SearchVenueListPage = () => {
                       </div>
                     ))
                   ) : (
-                    <p className="svl-no-courts">暫無場地資訊</p>
+                    <p className="app-no-courts">暫無場地資訊</p>
                   )}
                 </div>
               )}
             </div>
           ))
         ) : (
-          <p className="svl-no-venues">查無資料</p>
+          <p className="app-no-venues">查無資料</p>
         )}
       </div>
 
       {/* "Scroll to Top" Button */}
       {showToTop && (
-        <button className="svl-to-top-button" onClick={scrollToTop}>
+        <button className="app-to-top-button" onClick={scrollToTop}>
           ↑ 返回頂部
         </button>
       )}

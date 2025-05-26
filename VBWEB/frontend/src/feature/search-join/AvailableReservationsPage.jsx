@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { API_DOMAIN } from '../../config';
-import './AvailableReservationsPage.css';
+
 
 export default function AvailableReservationsPage() {
   const { user } = useAuth();
@@ -98,12 +98,12 @@ export default function AvailableReservationsPage() {
   };
 
   if (loading) return <p>載入中…</p>;
-  if (error)   return <p className="error">{error}</p>;
+  if (error)   return <p className="app-error">{error}</p>;
 
   return (
-    <div className="avail-res-page">
+    <div className="app-card-page">
       <h2>可預約場次</h2>
-      <table className="avail-res-table">
+      <table className="app-table">
         <thead>
           <tr>
             <th>場地</th>
@@ -129,16 +129,16 @@ export default function AvailableReservationsPage() {
 
             let actionNode;
             if (userStatus === 'pending') {
-              actionNode = <button disabled className="btn-pending">已申請</button>;
+              actionNode = <button disabled className="app-btn app-btn-pending">已申請</button>;
             } else if (userStatus === 'rejected') {
-              actionNode = <button disabled className="btn-rejected">被拒絕</button>;
+              actionNode = <button disabled className="app-btn app-btn-rejected">被拒絕</button>;
             } else if (userStatus === 'approved') {
-              actionNode = <span className="joined">已加入</span>;
+              actionNode = <span className="app-status-joined">已加入</span>;
             } else if (isFull) {
-              actionNode = <span className="full">額滿</span>;
+              actionNode = <span className="app-status-full">額滿</span>;
             } else {
               actionNode = (
-                <button className="btn-join" onClick={() => handleJoin(item)}>
+                <button className="app-btn" onClick={() => handleJoin(item)}>
                   申請加入
                 </button>
               );

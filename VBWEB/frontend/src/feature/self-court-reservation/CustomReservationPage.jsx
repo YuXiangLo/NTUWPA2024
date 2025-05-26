@@ -84,7 +84,7 @@ export default function CustomReservationPage() {
   };
 
   return (
-    <div className="custom-res-page">
+    <div className="app-card-page" style={{ maxWidth: 600 }}>
       <h2>自訂建立預約</h2>
       <form className="custom-res-form" onSubmit={handleSubmit}>
         <label>
@@ -206,8 +206,8 @@ export default function CustomReservationPage() {
           />
         </label>
 
-        <button type="submit">建立預約</button>
-        {statusMsg && <p className="status">{statusMsg}</p>}
+        <button type="submit" className="app-btn">建立預約</button>
+        {statusMsg && <p className="app-error">{statusMsg}</p>}
       </form>
     </div>
   );
