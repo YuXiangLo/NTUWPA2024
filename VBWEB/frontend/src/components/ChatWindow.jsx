@@ -9,6 +9,7 @@ export default function ChatWindow({ chatId, partnerName, onClose }) {
   const token = user?.accessToken;
   const userId = user?.userID;
 
+  const [isComposing, setIsComposing] = useState(false);
   const [socket, setSocket] = useState(null);
   const [msgs, setMsgs] = useState([]);
   const didInit = useRef(false);
@@ -193,12 +194,19 @@ export default function ChatWindow({ chatId, partnerName, onClose }) {
       </div>
 
       <div className="input-area">
-        <input
-          value={input}
-          onChange={e => setInput(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && sendMessage()}
-          placeholder="輸入訊息..."
-        />
+      <input
+        value={input}
+        onChange={e => setInput(e.target.value)}
+        onCompositionStart={() => setIsComposing(true)}
+        onCompositionEnd={() => setIsComposing(false)}
+        onKeyDown={e => {
+          if (e.key === 'Enter' && !isComposing) {
+            sendMessage(input);
+            setInput('');
+          }
+        }}
+        placeholder="輸入訊息..."
+      />
         <button onClick={sendMessage}>送出</button>
       </div>
     </div>
