@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo, useRef } from 'react';
 import io from 'socket.io-client';
-import { API_DOMAIN } from '../../config.js';
+import { API_DOMAIN, WS_DOMAIN } from '../../config.js';
 import { useAuth } from '../../context/AuthContext';
 
 function ChatRoomPage() {
@@ -30,7 +30,7 @@ function ChatRoomPage() {
   // Initialize socket
   const socket = useMemo(() => {
     if (!token) return null;
-    const sock = io(API_DOMAIN, { auth: { token } });
+    const sock = io(WS_DOMAIN, { auth: { token } });
 
     sock.on('connect_error', (err) => {
       console.warn('Socket connect_error:', err.message);
