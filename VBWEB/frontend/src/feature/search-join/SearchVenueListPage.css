@@ -24,7 +24,7 @@
 /* Header row styles */
 .svl-header-row {
   display: flex;
-  background-color: #f9f9f9;
+  background-color: var(--color-bg);
   padding: 0.3rem 0.5rem;
   font-weight: bold;
   border: 1px solid #ddd;
@@ -56,7 +56,7 @@
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 0.3rem 0.5rem;
-  background-color: #f9f9f9;
+  background-color: var(--color-bg);
 }
 
 /* Venue row styles in horizontal layout */
@@ -81,7 +81,7 @@
 /* Styling for specific columns (optional tweaks) */
 .svl-col-name {
   font-weight: bold;
-  color: #333;
+  color: var(--color-text);
 }
 
 /* Actions column buttons */
@@ -94,8 +94,8 @@
 .svl-detail-button,
 .svl-toggle-button {
   height: 2rem;
-  color: #fff;
-  background-color: #638889;
+  color: var(--color-surface);
+  background-color: var(--color-primary);
 
   /* center the text */
   display: inline-flex;
@@ -107,7 +107,11 @@
 
 
 .svl-detail-button {
-  background-color: #99bc85;
+  background-color: var(--color-secondary);
+}
+
+.svl-detail-button:hover {
+	color: var(--color-surface);
 }
 
 /* Court list within a venue */
@@ -129,24 +133,24 @@
 
 .svl-court-info span {
   font-size: 1em;
-  color: #666;
+  color: var(--color-muted);
 }
 
 .svl-no-courts {
   padding-left: 0.3rem;
-  color: #999;
+  color: var(--color-muted);
   font-style: italic;
 }
 
 .svl-no-venues {
   text-align: center;
   padding: 20px;
-  color: #999;
+  color: var(--color-muted);
 }
 
 .svl-to-top-button {
-  background-color: #89baf0;
-  color: #fff;
+  background-color: var(--color-third);
+  color: var(--color-surface);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 
   /* Center the button */
@@ -156,5 +160,5 @@
 
 
 .svl-to-top-button:hover {
-  background-color: #95bdff;
+  background-color: var(--color-fourth);
 }

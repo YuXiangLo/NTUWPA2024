@@ -1,0 +1,82 @@
+.avail-res-page {
+  padding: var(--spacing-lg) 6vw;
+}
+
+.avail-res-page h2 {
+  margin-bottom: var(--spacing-md);
+  font-size: 1.75rem;
+  color: var(--color-primary);
+  display: flex;
+  justify-content: center;
+}
+
+/* Table */
+.avail-res-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.avail-res-table th,
+.avail-res-table td {
+  padding: var(--spacing-sm);
+  text-align: center;
+  border-bottom: 1px solid var(--color-muted);
+}
+
+.avail-res-table thead {
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+}
+
+.avail-res-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Status Buttons */
+.btn-join {
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+}
+
+.btn-join:hover {
+  background-color: var(--color-secondary);
+}
+
+.btn-pending,
+.btn-rejected {
+  background-color: var(--color-muted);
+  color: var(--color-surface);
+  cursor: not-allowed;
+}
+
+.btn-rejected {
+  background-color: var(--color-error)
+}
+
+.full {
+  color: var(--color-error);
+  font-weight: bold;
+}
+
+.joined {
+  color: var(--color-accent);
+  font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .avail-res-table th,
+  .avail-res-table td {
+    font-size: 0.85rem;
+    padding: 0.4rem;
+  }
+
+  .avail-res-page h2 {
+    font-size: 1.5rem;
+  }
+}
+

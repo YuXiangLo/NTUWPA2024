@@ -1,0 +1,85 @@
+.my-join-page {
+  padding: var(--spacing-lg) 6vw;
+}
+
+.my-join-page h2 {
+  margin-bottom: var(--spacing-md);
+  font-size: 1.5rem;
+  color: var(--color-primary);
+  display: flex;
+  justify-content: center;
+}
+
+/* Table */
+.my-join-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-top: var(--spacing-md);
+}
+
+.my-join-table th,
+.my-join-table td {
+  padding: var(--spacing-sm);
+  text-align: center;
+  border-bottom: 1px solid var(--color-muted);
+}
+
+.my-join-table thead {
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+}
+
+.my-join-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Status Coloring (status color is still inline in JSX, but you can migrate here with classes if desired) */
+.my-join-table .status-pending {
+  color: var(--color-muted);
+}
+.my-join-table .status-approved {
+  color: var(--color-accent);
+}
+.my-join-table .status-rejected {
+  color: var(--color-error, #dc3545);
+}
+
+/* Detail Button */
+.btn-detail {
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color var(--transition-fast);
+}
+
+.btn-detail:hover {
+  background-color: var(--color-secondary);
+}
+
+/* Empty or Placeholder Text */
+.my-join-page p {
+  margin-top: var(--spacing-md);
+  text-align: center;
+  color: var(--color-muted);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .my-join-table th,
+  .my-join-table td {
+    font-size: 0.85rem;
+    padding: 0.4rem;
+  }
+
+  .my-join-page h2 {
+    font-size: 1.25rem;
+  }
+}
+

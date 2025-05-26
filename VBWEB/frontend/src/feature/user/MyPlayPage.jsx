@@ -4,6 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { API_DOMAIN } from '../../config';
 import { Link } from 'react-router-dom';
 import Calendar from '../../components/Calendar';
+import './MyPlayPage.css'
 
 export default function MyPlayPage() {
   const { user } = useAuth();
@@ -47,9 +48,38 @@ export default function MyPlayPage() {
       .finally(() => setLoading(false));
   }, [token]);
 
+  // Basic loading and error messages
+  if (loading) {
+    return (
+      <h1
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "80vh",
+          margin: 0,
+        }}
+      >
+        Loading...
+      </h1>
+    );
+  }
 
-  if (loading) return <p>載入中…</p>;
-  if (error)   return <p className="error">錯誤：{error}</p>;
+  if (error) {
+    return (
+      <h1
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "80vh",
+          margin: 0,
+        }}
+      >
+        Error: {error}
+      </h1>
+    );
+  }
 
   // build events for calendar
   const calendarEvents = requests
