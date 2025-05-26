@@ -18,7 +18,7 @@ import ManageCourtSchedule from './feature/manage-court/ManageCourtSchedule.jsx'
 import ManageReservationsApplyPage from './feature/manage-court/ManageReservationsApplyPage.jsx';
 import ReservationsDashboardPage from './feature/manage-reservation/ReservationsDashboardPage.jsx';
 import ReservationJoinRequestsPage from './feature/manage-reservation/ReservationJoinRequestsPage.jsx';
-import ReservationApplyPage from './feature/manage-reservation/ReservationApplyPage.jsx';
+import ReservationApplyPage from './feature/search-join/ReservationApplyPage.jsx';
 import CustomReservationPage from './feature/self-court-reservation/CustomReservationPage';
 import AvailableReservationsPage from './feature/search-join/AvailableReservationsPage.jsx';
 import SearchVenueListPage from './feature/search-join/SearchVenueListPage';

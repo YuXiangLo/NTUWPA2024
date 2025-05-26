@@ -92,7 +92,9 @@ export default function VenueApplication() {
 
   return (
     <div className="venue-app-form">
-      <h2>申請場地管理員</h2>
+      <div className="page-header">
+        <h2>申請場地管理員</h2>
+      </div>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         {/* 文字欄位 */}
         <label>
