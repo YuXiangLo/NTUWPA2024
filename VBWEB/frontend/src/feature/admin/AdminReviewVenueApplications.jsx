@@ -59,9 +59,9 @@ export default function AdminReviewApplications() {
   if (error) return <p className="error">載入錯誤：{error}</p>;
 
   return (
-    <div className="admin-review-list">
-      <h2>待審核申請清單</h2>
-      <table>
+    <div className="app-card-page">
+      <h1 className="h1" >待審核申請清單</h1>
+      <table className="app-table">
         <thead>
           <tr>
             <th>申請者</th>
@@ -78,7 +78,7 @@ export default function AdminReviewApplications() {
               <td>{app.venue_name}</td>
               <td>{app.address}</td>
               <td>{app.phone}</td>
-              <td><Link className="detail-button" to={`/admin-review-applications/${app.id}`}>詳細</Link></td>
+              <td><Link className="app-button" to={`/admin-review-applications/${app.id}`}>詳細</Link></td>
             </tr>
           ))}
         </tbody>

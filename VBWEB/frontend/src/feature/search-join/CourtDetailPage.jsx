@@ -29,17 +29,14 @@ export default function CourtDetailPage() {
     const endDate   = weekStart.addDays(6).toString("yyyy-MM-dd");
 
     Promise.all([
-      // 1) opening hours
       fetch(
         `${API_DOMAIN}/venues/${venueId}/courts/${courtId}/opening-hours`,
         { headers: { Authorization: `Bearer ${token}` } }
       ),
-      // 2) approved reservations in this week
       fetch(
         `${API_DOMAIN}/courts/${courtId}/reservations?status=approved&start=${startDate}&end=${endDate}`,
         { headers: { Authorization: `Bearer ${token}` } }
       ),
-      // 3) venue detail (to get venue + court names)
       fetch(
         `${API_DOMAIN}/venues/${venueId}`,
         { headers: { Authorization: `Bearer ${token}` } }
@@ -60,7 +57,6 @@ export default function CourtDetailPage() {
         setReservations(resData);
         setVenueName(vdData.name || '');
 
-        // find this court's name in vdData.courts
         const court = (vdData.courts || []).find(c => c.id === courtId);
         setCourtName(court?.name || '');
       })
@@ -69,9 +65,8 @@ export default function CourtDetailPage() {
   }, [venueId, courtId, token, weekStart]);
 
   if (loading) return <p>載入中…</p>;
-  if (error)   return <p className="error">錯誤：{error}</p>;
+  if (error)   return <p className="app-error">錯誤：{error}</p>;
 
-  // build and sort slots
   const slots = openings
     .map(rec => {
       const base    = new DayPilot.Date(weekStart).addDays(rec.day_of_week);
@@ -90,20 +85,20 @@ export default function CourtDetailPage() {
     });
 
   return (
-    <div className="court-detail-page">
-      {/* new header line */}
+    <div className="app-card-page">
+      <Link to="/search-venue" className="app-btn" style={{ marginTop: 24 }}>← 回搜尋</Link>
       <h2>場館：{venueName} , 場地： {courtName}</h2>
 
-      <p className="week-range">
+      <p className="text-center" style={{ marginBottom: 16 }}>
         Week: {weekStart.toString("yyyy-MM-dd")} – {weekStart.addDays(6).toString("yyyy-MM-dd")}
       </p>
 
-      <div className="week-switcher">
-        <button onClick={() => setWeekStart(ws => ws.addDays(-7))}>← 上週</button>
-        <button onClick={() => setWeekStart(ws => ws.addDays(7))}>下週 →</button>
+      <div className="app-btn-group" style={{ justifyContent: 'center', marginBottom: 16 }}>
+        <button className="app-btn" onClick={() => setWeekStart(ws => ws.addDays(-7))}>← 上週</button>
+        <button className="app-btn" onClick={() => setWeekStart(ws => ws.addDays(7))}>下週 →</button>
       </div>
 
-      <table className="slot-table">
+      <table className="app-table">
         <thead>
           <tr>
             <th>日期</th>
@@ -120,10 +115,10 @@ export default function CourtDetailPage() {
               <td>{slot.open_time} – {slot.close_time}</td>
               <td>
                 {isOccupied(slot) ? (
-                  <button className="btn-occupied" disabled>已被預約</button>
+                  <button className="app-btn app-btn-reject" disabled>已被預約</button>
                 ) : (
                   <button
-                    className="btn-apply"
+                    className="app-btn"
                     onClick={() =>
                       navigate(
                         `/venues/${venueId}/courts/${courtId}/reserve`,
@@ -139,8 +134,6 @@ export default function CourtDetailPage() {
           ))}
         </tbody>
       </table>
-
-      <Link to="/search-venue" className="btn-back">← 回搜尋</Link>
     </div>
   );
 }

@@ -234,6 +234,26 @@ header {
   cursor: not-allowed;
 }
 
+.app-btn-approve {
+  background: #66bb6a;
+  color: #fff;
+}
+
+.app-btn-approve:hover {
+  background: #388e3c;
+}
+.app-btn-reject {
+  background: #e57373;
+  color: #fff;
+}
+.app-btn-reject:hover {
+  background: #d32f2f;
+}
+.app-btn-group {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
 .app-status-joined {
   color: #388e3c;
   font-weight: bold;
@@ -379,6 +399,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin: 0.5rem 0;
 }
 
 .app-court-info {
@@ -439,10 +460,52 @@ header {
   width: 100%;
 }
 
-.app-img-preview {
-  margin-top: 0.5rem;
-  max-width: 100%;
-  max-height: 300px;
-  border-radius: var(--radius-sm);
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+/* --- Admin Review Detail Styles --- */
+.app-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 2rem;
+  margin-bottom: 1.5rem;
 }
+
+@media (max-width: 600px) {
+  .app-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.app-description {
+  margin-bottom: 1.5rem;
+  background: #f5f5f5;
+  padding: 1rem;
+  border-radius: var(--radius-md);
+}
+
+.app-location-inputs {
+  margin-bottom: 1.5rem;
+}
+
+.app-location-inputs label {
+  font-weight: 500;
+  color: #444;
+}
+
+.app-images {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.app-img-preview {
+  max-width: 200px;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 0 4px rgba(0,0,0,0.1);
+}
+
+.app-review-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+

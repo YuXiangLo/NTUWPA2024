@@ -48,43 +48,48 @@ export default function CreateCourt() {
   };
 
   return (
-    <div className="create-court">
+    <div className="app-card-page" >
       <h2>新增球場</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
-          球場名稱
-          <input
-            type="text"
-            value={name}
-            onChange={e => setName(e.target.value)}
-            required
-          />
-        </label>
-
-        <label>
-          球場屬性
-          <input
-            type="text"
-            value={property}
-            onChange={e => setProperty(e.target.value)}
-          />
-        </label>
-
-        <label>
-          詳細說明
-          <textarea
-            value={detail}
-            onChange={e => setDetail(e.target.value)}
-          />
-        </label>
-
-        <button type="submit" disabled={submitting}>
+      <form className="app-form" onSubmit={handleSubmit}>
+        <div className="app-form-group">
+          <label>
+            球場名稱
+            <input
+              className="app-input"
+              type="text"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              required
+            />
+          </label>
+        </div>
+        <div className="app-form-group">
+          <label>
+            球場屬性
+            <input
+              className="app-input"
+              type="text"
+              value={property}
+              onChange={e => setProperty(e.target.value)}
+            />
+          </label>
+        </div>
+        <div className="app-form-group">
+          <label>
+            詳細說明
+            <textarea
+              className="app-input"
+              value={detail}
+              onChange={e => setDetail(e.target.value)}
+            />
+          </label>
+        </div>
+        <button type="submit" className="app-btn" disabled={submitting}>
           {submitting ? '送出中…' : '送出'}
         </button>
       </form>
-
       {statusMessage && (
-        <p className="status">{statusMessage}</p>
+        <p className="app-error" style={{ marginTop: 16 }}>{statusMessage}</p>
       )}
     </div>
   );
