@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { API_DOMAIN } from '../../config';
 import { useNavigate, useLocation } from 'react-router-dom';
+import './AvailableReservationsPage.css';
 
 export default function AvailableReservationsPage() {
   const { user } = useAuth();
