@@ -31,9 +31,14 @@ export default function ChatWindow({ chatId, partnerName, onClose }) {
     });
   };
 
+  useEffect(() => {
+    didInit.current = false;
+  }, [chatId]);
+
   // load a page of messages (newest first, then reverse)
   const loadPage = useCallback(
     async before => {
+      console.log("loadPage", chatId, token, didInit.current);
       if (!chatId || !token || didInit.current) return;
       didInit.current = true;
 
@@ -44,7 +49,7 @@ export default function ChatWindow({ chatId, partnerName, onClose }) {
           base +
           `?limit=${PAGE_SIZE}` +
           (before ? `&before=${encodeURIComponent(before)}` : '');
-
+        
         const res = await fetch(url, {
           headers: { Authorization: `Bearer ${token}` },
           method: 'GET'
