@@ -16,19 +16,17 @@ import { UpdateOpeningHourDto } from './dto/update-opening-hour.dto';
 import { BulkCreateOpeningHoursDto } from './dto/bulk-create-opening-hours.dto';
 
 @Controller('venues/:venueId/courts/:courtId/opening-hours')
-@UseGuards(JwtAuthGuard)
 export class CourtController {
   constructor(private readonly service: CourtService) {}
 
   @Get()
   getAll(
     @Param('courtId') courtId: string,
-    @Request() req: any,
   ) {
-    const userId = req.user?.userid;
-    return this.service.getOpeningHours(courtId, userId);
+    return this.service.getOpeningHours(courtId);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   create(
     @Param('courtId') courtId: string,
@@ -39,6 +37,7 @@ export class CourtController {
     return this.service.createOpeningHour(courtId, userId, dto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':ohId')
   update(
     @Param('courtId') courtId: string,
@@ -50,6 +49,7 @@ export class CourtController {
     return this.service.updateOpeningHour(courtId, ohId, userId, dto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':ohId')
   remove(
     @Param('courtId') courtId: string,
@@ -61,6 +61,7 @@ export class CourtController {
   }
 
   /** Delete all old periods, then insert the new array */
+  @UseGuards(JwtAuthGuard)
   @Post('bulk')
   async bulk(
     @Param('courtId') courtId: string,

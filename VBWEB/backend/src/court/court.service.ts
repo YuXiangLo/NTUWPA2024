@@ -36,8 +36,7 @@ import {
       }
     }
   
-    async getOpeningHours(courtId: string, userId: string) {
-      // await this.ensureCourtBelongsToUser(courtId, userId);
+    async getOpeningHours(courtId: string) {
       const { data, error } = await this.supabase.client
         .from('court_opening_hours')
         .select('*')

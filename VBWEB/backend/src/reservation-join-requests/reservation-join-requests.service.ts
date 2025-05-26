@@ -67,7 +67,6 @@ import {
     /** Hoster(預約擁有者) 列出所有 join requests */
     async listRequests(
       reservationId: string,
-      userId: string,
     ) {
       // ownership checks omitted for brevity…
     

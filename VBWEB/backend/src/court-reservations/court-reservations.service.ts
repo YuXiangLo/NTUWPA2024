@@ -61,8 +61,7 @@ import e from 'express';
       return data;
     }
   
-    /** 取得單一 court 底下所有申請（維護者專用） */
-    async listByCourt(courtId: string, userId: string) {
+    async listByCourt(courtId: string) {
       // 驗證維護者身分
       const { data: court, error: cErr } = await this.supabase.client
         .from('courts')
@@ -200,16 +199,17 @@ import e from 'express';
 
     async listAvailableReservations(userId: string) {
       // 1) load friendships where user is either side
-      const { data: rows, error: fErr } = await this.supabase.client
-        .from('friendships')
-        .select('user_id_1,user_id_2')
-        .or(`user_id_1.eq.${userId},user_id_2.eq.${userId}`)
-      if (fErr) throw new InternalServerErrorException(fErr.message);
-    
-      // 2) build friendIds = the other column
-      const friendIds = rows.map(r =>
-        r.user_id_1 === userId ? r.user_id_2 : r.user_id_1
-      );
+      let friendIds = [];
+      if (userId) {
+        const { data: rows, error: fErr } = await this.supabase.client
+          .from('friendships')
+          .select('user_id_1,user_id_2')
+          .or(`user_id_1.eq.${userId},user_id_2.eq.${userId}`)
+        if (fErr) throw new InternalServerErrorException(fErr.message);
+        friendIds = rows.map(r =>
+          r.user_id_1 === userId ? r.user_id_2 : r.user_id_1
+        );
+      }
     
       // 3) public query
       const publicQ = this.supabase.client

@@ -1,6 +1,6 @@
 // src/pages/CourtDetailPage.jsx
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { API_DOMAIN } from '../../config';
 import { DayPilot } from "@daypilot/daypilot-lite-react";
@@ -10,6 +10,7 @@ export default function CourtDetailPage() {
   const { user } = useAuth();
   const token = user?.accessToken;
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [venueName, setVenueName]       = useState('');
   const [courtName, setCourtName]       = useState('');
@@ -22,7 +23,6 @@ export default function CourtDetailPage() {
   const weekdayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
   useEffect(() => {
-    if (!token) return;
     setLoading(true);
 
     const startDate = weekStart.toString("yyyy-MM-dd");
@@ -89,6 +89,20 @@ export default function CourtDetailPage() {
       return slot.start < re && rs < slot.end;
     });
 
+  const handleApply = slot => {
+    if (!token) {
+      // 導到 /login，並在 state 裡帶上原本路徑
+      alert('請先登入');
+      const redirectTo = encodeURIComponent(location.pathname + location.search);
+      navigate(`/login?redirect=${redirectTo}`, { replace: true });
+      return;
+    }
+    navigate(
+      `/venues/${venueId}/courts/${courtId}/reserve`,
+      { state: { slot, venueName, courtName } }
+    );
+  };
+
   return (
     <div className="court-detail-page">
       {/* new header line */}
@@ -124,12 +138,7 @@ export default function CourtDetailPage() {
                 ) : (
                   <button
                     className="btn-apply"
-                    onClick={() =>
-                      navigate(
-                        `/venues/${venueId}/courts/${courtId}/reserve`,
-                        { state: { slot, venueName, courtName } }
-                      )
-                    }
+                    onClick={() => handleApply(slot)}
                   >
                     申請
                   </button>
