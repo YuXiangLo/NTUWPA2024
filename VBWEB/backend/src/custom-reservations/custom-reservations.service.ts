@@ -25,12 +25,16 @@ export class CustomReservationsService {
   // 2) 列所有公開/好友的 free-form 預約（含申請狀態 & 人數）
   async listAvailable(userId: string) {
     // load friendIds as before (user_id_1 / user_id_2)
-    const { data: fr, error: fe } = await this.supabase.client
-      .from('friendships')
-      .select('user_id_1,user_id_2')
-      .or(`user_id_1.eq.${userId},user_id_2.eq.${userId}`)
-    if (fe) throw new InternalServerErrorException(fe.message);
-    const friendIds = fr.map(r => r.user_id_1===userId?r.user_id_2:r.user_id_1);
+    
+    let friendIds = [];
+    if (userId) {
+      const { data: fr, error: fe } = await this.supabase.client
+        .from('friendships')
+        .select('user_id_1,user_id_2')
+        .or(`user_id_1.eq.${userId},user_id_2.eq.${userId}`)
+      if (fe) throw new InternalServerErrorException(fe.message);
+      friendIds = fr.map(r => r.user_id_1===userId?r.user_id_2:r.user_id_1);
+    }
 
     // helper to build the two queries
     const baseSelect = `
