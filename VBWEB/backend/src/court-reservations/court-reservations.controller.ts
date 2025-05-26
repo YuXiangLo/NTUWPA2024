@@ -17,11 +17,11 @@ import {
   import { ReviewCourtReservationDto } from './dto/review-court-reservation.dto';
   
   @Controller()
-  @UseGuards(JwtAuthGuard)
   export class CourtReservationsController {
     constructor(private readonly service: CourtReservationsService) {}
   
     /** 申請預約 */
+    @UseGuards(JwtAuthGuard)
     @Post('venues/:venueId/courts/:courtId/reservations')
     create(
       @Param('courtId') courtId: string,
@@ -32,6 +32,7 @@ import {
     }
   
     /** 維護者：列出某 court 的所有申請 */
+    @UseGuards(JwtAuthGuard)
     @Get('courts/:courtId/reservations')
     listByCourt(
       @Param('courtId') courtId: string,
@@ -41,12 +42,14 @@ import {
     }
   
     /** 使用者：查看自己所有申請 */
+    @UseGuards(JwtAuthGuard)
     @Get('reservations/my')
     listMy(@Request() req: any) {
       return this.service.listMyReservations(req.user.userid);
     }
   
     /** 維護者：approve */
+    @UseGuards(JwtAuthGuard)
     @Patch('reservations/:id/approve')
     approve(
       @Param('id') id: string,
@@ -61,6 +64,7 @@ import {
     }
   
     /** 維護者：reject */
+    @UseGuards(JwtAuthGuard)
     @Patch('reservations/:id/reject')
     reject(
       @Param('id') id: string,
@@ -76,6 +80,7 @@ import {
     }
   
     /** 刪除申請 */
+    @UseGuards(JwtAuthGuard)
     @Delete('reservations/:id')
     remove(
       @Param('id') id: string,
@@ -86,9 +91,11 @@ import {
 
     @Get('reservations/available')
     listAvailable(@Request() req: any) {
-      return this.service.listAvailableReservations(req.user.userid);
+      const userId = req.user?.userid || null;
+      return this.service.listAvailableReservations(userId);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Get('reservations/:id')
     getDetail(
       @Param('id') id: string,

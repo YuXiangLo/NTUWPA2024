@@ -2,18 +2,21 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { API_DOMAIN } from '../../config';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export default function AvailableReservationsPage() {
   const { user } = useAuth();
   const userId = user?.userid;
   const token  = user?.accessToken;
 
+  const navigate = useNavigate();
+  const location = useLocation();
   const [items,    setItems]    = useState([]);
   const [loading,  setLoading]  = useState(true);
   const [error,    setError]    = useState(null);
 
   useEffect(() => {
-    if (!token) return setError('尚未登入');
+    // if (!token) return setError('尚未登入');
     setLoading(true);
 
     // 1) fetch court-based + custom in parallel
@@ -75,6 +78,14 @@ export default function AvailableReservationsPage() {
 
   // unified join handler
   const handleJoin = async (item) => {
+    if (!token) {
+      // 導到 /login，並在 state 裡帶上原本路徑
+      alert('請先登入');
+      const redirectTo = encodeURIComponent(location.pathname + location.search);
+      navigate(`/login?redirect=${redirectTo}`, { replace: true });
+      return;
+    }
+
     const url = item.type === 'court'
       ? `${API_DOMAIN}/reservations/${item.id}/join-requests`
       : `${API_DOMAIN}/custom-reservations/${item.id}/join-requests`;
