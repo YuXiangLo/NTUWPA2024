@@ -32,13 +32,11 @@ import {
     }
   
     /** 維護者：列出某 court 的所有申請 */
-    @UseGuards(JwtAuthGuard)
     @Get('courts/:courtId/reservations')
     listByCourt(
       @Param('courtId') courtId: string,
-      @Request() req: any
     ) {
-      return this.service.listByCourt(courtId, req.user.userid);
+      return this.service.listByCourt(courtId);
     }
   
     /** 使用者：查看自己所有申請 */

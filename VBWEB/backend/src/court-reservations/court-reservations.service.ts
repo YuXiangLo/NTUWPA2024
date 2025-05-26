@@ -61,8 +61,7 @@ import e from 'express';
       return data;
     }
   
-    /** 取得單一 court 底下所有申請（維護者專用） */
-    async listByCourt(courtId: string, userId: string) {
+    async listByCourt(courtId: string) {
       // 驗證維護者身分
       const { data: court, error: cErr } = await this.supabase.client
         .from('courts')

@@ -15,13 +15,13 @@ import { ReservationJoinRequestsService } from './reservation-join-requests.serv
 import { ReviewJoinRequestDto } from './dto/review-join-request.dto';
 
 @Controller()
-@UseGuards(JwtAuthGuard)
 export class ReservationJoinRequestsController {
   constructor(
     private readonly service: ReservationJoinRequestsService
   ) {}
 
   /** 送出加入請求 */
+  @UseGuards(JwtAuthGuard)
   @Post('reservations/:reservationId/join-requests')
   create(
     @Param('reservationId') reservationId: string,
@@ -30,16 +30,17 @@ export class ReservationJoinRequestsController {
     return this.service.createRequest(reservationId, req.user.userid);
   }
 
+  
   /** Hoster: 列出所有 join requests */
   @Get('reservations/:reservationId/join-requests')
   list(
     @Param('reservationId') reservationId: string,
-    @Request() req: any
   ) {
-    return this.service.listRequests(reservationId, req.user.userid);
+    return this.service.listRequests(reservationId);
   }
 
   /** Hoster: approve */
+  @UseGuards(JwtAuthGuard)
   @Patch('join-requests/:id/approve')
   approve(
     @Param('id') id: string,
@@ -49,6 +50,7 @@ export class ReservationJoinRequestsController {
   }
 
   /** Hoster: reject */
+  @UseGuards(JwtAuthGuard)
   @Patch('join-requests/:id/reject')
   reject(
     @Param('id') id: string,
@@ -59,6 +61,7 @@ export class ReservationJoinRequestsController {
   }
 
   /** 申請者／Hoster：刪除請求 */
+@UseGuards(JwtAuthGuard)
   @Delete('join-requests/:id')
   remove(
     @Param('id') id: string,
@@ -67,6 +70,7 @@ export class ReservationJoinRequestsController {
     return this.service.deleteRequest(id, req.user.userid);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('join-requests/my')
   listMy(@Request() req: any) {
     return this.service.listMyRequests(req.user.userid);
