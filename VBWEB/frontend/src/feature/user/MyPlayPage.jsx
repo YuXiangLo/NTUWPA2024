@@ -49,7 +49,7 @@ export default function MyPlayPage() {
 
 
   if (loading) return <p>載入中…</p>;
-  if (error)   return <p className="error">錯誤：{error}</p>;
+  if (error)   return <p className="app-error">錯誤：{error}</p>;
 
   // build events for calendar
   const calendarEvents = requests
@@ -84,15 +84,17 @@ export default function MyPlayPage() {
     });
 
   return (
-    <div className="my-join-page">
-      <h2>排程日曆</h2>
-      <Calendar eventsData={calendarEvents} />
+    <div className="app-card-page">
+      <h1>排程日曆</h1>
+      <div className="app-form-group">
+        <Calendar eventsData={calendarEvents} />
+      </div>
 
-      <h2>我的行程表</h2>
+      <h1>我的行程表</h1>
       {requests.length === 0 ? (
         <p>目前沒有任何加入請求。</p>
       ) : (
-        <table className="my-join-table">
+        <table className="app-table">
           <thead>
             <tr>
               <th>場地</th>

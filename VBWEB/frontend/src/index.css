@@ -208,7 +208,7 @@ header {
 
 /* --- Common Button Styles --- */
 .app-btn {
-  background: #99bc85;
+  background: #5a67d8;
   color: #fff;
   border: none;
   border-radius: var(--radius-md, 8px);
@@ -219,7 +219,7 @@ header {
 }
 
 .app-btn:hover {
-  background: #638889;
+  background: #9f7aea;
 }
 
 .app-btn-pending {
@@ -358,7 +358,7 @@ header {
 .app-venue-toggle-button {
   height: 2rem;
   color: #fff;
-  background-color: #638889;
+  background-color: #5a67d8;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -367,7 +367,7 @@ header {
 }
 
 .app-venue-detail-button {
-  background-color: #99bc85;
+  background-color: #805ad5;
 }
 
 /* Court list within a venue */
@@ -414,4 +414,35 @@ header {
 
 .app-to-top-button:hover {
   background-color: #95bdff;
+}
+
+
+/* --- Venue Application Form Styles --- */
+.app-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.app-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.app-input {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  background: #fff;
+  width: 100%;
+}
+
+.app-img-preview {
+  margin-top: 0.5rem;
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
 }
