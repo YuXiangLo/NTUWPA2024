@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import io from 'socket.io-client';
-import { API_DOMAIN } from '../config.js';
+import { API_DOMAIN, WS_DOMAIN } from '../config.js';
 import { useAuth } from '../context/AuthContext.jsx';
 import './ChatWindow.css';
 
@@ -38,9 +38,11 @@ export default function ChatWindow({ chatId, partnerName, onClose }) {
 
       setLoadingMore(true);
       try {
-        const url = new URL(`${API_DOMAIN}/chats/${chatId}/messages`);
-        url.searchParams.set('limit', PAGE_SIZE);
-        if (before) url.searchParams.set('before', before);
+        const base = `${API_DOMAIN}/chats/${chatId}/messages`;
+        const url =
+          base +
+          `?limit=${PAGE_SIZE}` +
+          (before ? `&before=${encodeURIComponent(before)}` : '');
 
         const res = await fetch(url, {
           headers: { Authorization: `Bearer ${token}` }
@@ -71,7 +73,7 @@ export default function ChatWindow({ chatId, partnerName, onClose }) {
   useEffect(() => {
     if (!chatId || !token) return;
 
-    const sock = io(API_DOMAIN, { auth: { token } });
+    const sock = io(WS_DOMAIN, { auth: { token } });
     setSocket(sock);
     sock.emit('joinChat', { chatId });
 

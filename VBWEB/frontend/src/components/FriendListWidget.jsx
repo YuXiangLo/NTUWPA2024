@@ -9,7 +9,7 @@ import {
 } from '../api/friends';
 import ChatWindow from './ChatWindow.jsx';
 import './FriendListWidget.css';
-import { API_DOMAIN } from '../config.js';
+import { API_DOMAIN, WS_DOMAIN } from '../config.js';
 import { MessageCircle, X } from 'lucide-react';
 
 export default function FriendListWidget() {
@@ -54,7 +54,7 @@ export default function FriendListWidget() {
   // establish socket when open
   useEffect(() => {
     if (!isOpen || !token) return;
-    const sock = io(API_DOMAIN, { auth: { token } });
+    const sock = io(WS_DOMAIN, { auth: { token } });
     socketRef.current = sock;
     return () => {
       sock.disconnect();
