@@ -43,7 +43,8 @@ export default function ChatWindow({ chatId, partnerName, onClose }) {
         if (before) url.searchParams.set('before', before);
 
         const res = await fetch(url, {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
+          method: 'GET'
         });
         const data = await res.json();
         const page = dedupe(data);
