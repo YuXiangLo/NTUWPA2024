@@ -36,7 +36,7 @@ export default function MyVenues() {
       <h2>我的場地管理</h2>
 
       <div className="actions">
-        <button onClick={() => navigate(`/venues/new`)} className="button-ops">
+        <button onClick={() => navigate(`/venue-application`)} className="button-ops">
           新增場地
         </button>
       </div>
