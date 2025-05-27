@@ -1,8 +1,8 @@
-// src/pages/ManageReservationsPage.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { API_DOMAIN } from '../../config';
+import './ManageReservationsApplyPage.css';
 
 export default function ManageReservationsApplyPage() {
   const { courtId } = useParams();
@@ -43,22 +43,42 @@ export default function ManageReservationsApplyPage() {
     try {
       const res = await fetch(url, opts);
       if (!res.ok) throw new Error(`Error ${res.status}`);
-      // refresh list
       setRequests(r => r.filter(req => req.id !== id));
     } catch (err) {
       alert(`操作失敗：${err.message}`);
     }
+    window.location.reload();
   };
 
-  if (loading) return <p>載入中…</p>;
-  if (error)   return <p className="error">錯誤：{error}</p>;
-
+  if (loading) return <p className="center-message">載入中…</p>;
+  if (error)   return <p className="center-message error">錯誤：{error}</p>;
 
   return (
     <div className="manage-res-page">
       <h2>管理預約申請</h2>
+
       {requests.length === 0 ? (
-        <p>目前沒有任何預約申請。</p>
+        <table className="res-table">
+          <thead>
+            <tr>
+              <th>申請者</th>
+              <th>時段</th>
+              <th>人數</th>
+              <th>費用</th>
+              <th>可見性</th>
+              <th>說明</th>
+              <th>狀態</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colSpan={8} className="no-data">
+                目前沒有任何預約申請。
+              </td>
+            </tr>
+          </tbody>
+        </table>
       ) : (
         <table className="res-table">
           <thead>
@@ -87,15 +107,25 @@ export default function ManageReservationsApplyPage() {
                 <td>{req.num_players}</td>
                 <td>{req.fee ?? '免費'}</td>
                 <td>{req.visibility}</td>
-                <td>{req.detail}</td>
-                <td>{req.status}</td>
+                <td>{req.detail || '—'}</td>
                 <td>
+                  <span className={`status-${req.status}`}>
+                    {req.status === 'pending' ? '審核中' : req.status === 'approved' ? '已通過' : '已拒絕'}
+                  </span>
+                </td>
+                <td className="btn-group">
                   {req.status === 'pending' && (
                     <>
-                      <button onClick={() => handleAction(req.id, 'approve')}>
+                      <button
+                        className="button-ops-approve"
+                        onClick={() => handleAction(req.id, 'approve')}
+                      >
                         批准
                       </button>
-                      <button onClick={() => handleAction(req.id, 'reject')}>
+                      <button
+                        className="button-ops-reject"
+                        onClick={() => handleAction(req.id, 'reject')}
+                      >
                         拒絕
                       </button>
                     </>
