@@ -35,6 +35,12 @@ export default function MyVenues() {
     <div className="my-venues">
       <h2>我的場地管理</h2>
 
+      <div className="actions">
+        <button onClick={() => navigate(`/venues/new`)} className="button-ops">
+          新增場地
+        </button>
+      </div>
+
       {venues.length === 0 ? (
         <table className="my-venues-table">
           <thead>

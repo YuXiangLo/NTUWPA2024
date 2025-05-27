@@ -1,0 +1,123 @@
+.manage-res-page {
+    padding: var(--spacing-lg) 6vw;
+  }
+  
+  .manage-res-page h2 {
+    margin-bottom: var(--spacing-md);
+    font-size: 1.75rem;
+    color: var(--color-primary);
+    text-align: center;
+  }
+  
+  /* Centered messages */
+  .center-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+    margin: 0;
+    font-size: 1rem;
+    color: var(--color-muted);
+  }
+  
+  .center-message.error {
+    color: var(--color-error);
+  }
+  
+  /* No-data row */
+  .no-data {
+    text-align: center;
+    color: var(--color-muted);
+    padding: var(--spacing-md) 0;
+  }
+  
+  /* Table */
+  .res-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--color-surface);
+    box-shadow: var(--shadow-md);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  
+  .res-table th,
+  .res-table td {
+    padding: var(--spacing-sm);
+    text-align: center;
+    border-bottom: 1px solid var(--color-muted);
+  }
+  
+  .res-table thead {
+    background-color: var(--color-primary);
+    color: var(--color-surface);
+  }
+  
+  .res-table tr:last-child td {
+    border-bottom: none;
+  }
+  
+  /* Status labels */
+  .status-pending {
+    background-color: var(--color-muted);
+    color: var(--color-surface);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-sm);
+  }
+  
+  .status-approved {
+    background-color: #32d663d3;
+    color: var(--color-surface);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-sm);
+  }
+  
+  .status-rejected {
+    background-color: #fb5757d3;
+    color: var(--color-surface);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-sm);
+  }
+  
+  /* Buttons */
+  .button-ops {
+    background-color: var(--color-primary);
+    color: var(--color-surface);
+    padding: var(--spacing-sm) var(--spacing-md);
+    margin-right: var(--spacing-sm);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+  }
+  
+  .button-ops:hover {
+    background-color: var(--color-secondary);
+  }
+  
+  .button-ops-approve {
+    background-color: #32d663d3;
+    margin-right: var(--spacing-sm);
+  }
+  
+  .button-ops-reject {
+    background-color: #fb5757d3;
+    margin-right: var(--spacing-sm);
+  }
+  
+  /* Button group cell */
+  .btn-group > button {
+    display: inline-block;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .manage-res-page h2 {
+      font-size: 1.5rem;
+    }
+    .res-table th,
+    .res-table td {
+      font-size: 0.85rem;
+      padding: 0.4rem;
+    }
+  }
+  
