@@ -12,6 +12,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { API_DOMAIN } from '../../config';
 
+const EVENT_COLOR = '#9ebc8a'
+
 /**********************************************************************
  * Lightweight UndoService (adapted from
  * https://code.daypilot.org/30113/react-scheduler-how-to-enable-undo-redo)
@@ -132,7 +134,8 @@ export default function ManageCourtSchedule() {
             id: rec.id,
             start: new DayPilot.Date(`${iso}T${rec.open_time}`),
             end: new DayPilot.Date(`${iso}T${rec.close_time}`),
-            text: `${rec.open_time}–${rec.close_time}`
+            text: `${rec.open_time}–${rec.close_time}`,
+            backColor: EVENT_COLOR
           };
         });
         setEvents(evs);
@@ -383,7 +386,7 @@ export default function ManageCourtSchedule() {
   /* ---------- calendar config ---------- */
   const config = {
     viewType: 'Week',
-    weekStarts: 0,            // Sunday
+    weekStarts: 0,  
     headerDateFormat: 'dddd',
     durationBarVisible: false,
     timeRangeSelectedHandling: 'Enabled',
