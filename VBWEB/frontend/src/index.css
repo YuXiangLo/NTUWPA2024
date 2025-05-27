@@ -114,6 +114,15 @@ button:hover {
   border-color: #cccccc;
 }
 
+.button-ops {
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+}
+
+.button-ops:hover {
+  background-color: var(--color-secondary);
+}
+
 /* Links */
 a {
   font-weight: 500;
