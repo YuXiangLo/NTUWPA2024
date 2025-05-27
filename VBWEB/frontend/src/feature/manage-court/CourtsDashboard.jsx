@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { API_DOMAIN } from '../../config';
+import './CourtsDashboard.css';
 
 export default function CourtsDashboard() {
   const { venueId } = useParams();
@@ -42,21 +43,38 @@ export default function CourtsDashboard() {
     }
   };
 
-  if (!token)   return <p>請先登入。</p>;
-  if (loading)  return <p>載入中…</p>;
-  if (error)    return <p className="error">錯誤：{error}</p>;
+  if (!token)   return <p className="center-message">請先登入。</p>;
+  if (loading)  return <p className="center-message">載入中…</p>;
+  if (error)    return <p className="center-message error">錯誤：{error}</p>;
 
   return (
     <div className="manage-courts">
       <h2>管理球場</h2>
-      <Link to={`/venues/${venueId}/courts/new`} className="btn-add-court">
-        新增球場
-      </Link>
+
+      <div className="actions">
+        <button onClick={() => navigate(`/venues/${venueId}/courts/new`)} className="button-ops">
+          新增球場
+        </button>
+      </div>
 
       {courts.length === 0 ? (
-        <p>尚未新增任何球場。</p>
-      ) : (
-        <table>
+        <table className="manage-courts-table">
+          <thead>
+            <tr>
+              <th>名稱</th>
+              <th>屬性</th>
+              <th>說明</th> 
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colSpan={4} className="no-data">尚未新增任何球場。</td>
+            </tr>
+          </tbody>
+        </table>
+        ) : (
+        <table className="manage-courts-table">
           <thead>
             <tr>
               <th>名稱</th>
@@ -72,20 +90,17 @@ export default function CourtsDashboard() {
                 <td>{c.property || '—'}</td>
                 <td>{c.detail || '—'}</td>
                 <td>
-                  <button
-                    className="btn-maintain"
+                  <button className="button-ops"
                     onClick={() => navigate(`/venues/${venueId}/courts/${c.id}/manage-schedule`)}
                   >
                     維護時段
                   </button>
-                  <button
-                    className="btn-maintain"
+                  <button className="button-ops"
                     onClick={() => navigate(`/venues/${venueId}/courts/${c.id}/reservations`)}
                   >
                     管理預約申請
                   </button>
-                  <button
-                    className="btn-delete"
+                  <button className="button-ops-delete"
                     onClick={() => handleDelete(c.id)}
                   >
                     刪除
