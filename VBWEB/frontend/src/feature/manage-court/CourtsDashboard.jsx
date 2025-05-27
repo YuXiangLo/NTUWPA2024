@@ -52,9 +52,9 @@ export default function CourtsDashboard() {
       <h2>管理球場</h2>
 
       <div className="actions">
-        <Link to={`/venues/${venueId}/courts/new`} className="btn-add-court">
+        <button onClick={() => navigate(`/venues/${venueId}/courts/new`)} className="button-ops">
           新增球場
-        </Link>
+        </button>
       </div>
 
       {courts.length === 0 ? (
@@ -90,17 +90,17 @@ export default function CourtsDashboard() {
                 <td>{c.property || '—'}</td>
                 <td>{c.detail || '—'}</td>
                 <td>
-                  <button className="btn-manage"
+                  <button className="button-ops"
                     onClick={() => navigate(`/venues/${venueId}/courts/${c.id}/manage-schedule`)}
                   >
                     維護時段
                   </button>
-                  <button className="btn-manage"
+                  <button className="button-ops"
                     onClick={() => navigate(`/venues/${venueId}/courts/${c.id}/reservations`)}
                   >
                     管理預約申請
                   </button>
-                  <button className="btn-delete"
+                  <button className="button-ops-delete"
                     onClick={() => handleDelete(c.id)}
                   >
                     刪除
