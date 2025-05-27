@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { API_DOMAIN } from '../../config';
+import './CreateCourt.css';
 
 export default function CreateCourt() {
   const { venueId } = useParams();

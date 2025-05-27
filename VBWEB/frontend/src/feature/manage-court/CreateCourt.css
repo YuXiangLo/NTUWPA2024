@@ -1,0 +1,74 @@
+/* CreateCourt.css */
+
+.create-court {
+  max-width: 600px;
+  margin: var(--spacing-lg) auto;
+  padding: var(--spacing-lg);
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-md);
+}
+
+.create-court h2 {
+  font-size: 2em;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-md);
+  text-align: center;
+}
+
+.create-court form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.create-court label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.create-court input,
+.create-court textarea {
+  margin-top: var(--spacing-sm);
+  padding: 0.5em;
+  font-size: 1em;
+  border: 1px solid #ddd;
+  border-radius: var(--radius-sm);
+  transition: border-color var(--transition-fast);
+}
+
+.create-court input:focus,
+.create-court textarea:focus {
+  border-color: var(--color-primary);
+  outline: none;
+}
+
+.create-court textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.create-court button {
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+  transition: background-color var(--transition-fast);
+}
+
+.create-court button:disabled {
+  background-color: var(--color-muted);
+  cursor: not-allowed;
+}
+
+.create-court button:hover:not(:disabled) {
+  background-color: var(--color-secondary);
+}
+
+.status {
+  margin-top: var(--spacing-md);
+  color: var(--color-error);
+  font-weight: 500;
+  text-align: center;
+}
+
