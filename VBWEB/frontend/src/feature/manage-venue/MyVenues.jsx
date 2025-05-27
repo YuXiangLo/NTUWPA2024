@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { API_DOMAIN } from '../../config';
@@ -10,11 +10,20 @@ export default function MyVenues() {
   const [venues, setVenues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const hasAlerted = useRef(false);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!token) return;
+    if (!token) {
+      if (!hasAlerted.current) {
+        alert('請先登入才能查看「我的場地」');
+        hasAlerted.current = true;
+      }
+      navigate('/login');
+      return;
+    }
+    setLoading(true);
     fetch(`${API_DOMAIN}/venues/my`, {
       headers: { Authorization: `Bearer ${token}` },
     })

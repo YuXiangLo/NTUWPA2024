@@ -1,18 +1,20 @@
 // src/pages/MyPlayPage.jsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { API_DOMAIN } from '../../config';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Calendar from '../../components/Calendar';
 import './MyPlayPage.css';
 
 export default function MyPlayPage() {
   const { user } = useAuth();
   const token = user?.accessToken;
+  const navigate = useNavigate();
 
   const [requests, setRequests] = useState([]);
   const [loading, setLoading]   = useState(true);
   const [error, setError]       = useState(null);
+  const hasAlerted = useRef(false);
 
   // new state to control popup
   const [showCalendarModal, setShowCalendarModal] = useState(false);
@@ -24,9 +26,17 @@ export default function MyPlayPage() {
   };
 
   useEffect(() => {
-    if (!token) return;
     setLoading(true);
 
+    if (!token) {
+      if (!hasAlerted.current) {
+        alert('請先登入才能查看「我的行程表」');
+        hasAlerted.current = true;
+      }
+      navigate('/login');
+      return;
+    }
+    
     Promise.all([
       fetch(`${API_DOMAIN}/join-requests/my`, {
         headers: { Authorization: `Bearer ${token}` }
