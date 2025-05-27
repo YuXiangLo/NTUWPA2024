@@ -171,9 +171,8 @@ export default function ManageCourtSchedule() {
       );
       if (!res.ok) throw new Error(`Error ${res.status}`);
       const created = await res.json();
-      const ev = { id: created.id, start: s, end: e, text: `${openTime}–${closeTime}` };
+      const ev = { id: created.id, start: s, end: e, text: `${openTime}–${closeTime}`, backColor: EVENT_COLOR };
       calendar.events.add(ev);
-      setEvents(prev => [...prev, ev]);
       undoService.add(toPlain(ev), '新增');
     } catch (err) {
       alert(`新增失敗：${err.message}`);
