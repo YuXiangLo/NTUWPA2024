@@ -115,6 +115,7 @@ button:hover {
 }
 
 .button-ops {
+  align-self: flex-start;
   background-color: var(--color-primary);
   color: var(--color-surface);
 }
