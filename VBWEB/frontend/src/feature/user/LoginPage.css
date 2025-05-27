@@ -9,8 +9,7 @@
     .signup-form, 
     .custom-res-form, 
     .venue-app-form > form {
-    width: 100%;
-    max-width: 360px;             /* or whatever “narrow” you like */
+    width: 50%;
     margin: 0 auto;               /* horizontally center */
     }
   

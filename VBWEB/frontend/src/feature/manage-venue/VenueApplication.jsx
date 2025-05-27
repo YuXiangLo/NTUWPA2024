@@ -123,7 +123,13 @@ export default function VenueApplication() {
               <button type="button" className="upload-button" onClick={() => image1Ref.current?.click()}>
                 選擇證明圖片 1
               </button>
-              {images.image1 && <span className="filename">{images.image1.name}</span>}
+	          <span
+                className="filename"
+                style={{ opacity: images.image1 ? 1 : 0 }}
+              >
+                {images.image1?.name}
+              </span>
+
             </div>
             {/* 圖片 2 */}
             <div className="upload-field">
@@ -131,7 +137,12 @@ export default function VenueApplication() {
               <button type="button" className="upload-button" onClick={() => image2Ref.current?.click()}>
                 選擇證明圖片 2
               </button>
-              {images.image2 && <span className="filename">{images.image2.name}</span>}
+	          <span
+                className="filename"
+                style={{ opacity: images.image2 ? 1 : 0 }}
+              >
+                {images.image2?.name}
+              </span>
             </div>
           </div>
 
