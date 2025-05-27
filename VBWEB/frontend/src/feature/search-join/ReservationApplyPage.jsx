@@ -1,10 +1,10 @@
-// src/pages/CourtReservationApplyPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useLocation, useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { API_DOMAIN } from '../../config';
+import './ReservationApplyPage.css';
 
-export default function ReservationApplyPage() {
+export default function CourtReservationApplyPage() {
   const { venueId, courtId } = useParams();
   const { user } = useAuth();
   const token = user?.accessToken;
@@ -12,14 +12,12 @@ export default function ReservationApplyPage() {
   const { state } = useLocation();
   const { slot, venueName, courtName } = state || {};
 
-  // if someone lands here directly, go back
   useEffect(() => {
     if (!slot || !venueName || !courtName) {
       navigate(-1);
     }
   }, [slot, venueName, courtName, navigate]);
 
-  // format slot date as YYYY-MM-DD
   const pad = n => n.toString().padStart(2, '0');
   const slotDate = slot
     ? `${slot.start.getFullYear()}-${pad(slot.start.getMonth()+1)}-${pad(slot.start.getDate())}`
@@ -31,7 +29,7 @@ export default function ReservationApplyPage() {
   const [detail, setDetail]         = useState('');
   const [statusMsg, setStatusMsg]   = useState('');
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     const startTs = `${slotDate}T${slot.open_time}`;
     const endTs   = `${slotDate}T${slot.close_time}`;
@@ -64,48 +62,47 @@ export default function ReservationApplyPage() {
   };
 
   return (
-    <div className="apply-page">
-      {/* Show venue & court names */}
-      <div className="apply-header">
-        <h2>場館：{venueName} , 場地： {courtName}</h2>
-        <h3>預約申請表</h3>
-      </div>
+    <div className="custom-res-page">
+      <h2>場館：{venueName} ， 場地：{courtName}</h2>
+      <h2>預約申請表</h2>
 
       {slot && (
-        <form onSubmit={handleSubmit} className="apply-form">
-          {/* Read-only date */}
+        <form className="custom-res-form" onSubmit={handleSubmit}>
           <label>
-            日期
+            日期 *
             <input
               type="date"
+              name="slotDate"
               value={slotDate}
               readOnly
             />
           </label>
 
-          {/* Read-only time */}
           <label>
-            開始時間
+            開始時間 *
             <input
               type="time"
+              name="startTime"
               value={slot.open_time}
               readOnly
             />
           </label>
+
           <label>
-            結束時間
+            結束時間 *
             <input
               type="time"
+              name="endTime"
               value={slot.close_time}
               readOnly
             />
           </label>
 
-          {/* User inputs */}
           <label>
-            人數
+            人數 *
             <input
               type="number"
+              name="numPlayers"
               min="1"
               value={numPlayers}
               onChange={e => setNumPlayers(+e.target.value)}
@@ -117,6 +114,7 @@ export default function ReservationApplyPage() {
             費用（選填）
             <input
               type="number"
+              name="fee"
               min="0"
               step="0.01"
               value={fee}
@@ -125,33 +123,35 @@ export default function ReservationApplyPage() {
           </label>
 
           <label>
-            可見性
+            可見性 *
             <select
+              name="visibility"
               value={visibility}
               onChange={e => setVisibility(e.target.value)}
             >
               <option value="public">公開</option>
-              <option value="private">私密</option>
               <option value="friend">好友</option>
+              <option value="private">私密</option>
             </select>
           </label>
 
           <label>
-            說明
+            詳細說明（選填）
             <textarea
+              name="detail"
               value={detail}
               onChange={e => setDetail(e.target.value)}
             />
           </label>
-
-          <button type="submit">送出申請</button>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <button type="submit">送出申請</button>
+            <button onClick={() => navigate(`/venues/${venueId}/courts/${courtId}/schedule`)}>
+              ← 返回時段列表
+            </button>
+          </div>
           {statusMsg && <p className="status">{statusMsg}</p>}
         </form>
       )}
-
-      <Link to={`/venues/${venueId}/courts/${courtId}/schedule`} className="btn-back">
-        ← 返回時段列表
-      </Link>
     </div>
   );
 }
