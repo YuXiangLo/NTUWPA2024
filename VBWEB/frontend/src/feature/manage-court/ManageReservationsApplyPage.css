@@ -66,7 +66,7 @@
   }
   
   .status-approved {
-    background-color: #32d663d3;
+    background-color: #2ec25ad3;
     color: var(--color-surface);
     padding: var(--spacing-sm) var(--spacing-md);
     border-radius: var(--radius-sm);
@@ -95,7 +95,7 @@
   }
   
   .button-ops-approve {
-    background-color: #32d663d3;
+    background-color: #2ec25ad3;
     margin-right: var(--spacing-sm);
   }
   
