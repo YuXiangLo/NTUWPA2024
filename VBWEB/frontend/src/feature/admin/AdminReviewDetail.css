@@ -1,0 +1,123 @@
+/* src/pages/AdminReviewDetail.css */
+
+.venue-app-form {
+    padding: var(--spacing-lg) 6vw;
+    color: var(--color-text);
+  }
+  
+  .page-header h2 {
+    font-size: 1.75rem;
+    color: var(--color-primary);
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .custom-res-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    background-color: var(--color-surface);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+  }
+  
+  .custom-res-form label {
+    display: flex;
+    flex-direction: column;
+    font-weight: 500;
+    color: var(--color-text);
+  }
+  
+  .custom-res-form input,
+  .custom-res-form textarea {
+    margin-top: var(--spacing-sm);
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid var(--color-muted);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+  }
+  
+  .custom-res-form textarea {
+    min-height: 5rem;
+    resize: vertical;
+  }
+  
+  /* 經緯度 & 圖片區 */
+  .file-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+  
+  .preview-row {
+    display: flex;
+    justify-content: space-evenly;
+    gap: var(--spacing-md);
+  }
+  
+  .preview-image {
+    flex: 0 0 25%;
+    max-width: 25%;
+    height: auto;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-muted);
+    cursor: pointer; /* 表示可點擊 */
+  }
+  
+  /* ----- 圖片預覽彈窗 ----- */
+  .img-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .img-modal-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+  }
+  
+  .img-modal-content img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-sm);
+  }
+  
+  /* 操作按鈕 */
+  .actions {
+    display: flex;
+    gap: var(--spacing-sm);
+  }
+  
+  .button-ops-approve {
+    background-color: #2ec25ad3;
+  }
+  
+  .button-ops-reject {
+    background-color: #fb5757d3;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .custom-res-form {
+      padding: var(--spacing-md);
+    }
+    .page-header h2 {
+      font-size: 1.5rem;
+    }
+    .preview-image {
+      max-width: 40%;
+      flex: 0 0 40%;
+    }
+  }
+  

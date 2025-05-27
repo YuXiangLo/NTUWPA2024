@@ -1,0 +1,73 @@
+/* src/pages/admin/AdminReviewVenueApplications.css */
+
+.admin-review-page {
+    padding: var(--spacing-lg) 6vw;
+  }
+  
+  .admin-review-page h2 {
+    margin-bottom: var(--spacing-md);
+    font-size: 1.75rem;
+    color: var(--color-primary);
+    text-align: center;
+  }
+  
+  /* Centered messages */
+  .center-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+    margin: 0;
+    font-size: 1rem;
+    color: var(--color-muted);
+  }
+  
+  .center-message.error {
+    color: var(--color-error);
+  }
+  
+  /* No-data row */
+  .no-data {
+    text-align: center;
+    color: var(--color-muted);
+    padding: var(--spacing-md) 0;
+  }
+  
+  /* Table */
+  .admin-review-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--color-surface);
+    box-shadow: var(--shadow-md);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  
+  .admin-review-table th,
+  .admin-review-table td {
+    padding: var(--spacing-sm);
+    text-align: center;
+    border-bottom: 1px solid var(--color-muted);
+  }
+  
+  .admin-review-table thead {
+    background-color: var(--color-primary);
+    color: var(--color-surface);
+  }
+  
+  .admin-review-table tr:last-child td {
+    border-bottom: none;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .admin-review-page h2 {
+      font-size: 1.5rem;
+    }
+    .admin-review-table th,
+    .admin-review-table td {
+      font-size: 0.85rem;
+      padding: 0.4rem;
+    }
+  }
+  

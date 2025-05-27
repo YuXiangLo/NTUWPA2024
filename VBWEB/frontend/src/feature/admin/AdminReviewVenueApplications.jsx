@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { API_DOMAIN } from '../../config';
 import { useNavigate } from 'react-router-dom';
+import './AdminReviewVenueApplications.css';
 
 export default function AdminReviewApplications() {
   const { user } = useAuth();
@@ -13,55 +14,46 @@ export default function AdminReviewApplications() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // check admin
   useEffect(() => {
-    const fetchAdminStatus = async () => {
-      if (!token) return;
-      try {
-        const res = await fetch(`${API_DOMAIN}/user/isadmin`, {
-          method: 'GET',
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const data = await res.json();
+    if (!token) return;
+    fetch(`${API_DOMAIN}/user/isadmin`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => res.json())
+      .then(data => {
         if (!data) {
           alert('你並沒有管理員權限');
           navigate('/');
-        } 
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchAdminStatus();
-  }, [token]);
+        }
+      })
+      .catch(() => navigate('/'));
+  }, [token, navigate]);
 
+  // load applications
   useEffect(() => {
-    const fetchList = async () => {
-      if (!token) return;
-      setLoading(true);
-      try {
-        const res = await fetch(`${API_DOMAIN}/maintainer_applications`, {
-          method: 'GET',
-          headers: { Authorization: `Bearer ${token}` },
-        });
+    if (!token) return;
+    setLoading(true);
+    fetch(`${API_DOMAIN}/maintainer_applications`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => {
         if (!res.ok) throw new Error(`Error ${res.status}`);
-        const data = await res.json();
-        setApps(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchList();
+        return res.json();
+      })
+      .then(data => setApps(data))
+      .catch(err => setError(err.message))
+      .finally(() => setLoading(false));
   }, [token]);
 
-  if (!token) return <p>請先登入</p>;
-  if (loading) return <p>讀取中…</p>;
-  if (error) return <p className="error">載入錯誤：{error}</p>;
+  if (!token)   return <p className="center-message">請先登入</p>;
+  if (loading)  return <p className="center-message">讀取中…</p>;
+  if (error)    return <p className="center-message error">載入錯誤：{error}</p>;
 
   return (
-    <div className="admin-review-list">
+    <div className="admin-review-page">
       <h2>待審核申請清單</h2>
-      <table>
+      <table className="admin-review-table">
         <thead>
           <tr>
             <th>申請者</th>
@@ -72,15 +64,30 @@ export default function AdminReviewApplications() {
           </tr>
         </thead>
         <tbody>
-          {apps.map(app => (
-            <tr key={app.id}>
-              <td>{app.user_id}</td>
-              <td>{app.venue_name}</td>
-              <td>{app.address}</td>
-              <td>{app.phone}</td>
-              <td><Link className="detail-button" to={`/admin-review-applications/${app.id}`}>詳細</Link></td>
+          {apps.length === 0 ? (
+            <tr>
+              <td colSpan={5} className="no-data">
+                暫無申請
+              </td>
             </tr>
-          ))}
+          ) : (
+            apps.map(app => (
+              <tr key={app.id}>
+                <td>{app.user_id}</td>
+                <td>{app.venue_name}</td>
+                <td>{app.address}</td>
+                <td>{app.phone}</td>
+                <td>
+                  <button
+                    onClick={() => navigate(`/admin-review-applications/${app.id}`)}
+                    className="button-ops"
+                  >
+                    詳細
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>

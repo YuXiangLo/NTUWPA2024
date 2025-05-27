@@ -1,10 +1,10 @@
-// src/pages/MyJoinRequestsPage.jsx
+// src/pages/MyPlayPage.jsx
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { API_DOMAIN } from '../../config';
 import { Link } from 'react-router-dom';
 import Calendar from '../../components/Calendar';
-import './MyPlayPage.css'
+import './MyPlayPage.css';
 
 export default function MyPlayPage() {
   const { user } = useAuth();
@@ -13,6 +13,9 @@ export default function MyPlayPage() {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading]   = useState(true);
   const [error, setError]       = useState(null);
+
+  // new state to control popup
+  const [showCalendarModal, setShowCalendarModal] = useState(false);
 
   const statusColors = {
     pending:  '#888888',
@@ -37,7 +40,6 @@ export default function MyPlayPage() {
         if (!r2.ok) throw new Error(`Error ${r2.status}`);
         const [data1, data2] = await Promise.all([r1.json(), r2.json()]);
 
-        // tag each with type and combine
         const combined = [
           ...data1.map(req => ({ ...req, type: 'court' })),
           ...data2.map(req => ({ ...req, type: 'custom' })),
@@ -48,77 +50,72 @@ export default function MyPlayPage() {
       .finally(() => setLoading(false));
   }, [token]);
 
-  // Basic loading and error messages
   if (loading) {
     return (
-      <h1
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "80vh",
-          margin: 0,
-        }}
-      >
-        Loading...
-      </h1>
+      <h1 className="center-fullpage">Loading...</h1>
     );
   }
 
   if (error) {
     return (
-      <h1
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "80vh",
-          margin: 0,
-        }}
-      >
-        Error: {error}
-      </h1>
+      <h1 className="center-fullpage">Error: {error}</h1>
     );
   }
 
-  // build events for calendar
   const calendarEvents = requests
     .filter(req => req.status === 'pending' || req.status === 'approved')
     .map(req => {
-      // unified reservation object
-      if (req.type === 'court') {
-        const res = req.reservation;
-        const venue = res.court.venue.name;
-        const court = res.court.name;
-        return {
-          id:           req.id,
-          start:        res.start_ts,
-          end:          res.end_ts,
-          text:         `${venue} - ${court}`,
-          participants: res.num_players,
-          tag:          req.status
-        };
-      } else {
-        const res = req.reservation;
-        const venue = res.venue_name;
-        const court = res.court_name;
-        return {
-          id:           req.id,
-          start:        res.start_ts,
-          end:          res.end_ts,
-          text:         `${venue} - ${court}`,
-          participants: res.num_players,
-          tag:          req.status
-        };
-      } 
+      const res   = req.reservation;
+      const venue = req.type === 'court'
+        ? res.court.venue.name
+        : res.venue_name;
+      const court = req.type === 'court'
+        ? res.court.name
+        : res.court_name;
+      return {
+        id:           req.id,
+        start:        res.start_ts,
+        end:          res.end_ts,
+        text:         `${venue} - ${court}`,
+        participants: res.num_players,
+        tag:          req.status
+      };
     });
 
   return (
     <div className="my-join-page">
-      <h2>排程日曆</h2>
-      <Calendar eventsData={calendarEvents} />
-
+      {/* Button to open calendar modal */}
       <h2>我的行程表</h2>
+
+      <button
+        className="button-ops"
+        onClick={() => setShowCalendarModal(true)}
+      >
+        開啟排程日曆
+      </button>
+
+      {/* Calendar Modal */}
+      {showCalendarModal && (
+        <div
+          className="calendar-modal-overlay"
+          onClick={() => setShowCalendarModal(false)}
+        >
+          <div
+            className="calendar-modal-content"
+            onClick={e => e.stopPropagation()}
+          >
+            <button
+              className="modal-close"
+              onClick={() => setShowCalendarModal(false)}
+            >
+              &times;
+            </button>
+            <h2>排程日曆</h2>
+            <Calendar eventsData={calendarEvents} />
+          </div>
+        </div>
+      )}
+
       {requests.length === 0 ? (
         <p>目前沒有任何加入請求。</p>
       ) : (
@@ -137,17 +134,15 @@ export default function MyPlayPage() {
           </thead>
           <tbody>
             {requests.map(req => {
-              let res, court, venue;
-              if (req.type === 'court') {
-                res = req.reservation;
-                venue = res.court.venue.name;
-                court = res.court.name;
-              } else {
-                res = req.reservation;
-                venue = res.venue_name;
-                court = res.court_name;
-              }
+              const res   = req.reservation;
+              const venue = req.type === 'court'
+                ? res.court.venue.name
+                : res.venue_name;
+              const court = req.type === 'court'
+                ? res.court.name
+                : res.court_name;
               const timeslot = `${new Date(res.start_ts).toLocaleString()} – ${new Date(res.end_ts).toLocaleString()}`;
+
               return (
                 <tr key={`${req.type}-${req.id}`}>
                   <td>{venue}</td>
@@ -161,21 +156,16 @@ export default function MyPlayPage() {
                   </td>
                   <td>
                     {req.status === 'approved' ? (
-                      req.type === 'court' ? (
-                        <Link
-                          to={`/reservations/${res.id}/detail`}
-                          className="btn-detail"
-                        >
-                          查看詳情
-                        </Link>
-                      ) : (
-                        <Link
-                          to={`/custom-reservations/${res.id}/detail`}
-                          className="btn-detail"
-                        >
-                          查看詳情
-                        </Link>
-                      )
+                      <Link
+                        to={
+                          req.type === 'court'
+                            ? `/reservations/${res.id}/detail`
+                            : `/custom-reservations/${res.id}/detail`
+                        }
+                        className="btn-detail"
+                      >
+                        查看詳情
+                      </Link>
                     ) : (
                       <em>—</em>
                     )}
