@@ -4,6 +4,7 @@ import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { API_DOMAIN } from '../../config';
 import { DayPilot } from "@daypilot/daypilot-lite-react";
+import './CourtDetailPage.css';
 
 export default function CourtDetailPage() {
   const { venueId, courtId } = useParams();
@@ -24,22 +25,18 @@ export default function CourtDetailPage() {
 
   useEffect(() => {
     setLoading(true);
-
     const startDate = weekStart.toString("yyyy-MM-dd");
     const endDate   = weekStart.addDays(6).toString("yyyy-MM-dd");
 
     Promise.all([
-      // 1) opening hours
       fetch(
         `${API_DOMAIN}/venues/${venueId}/courts/${courtId}/opening-hours`,
         { headers: { Authorization: `Bearer ${token}` } }
       ),
-      // 2) approved reservations in this week
       fetch(
         `${API_DOMAIN}/courts/${courtId}/reservations?status=approved&start=${startDate}&end=${endDate}`,
         { headers: { Authorization: `Bearer ${token}` } }
       ),
-      // 3) venue detail (to get venue + court names)
       fetch(
         `${API_DOMAIN}/venues/${venueId}`,
         { headers: { Authorization: `Bearer ${token}` } }
@@ -49,18 +46,12 @@ export default function CourtDetailPage() {
         if (!ohRes.ok) throw new Error(`載入時段失敗：${ohRes.status}`);
         if (!resRes.ok) throw new Error(`載入預約失敗：${resRes.status}`);
         if (!vdRes.ok) throw new Error(`載入場地資訊失敗：${vdRes.status}`);
-
         const [ohData, resData, vdData] = await Promise.all([
-          ohRes.json(),
-          resRes.json(),
-          vdRes.json(),
+          ohRes.json(), resRes.json(), vdRes.json()
         ]);
-
         setOpenings(ohData);
         setReservations(resData);
         setVenueName(vdData.name || '');
-
-        // find this court's name in vdData.courts
         const court = (vdData.courts || []).find(c => c.id === courtId);
         setCourtName(court?.name || '');
       })
@@ -68,10 +59,9 @@ export default function CourtDetailPage() {
       .finally(() => setLoading(false));
   }, [venueId, courtId, token, weekStart]);
 
-  if (loading) return <p>載入中…</p>;
-  if (error)   return <p className="error">錯誤：{error}</p>;
+  if (loading) return <p className="center-message">載入中…</p>;
+  if (error)   return <p className="center-message error">錯誤：{error}</p>;
 
-  // build and sort slots
   const slots = openings
     .map(rec => {
       const base    = new DayPilot.Date(weekStart).addDays(rec.day_of_week);
@@ -84,14 +74,12 @@ export default function CourtDetailPage() {
 
   const isOccupied = slot =>
     reservations.some(r => {
-      const rs = new Date(r.start_ts);
-      const re = new Date(r.end_ts);
+      const rs = new Date(r.start_ts), re = new Date(r.end_ts);
       return slot.start < re && rs < slot.end;
     });
 
   const handleApply = slot => {
     if (!token) {
-      // 導到 /login，並在 state 裡帶上原本路徑
       alert('請先登入');
       const redirectTo = encodeURIComponent(location.pathname + location.search);
       navigate(`/login?redirect=${redirectTo}`, { replace: true });
@@ -105,16 +93,19 @@ export default function CourtDetailPage() {
 
   return (
     <div className="court-detail-page">
-      {/* new header line */}
-      <h2>場館：{venueName} , 場地： {courtName}</h2>
+      <h2>場館：{venueName}，場地：{courtName}</h2>
 
       <p className="week-range">
-        Week: {weekStart.toString("yyyy-MM-dd")} – {weekStart.addDays(6).toString("yyyy-MM-dd")}
+        {weekStart.toString("yyyy-MM-dd")} – {weekStart.addDays(6).toString("yyyy-MM-dd")}
       </p>
 
       <div className="week-switcher">
-        <button onClick={() => setWeekStart(ws => ws.addDays(-7))}>← 上週</button>
-        <button onClick={() => setWeekStart(ws => ws.addDays(7))}>下週 →</button>
+        <button className="button" onClick={() => setWeekStart(ws => ws.addDays(-7))}>
+          ← 上週
+        </button>
+        <button className="button" onClick={() => setWeekStart(ws => ws.addDays(7))}>
+          下週 →
+        </button>
       </div>
 
       <table className="slot-table">
@@ -128,16 +119,18 @@ export default function CourtDetailPage() {
         </thead>
         <tbody>
           {slots.map(slot => (
-            <tr key={slot.id}>
-              <td>{slot.start.toISOString().slice(5,10)}</td>
+            <tr key={`${slot.day_of_week}-${slot.open_time}`}>
+              <td>{slot.start.toString("MM-dd")}</td>
               <td>{weekdayNames[slot.day_of_week]}</td>
               <td>{slot.open_time} – {slot.close_time}</td>
               <td>
                 {isOccupied(slot) ? (
-                  <button className="btn-occupied" disabled>已被預約</button>
+                  <button className="button-ops" disabled>
+                    已被預約
+                  </button>
                 ) : (
                   <button
-                    className="btn-apply"
+                    className="button-ops"
                     onClick={() => handleApply(slot)}
                   >
                     申請
@@ -149,7 +142,9 @@ export default function CourtDetailPage() {
         </tbody>
       </table>
 
-      <Link to="/search-venue" className="btn-back">← 回搜尋</Link>
+      <Link to="/search-venue" className="button">
+        ← 回搜尋
+      </Link>
     </div>
   );
 }

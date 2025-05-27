@@ -1,0 +1,99 @@
+/* src/pages/CourtDetailPage.css */
+
+.court-detail-page {
+  padding: var(--spacing-lg) 6vw;
+}
+
+.court-detail-page h2 {
+  margin-bottom: var(--spacing-md);
+  font-size: 1.75rem;
+  color: var(--color-primary);
+  text-align: center;
+}
+
+/* Week range */
+.week-range {
+  text-align: center;
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-muted);
+}
+
+/* Week switcher */
+.week-switcher {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+/* Centered messages */
+.center-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+  margin: 0;
+  font-size: 1rem;
+  color: var(--color-muted);
+}
+
+.center-message.error {
+  color: var(--color-error);
+}
+
+/* Table */
+.slot-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-bottom: var(--spacing-md);
+}
+
+.slot-table th,
+.slot-table td {
+  padding: var(--spacing-sm);
+  text-align: center;
+  border-bottom: 1px solid var(--color-muted);
+}
+
+.slot-table thead {
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+}
+
+.slot-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* No-data row */
+.no-data {
+  text-align: center;
+  color: var(--color-muted);
+  padding: var(--spacing-md) 0;
+}
+
+.button-ops-approve {
+  background-color: #2ec25ad3;
+}
+
+.button-ops-reject {
+  background-color: #fb5757d3;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .court-detail-page h2 {
+    font-size: 1.5rem;
+  }
+  .slot-table th,
+  .slot-table td {
+    font-size: 0.85rem;
+    padding: 0.4rem;
+  }
+  .week-switcher {
+    flex-direction: column;
+  }
+}

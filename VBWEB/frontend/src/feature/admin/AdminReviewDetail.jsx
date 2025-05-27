@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { API_DOMAIN } from '../../config';
+import './AdminReviewDetail.css';
 
 export default function AdminReviewDetail() {
   const { id } = useParams();
@@ -10,56 +11,40 @@ export default function AdminReviewDetail() {
   const { user } = useAuth();
   const token = user?.accessToken;
 
-  const [app, setApp] = useState(null);
-  const [error, setError] = useState(null);
-  const [longitude, setLongitude] = useState('');
-  const [latitude, setLatitude] = useState('');
-  const [coords, setCoords] = useState(''); // combined lat,lon input
+  const [app, setApp]       = useState(null);
+  const [error, setError]   = useState(null);
+  const [coords, setCoords] = useState('');
+
+  const [previewSrc, setPreviewSrc] = useState(null);
 
   useEffect(() => {
-    const fetchDetail = async () => {
-      if (!token) return;
-      try {
-        const res = await fetch(`${API_DOMAIN}/maintainer_applications`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+    if (!token) return;
+    fetch(`${API_DOMAIN}/maintainer_applications`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then(res => {
         if (!res.ok) throw new Error(`Error ${res.status}`);
-        const data = await res.json();
+        return res.json();
+      })
+      .then(data => {
         const item = data.find(a => a.id === id);
         setApp(item);
         if (item?.location) {
           const [lon, lat] = item.location;
-          setLongitude(lon);
-          setLatitude(lat);
           setCoords(`${lat}, ${lon}`);
         }
-      } catch (err) {
-        setError(err.message);
-      }
-    };
-    fetchDetail();
+      })
+      .catch(err => setError(err.message));
   }, [id, token]);
 
-  const handleCoordChange = e => {
-    const val = e.target.value;
-    setCoords(val);
-    const parts = val.split(',');
-    if (parts.length === 2) {
-      const lat = parseFloat(parts[0].trim());
-      const lon = parseFloat(parts[1].trim());
-      if (!isNaN(lat) && !isNaN(lon)) {
-        setLatitude(lat);
-        setLongitude(lon);
-      }
-    }
-  };
+  const handleCoordChange = e => setCoords(e.target.value);
 
   const handleReview = async action => {
+    const [lat, lon] = coords.split(',').map(s => parseFloat(s.trim()));
+    const body = action === 'approve'
+      ? { latitude: lat, longitude: lon }
+      : {};
     try {
-      const body =
-        action === 'approve'
-          ? { longitude: parseFloat(longitude), latitude: parseFloat(latitude) }
-          : {};
       const res = await fetch(
         `${API_DOMAIN}/maintainer_applications/${id}/${action}`,
         {
@@ -78,44 +63,98 @@ export default function AdminReviewDetail() {
     }
   };
 
-  if (!app) return <p>{error ? `錯誤：${error}` : '載入中…'}</p>;
+  if (error) return <p className="center-message error">錯誤：{error}</p>;
+  if (!app)  return <p className="center-message">載入中…</p>;
 
   return (
-    <div className="admin-review-detail">
-      <h2>申請詳情</h2>
-      <div className="detail-grid">
-        <div><strong>申請者：</strong> {app.user_id}</div>
-        <div><strong>場地名稱：</strong> {app.venue_name}</div>
-        <div><strong>地址：</strong> {app.address}</div>
-        <div><strong>電話：</strong> {app.phone}</div>
+    <div className="venue-app-form">
+      <div className="page-header">
+        <h2>申請詳情</h2>
       </div>
-      <div className="description">
-        <strong>說明：</strong>
-        <p>{app.detail}</p>
-      </div>
-      <div className="location-inputs">
+
+      <form className="custom-res-form">
         <label>
-          經緯度 (緯度, 經度)
+          申請者
+          <input type="text" value={app.user_id} readOnly />
+        </label>
+        <label>
+          場地名稱
+          <input type="text" value={app.venue_name} readOnly />
+        </label>
+        <label>
+          地址
+          <input type="text" value={app.address} readOnly />
+        </label>
+        <label>
+          電話
+          <input type="text" value={app.phone} readOnly />
+        </label>
+
+        <label>
+          說明
+          <textarea value={app.detail} readOnly />
+        </label>
+
+        <label>
+          <strong>經緯度</strong>
           <input
             type="text"
             value={coords}
             onChange={handleCoordChange}
-            placeholder="25.031291572016002, 121.5303620693936"
+            placeholder="ex: 25.03129, 121.53036"
           />
         </label>
-      </div>
-      <div className="images">
-        {app.image1 && <img src={app.image1} alt="證明1" className="thumbnail" />}
-        {app.image2 && <img src={app.image2} alt="證明2" className="thumbnail" />}
-      </div>
-      <div className="actions">
-        <button onClick={() => handleReview('approve')} className="approve">
-          通過
-        </button>
-        <button onClick={() => handleReview('reject')} className="reject">
-          拒絕
-        </button>
-      </div>
+
+        <label>
+            <strong>場地照片</strong>
+            <div className="preview-row">
+                {app.image1 && (
+                    <img
+                        src={app.image1}
+                        alt="證明1"
+                        className="preview-image"
+                        onClick={() => setPreviewSrc(app.image1)}
+                    />
+                )}
+                {app.image2 && (
+                    <img
+                        src={app.image2}
+                        alt="證明2"
+                        className="preview-image"
+                        onClick={() => setPreviewSrc(app.image2)}
+                    />
+                )}
+            </div>
+        </label>
+
+        <div>
+          <button
+            type="button"
+            className="button-ops-approve"
+            onClick={() => handleReview('approve')}
+          >
+            通過
+          </button>
+          <button
+            type="button"
+            className="button-ops-reject"
+            onClick={() => handleReview('reject')}
+          >
+            拒絕
+          </button>
+        </div>
+        {/* 圖片預覽彈窗 */}
+        {previewSrc && (
+          <div className="img-modal" onClick={() => setPreviewSrc(null)}>
+            <div className="img-modal-content" onClick={e => e.stopPropagation()}>
+              <button className="button-close" onClick={() => setPreviewSrc(null)}>
+                X
+              </button>
+              <img src={previewSrc} alt="Preview" />
+            </div>
+          </div>
+        )}
+      </form>
     </div>
   );
 }

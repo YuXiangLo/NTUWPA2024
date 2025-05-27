@@ -83,3 +83,62 @@
   }
 }
 
+
+/* center-loading & error */
+.center-fullpage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  margin: 0;
+}
+
+/* --- Open Calendar Button --- */
+.btn-open-calendar {
+  display: inline-block;
+  margin-bottom: 1rem;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-accent);
+  color: var(--color-surface);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+/* --- Modal Overlay & Content --- */
+.calendar-modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.calendar-modal-content {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  max-width: 90%;
+  max-height: 90%;
+  overflow: auto;
+  position: relative;
+}
+
+/* Close “×” button */
+.modal-close {
+  position: absolute;
+  top: 0.5rem; right: 0.5rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* Optional: make your calendar inside modal responsive */
+.calendar-modal-content h2 {
+  margin-top: 0;
+}

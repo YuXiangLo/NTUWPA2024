@@ -1,6 +1,6 @@
 // src/pages/ReservationDetailPage.jsx
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { API_DOMAIN } from '../../config';
 import './PlayDetailPage.css';
@@ -9,7 +9,7 @@ export default function PlayDetailPage() {
   const { type, reservationId } = useParams();
   const { user }                = useAuth();
   const token                   = user?.accessToken;
-
+  const navigate                = useNavigate();
   const [resv,   setResv]   = useState(null);
   const [loading,setLoading]= useState(true);
   const [error,  setError]  = useState(null);
@@ -135,12 +135,12 @@ export default function PlayDetailPage() {
         </div>
       </div>
 
-      <Link
-        to={'/my-play'}
-        className="btn-back"
+      <br></br>
+      <button
+        onClick={() => navigate('/my-play')}
       >
         ← 返回我的加入請求
-      </Link>
+      </button>
     </div>
   );
 }

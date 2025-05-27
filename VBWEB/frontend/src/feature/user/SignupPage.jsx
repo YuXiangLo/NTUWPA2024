@@ -3,91 +3,101 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { API_DOMAIN } from '../../config.js';
 import { useAuth } from '../../context/AuthContext.jsx';
+import './SignupPage.css';
 
-function SignupPage() {
-  const navigate = useNavigate();  
+export default function SignupPage() {
+  const navigate = useNavigate();
   const { login } = useAuth();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail]               = useState('');
+  const [password, setPassword]         = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [errorMsg, setErrorMsg] = useState('');
+  const [errorMsg, setErrorMsg]         = useState('');
 
-  const handleSignup = async (e) => {
+  const handleSignup = async e => {
     e.preventDefault();
     setErrorMsg('');
 
-    // Validate that passwords match
     if (password !== confirmPassword) {
-      setErrorMsg("Passwords do not match");
+      setErrorMsg("密碼不一致");
       return;
     }
 
     try {
-      const response = await fetch(`${API_DOMAIN}/auth/register`, {
+      const res = await fetch(`${API_DOMAIN}/auth/register`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
 
-      if (response.ok) {
-        const response = await fetch(`${API_DOMAIN}/auth/login`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email, password }),
-        });
-        const data = await response.json();
-        login(data);
-        navigate('/profile');
-      } else {
-        const errorData = await response.json();
-        setErrorMsg(errorData.message || 'Sign up failed');
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || '註冊失敗');
       }
-    } catch (error) {
-      console.error('Error during signup:', error);
-      setErrorMsg('Sign up failed');
+
+      const loginRes = await fetch(`${API_DOMAIN}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await loginRes.json();
+      login(data);
+      navigate('/profile');
+    } catch (err) {
+      setErrorMsg(err.message);
     }
   };
 
   return (
     <div className="signup-page">
-      <h2>Sign Up</h2>
-      {errorMsg && <p className="error-msg">{errorMsg}</p>}
-      <form onSubmit={handleSignup}>
+      <div className="page-header">
+        <h2>註冊帳號</h2>
+      </div>
+      <form className="signup-form" onSubmit={handleSignup}>
+        {errorMsg && <p className="status">{errorMsg}</p>}
+
         <label>
-          Email:
-          <input 
-            type="email" 
+          電子郵件
+          <input
+            type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required 
+            onChange={e => setEmail(e.target.value)}
+            required
           />
         </label>
+
         <label>
-          Password:
-          <input 
-            type="password" 
+          密碼
+          <input
+            type="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required 
+            onChange={e => setPassword(e.target.value)}
+            required
           />
         </label>
+
         <label>
-          Confirm Password:
-          <input 
-            type="password" 
+          確認密碼
+          <input
+            type="password"
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required 
+            onChange={e => setConfirmPassword(e.target.value)}
+            required
           />
         </label>
-        <button type="submit">Sign Up</button>
+        <div className="button-group">
+          <button type="submit" className="button-ops">
+            確認註冊
+          </button>
+          <button
+            type="button"
+            className="button-ops-right"
+            onClick={() => navigate('/login')}
+          >
+            返回登入
+          </button>
+        </div>
       </form>
     </div>
   );
 }
 
-export default SignupPage;
