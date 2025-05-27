@@ -46,10 +46,36 @@
 
 .button-ops {
   align-self: flex-start;
+  color: var(--color-surface);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-primary);
 }
 
 .button-ops:hover {
   background-color: var(--color-secondary);
+}
+
+.button-ops-right {
+  align-self: flex-end;
+  color: var(--color-surface);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-primary);
+}
+
+.button-ops-right:hover {
+  background-color: var(--color-secondary);
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-md);
 }
 
 /* Responsive */

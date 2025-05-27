@@ -1,0 +1,80 @@
+/* src/pages/user/LoginPage.css */
+
+.login-page {
+    padding: var(--spacing-lg) 6vw;
+    color: var(--color-text);
+  }
+
+  .login-form, 
+    .signup-form, 
+    .custom-res-form, 
+    .venue-app-form > form {
+    width: 100%;
+    max-width: 360px;             /* or whatever “narrow” you like */
+    margin: 0 auto;               /* horizontally center */
+    }
+  
+  .page-header h2 {
+    font-size: 1.75rem;
+    color: var(--color-primary);
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .status {
+    color: var(--color-error);
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    background-color: var(--color-surface);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .login-form label {
+    display: flex;
+    flex-direction: column;
+    font-weight: 500;
+    color: var(--color-text);
+  }
+  
+  .login-form input {
+    margin-top: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    font-size: 1rem;
+    border: 1px solid var(--color-muted);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+  }
+  
+  .google-btn {
+    align-self: flex-start;
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .button-group {
+    display: flex;
+    gap: var(--spacing-md);
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .login-form {
+      padding: var(--spacing-md);
+    }
+    .page-header h2 {
+      font-size: 1.5rem;
+    }
+  }
+  

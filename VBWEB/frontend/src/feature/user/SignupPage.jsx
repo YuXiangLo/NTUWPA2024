@@ -84,10 +84,18 @@ export default function SignupPage() {
             required
           />
         </label>
-
-        <button type="submit" className="button-ops">
-          註冊
-        </button>
+        <div className="button-group">
+          <button type="submit" className="button-ops">
+            確認註冊
+          </button>
+          <button
+            type="button"
+            className="button-ops-right"
+            onClick={() => navigate('/login')}
+          >
+            返回登入
+          </button>
+        </div>
       </form>
     </div>
   );
