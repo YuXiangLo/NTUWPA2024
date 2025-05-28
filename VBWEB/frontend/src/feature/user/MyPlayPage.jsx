@@ -127,7 +127,21 @@ export default function MyPlayPage() {
       )}
 
       {requests.length === 0 ? (
-        <p>目前沒有任何加入請求。</p>
+        <table className="my-join-table">
+          <thead>
+            <tr>
+              <th>名稱</th>
+              <th>屬性</th>
+              <th>說明</th> 
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colSpan={4} className="no-data">尚未新增任何球場。</td>
+            </tr>
+          </tbody>
+        </table>
       ) : (
         <table className="my-join-table">
           <thead>
